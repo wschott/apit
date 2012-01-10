@@ -9,16 +9,16 @@ from AtomicParser import AtomicParser
 from iTunesMusic import iTunesMusic
 
 AP_FILE = ''
-DEBUG_LOG_FILE = 'debug.log'
-LOG_PATH = 'logs'
-UPDATES_LOG_FILE = 'updates.log'
+DEBUG_LOG_FILE = os.path.abspath(os.path.expanduser('~/Desktop/appy/debug.log'))
+LOG_PATH = os.path.abspath(os.path.expanduser('~/Desktop/appy/logs'))
+UPDATES_LOG_FILE = os.path.abspath(os.path.expanduser('~/Desktop/appy/updates.log'))
 OVERWRITE_FILES = True
 
 
 def get_files(path, filter_ext=None):
     """Return a list of files in the given path. This list might be filtered
     by a given list of extensions.
-    
+
     Keyword arguments:
     filter_ext -- the (list of) extension(s) by which the files will be filtered (default None)
     """
@@ -32,7 +32,7 @@ def get_files(path, filter_ext=None):
     return ret
 
 def save_to_file(query, path):
-    fsock = open('updates.log', 'a')
+    fsock = open(UPDATES_LOG_FILE, 'a')
     fsock.write('%s\t%s\n' % (query, path))
     fsock.close()
 
@@ -48,11 +48,25 @@ def get_itunes_query(source):
         logging.debug("itunes search query: '%s'" % query)
     return query
 
+def extract_disc_and_track_number(filename):
+    """Split the disc and track number from a given filename
+    (e.g. '2-14 song title.m4a' returns 2, 14)."""
+    track_disc = os.path.basename(filename).split(' ')[0]
+    # split discnumber if in filename
+    if '-' in track_disc:
+        disc = int(track_disc.split('-')[0])
+        track = int(track_disc.split('-')[1])
+    else:
+        disc = 1
+        track = int(track_disc)
+    return disc, track
+
+
 if __name__ == '__main__':
     if '--help' in sys.argv:
         print '''possible actions:
-            --info
-            --update'''
+            --info /path/to/m4a/files
+            --update /path/to/m4a/files'''
 
     logging.basicConfig(filename=DEBUG_LOG_FILE, level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -66,7 +80,7 @@ if __name__ == '__main__':
 
     if '--info' in sys.argv:
         for f in get_files(path, '.m4a'):
-            print "\n%s\n" % (f, ap.get_info(f))
+            print "\n%s\n%s" % (f, ap.get_info(f))
         exit()
 
     if '--overwrite' in sys.argv:
@@ -75,7 +89,7 @@ if __name__ == '__main__':
 
     extra_data = {}
     query = raw_input('source URL? [http://itunes.apple.com/...]: ')
-    extra_data['purchaseDate'] = raw_input('update purchase date? [ YYYY-MM-DD | YYYY-MM-DD_HH-MM-SS | y | n ]: ')
+    extra_data['purchaseDate'] = raw_input('update purchase date? [ YYYY-MM-DD | YYYY-MM-DD-HH-MM-SS | y | n ]: ')
     extra_data['account'] = raw_input('update account? [test@example.com]: ')
     print
 
@@ -89,30 +103,25 @@ if __name__ == '__main__':
     files = get_files(path, '.m4a')
 
     # skip files which were bought on iTunes
-    for f in files:
+    for f in files[:]:
         fileinfo = ap.get_info(f)
+        if fileinfo is None:
+            raise Exception("AtomicParsley can not read the metadata of '%s'" %  f)
         if 'Atom "flvr" contains:' in fileinfo or 'Atom "xid " contains:' in fileinfo:
             files.remove(f)
             print 'iTunes purchased song -> skipped: %s' % f
 
     print
     for f in files[:]:
-        track_disc_number = os.path.basename(f).split(' ')[0]
-        # split discnumber if in filename
-        if '-' in track_disc_number:
-            disc_number = int(track_disc_number.split('-')[0])
-            track_number = int(track_disc_number.split('-')[1])
-        else:
-            disc_number = 1
-            track_number = int(track_disc_number)
+        disc, track = extract_disc_and_track_number(f)
         # update only if the file's tracknumber is in the search result
-        if track_number in songs[disc_number]:
-            result = ap.update_metadata(f, songs[disc_number][track_number], album, extra_data)
+        if disc in songs and track in songs[disc]:
+            result = ap.update_metadata(f, songs[disc][track], album, extra_data)
             print '\nupdating: %s%s' % (f, result)
             files.remove(f)
-    
+
     save_to_file(query, path)
-    
+
     print
     for f in files:
         print 'NOT updated: %s' % f

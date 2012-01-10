@@ -8,9 +8,18 @@ import logging
 
 class AtomicParser:
     # should the file be overwritten or create a duplicate
-    DEFAULT_AP_FILES = ['/Applications/AtomicParsley',
+    DEFAULT_AP_FILES = ('/Applications/AtomicParsley',
                         '~/Applications/AtomicParsley',
-                        '~/bin/AtomicParsley']
+                        '~/bin/AtomicParsley')
+    date_format = (
+        '%Y-%m-%d',
+        '%Y-%m-%d_%H',
+        '%Y-%m-%d-%H',
+        '%Y-%m-%d_%H-%M',
+        '%Y-%m-%d-%H-%M',
+        '%Y-%m-%d_%H-%M-%S',
+        '%Y-%m-%d-%H-%M-%S'
+    )
     rating_map = {
         'cleaned': 'clean',
         'explicit': 'explicit',
@@ -34,12 +43,10 @@ class AtomicParser:
         self.new_ap_executable = new_executable_version
         self.atomic_parsley_file = 'AtomicParsley'
         # find AtomicParsley
-        for f in [ap_file] + AtomicParser.DEFAULT_AP_FILES:
+        for f in tuple(ap_file) + AtomicParser.DEFAULT_AP_FILES:
             if os.path.isfile(f):
                 self.atomic_parsley_file = f
                 logging.debug("'%s' found" % f)
-            else:
-                logging.debug("'%s' not found" % f)
 
         if not self.atomic_parsley_file:
             raise Exception('AtomicParsley executable not found')
@@ -66,8 +73,8 @@ class AtomicParser:
         if 'purchaseDate' in extra_data:
             if extra_data['purchaseDate'] == 'y':
                 cmd.append('--purchaseDate "timestamp"')
-            elif extra_data['purchaseDate'] != '' and extra_data['purchaseDate'] != 'n':
-                for format in ['%Y-%m-%d', '%Y-%m-%d_%H', '%Y-%m-%d_%H-%M', '%Y-%m-%d_%H-%M-%S']:
+            elif extra_data['purchaseDate'] not in ('', 'n'):
+                for format in self.date_format:
                     try:
                         date = datetime.datetime.strptime(extra_data['purchaseDate'], format).strftime('%Y-%m-%d %H:%M:%S')
                         cmd.append('--purchaseDate "%s"' % date)
@@ -76,12 +83,14 @@ class AtomicParser:
 
         if self.new_ap_executable:
             cmd.append('--cnID "%s"' % track['trackId'])
-        # cmd.append('--meta-uuid "cnID" text "%s"' % track['trackId'])
+        # else:
+            # cmd.append('--meta-uuid "cnID" text "%s"' % track['trackId'])
 
         if 'account' in extra_data and '@' in extra_data['account']:
             if self.new_ap_executable:
                 cmd.append('--apID "%s"' % extra_data['account'])
-            # cmd.append('--meta-uuid "apID" text "%s"' % extra_data['account'])
+            # else:
+            #     cmd.append('--meta-uuid "apID" text "%s"' % extra_data['account'])
 
         # native tag writing for the following isn't supported by AtomicParsley
         # cmd.append('--meta-uuid "atID" text "%s"' % track['artistId'])
@@ -102,10 +111,16 @@ class AtomicParser:
 
     def __run_command(self, filename, command):
         """Run a syscall in order to call AtomicParsley with the given command on the given file."""
+        
+        cmd = self.__construct_command(filename, command)
+        logging.debug(cmd)
+        return os.popen(cmd).read()
+
+    def __construct_command(self, filename, command):
         if isinstance(command, str) or isinstance(command, unicode):
             command = [command]
 
         command = [self.atomic_parsley_file, '"%s"' % filename] + command
-        logging.debug(' '.join(command))
-        output = os.popen(' '.join(command)).read()
-        return output
+        cmd = ' '.join(command)
+        cmd = cmd.replace('$', '\\$')
+        return cmd
