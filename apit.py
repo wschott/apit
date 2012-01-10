@@ -9,10 +9,11 @@ from AtomicParser import AtomicParser
 from iTunesMusic import iTunesMusic
 
 AP_FILE = ''
-DEBUG_LOG_FILE = os.path.abspath(os.path.expanduser('~/Desktop/appy/debug.log'))
-LOG_PATH = os.path.abspath(os.path.expanduser('~/Desktop/appy/logs'))
-UPDATES_LOG_FILE = os.path.abspath(os.path.expanduser('~/Desktop/appy/updates.log'))
+DEBUG_LOG_FILE = os.path.abspath(os.path.expanduser('~/Desktop/apit/debug.log'))
+LOG_PATH = os.path.abspath(os.path.expanduser('~/Desktop/apit/logs'))
+UPDATES_LOG_FILE = os.path.abspath(os.path.expanduser('~/Desktop/apit/updates.log'))
 OVERWRITE_FILES = True
+NEW_EXECUTABLE_VERSION = True
 
 
 def get_files(path, filter_ext=None):
@@ -76,7 +77,7 @@ if __name__ == '__main__':
         raise Exception("given path '%s' is not readable (the path has to be the last argument)" % path)
     logging.debug('path: %s' % path)
 
-    ap = AtomicParser(AP_FILE, OVERWRITE_FILES)
+    ap = AtomicParser(AP_FILE, OVERWRITE_FILES, NEW_EXECUTABLE_VERSION)
 
     if '--info' in sys.argv:
         for f in get_files(path, '.m4a'):
