@@ -9,7 +9,7 @@ metadata from the iTunes Store.
 # Requirements
 
 You need either an [*old* version of Atomicparsley ](http://atomicparsley.sourceforge.net/)
-or [a *new* version of AtomicParsley](https://bitbucket.org/wez/atomicparsley).
+or a [*new* version of AtomicParsley](https://bitbucket.org/wez/atomicparsley).
 
 Run the following in your Terminal to compile the new version for OS X Lion:
 
