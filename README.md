@@ -47,7 +47,7 @@ Open your Terminal and run this
 your have to provide a source for the metadata to fetch by copy & paste'ing
 a link to an album in the Store functionality in the iTunes.app
 
-	http://itunes.apple.com/de/album/my-beautiful-dark-twisted/id404005350
+	http://itunes.apple.com/us/album/my-beautiful-dark-twisted/id403822142
 
 Additionally it's possible to specify a purchase date (format: YYYY-MM-DD, …)
 
