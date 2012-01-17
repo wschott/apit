@@ -33,6 +33,10 @@ def get_files(path, filter_ext=None):
     return ret
 
 def save_to_file(query, path):
+    try:
+        os.makedirs(os.path.dirname(UPDATES_LOG_FILE))
+    except OSError:
+        pass
     fsock = open(UPDATES_LOG_FILE, 'a')
     fsock.write('%s\t%s\n' % (query, path))
     fsock.close()
@@ -69,6 +73,10 @@ if __name__ == '__main__':
             --info /path/to/m4a/files
             --update /path/to/m4a/files'''
 
+    try:
+        os.makedirs(os.path.dirname(DEBUG_LOG_FILE))
+    except OSError:
+        pass
     logging.basicConfig(filename=DEBUG_LOG_FILE, level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
     path = sys.argv[-1]
