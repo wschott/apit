@@ -111,7 +111,7 @@ class AtomicParser:
 
     def __run_command(self, filename, command):
         """Run a syscall in order to call AtomicParsley with the given command on the given file."""
-        
+
         cmd = self.__construct_command(filename, command)
         logging.debug(cmd)
         return os.popen(cmd).read()

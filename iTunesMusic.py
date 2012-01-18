@@ -10,7 +10,7 @@ class iTunesMusic():
         self.log_path = log_path
         self.album = {}
         self.data = {}
-        
+
         self.load_source(source)
 
     def load_source(self, source):
