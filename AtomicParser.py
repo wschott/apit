@@ -67,7 +67,7 @@ class AtomicParser:
         cmd.append('--advisory %s'      % self.rating_map[track['trackExplicitness']])
         cmd.append('--stik "%s"'        % self.kind_map[track['kind']])
         cmd.append('--albumArtist "%s"' % self.escape(album['artistName']))
-        copyright = u'--copyright "℗ %s"' % self.escape(album['copyright'])
+        copyright = u'--copyright "℗ %s"' % self.escape(album['copyright'][2:])
         cmd.append(copyright.encode('utf-8'))
 
         if 'purchaseDate' in extra_data:
