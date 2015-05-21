@@ -1,5 +1,7 @@
 # apit
 
+[![Build Status](https://travis-ci.org/wschott/apit.svg?branch=master)](https://travis-ci.org/wschott/apit)
+
 **RUN THIS AT YOUR OWN RISK! MAKE A BACKUP BEFORE RUNNING THIS!**
 
 apit updates the metadata tags of .m4a (AAC and ALAC) files with fetched metadata from the iTunes Store.
