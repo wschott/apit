@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import os
 from collections import namedtuple
-from unittest import TestCase
+from unittest import TestCase, skipIf
 from StringIO import StringIO
 
 from mock import patch
@@ -45,13 +46,14 @@ EXPECTED = ' '.join(
     ]
 )
 
-
+@patch('apit.AtomicParser.get_atomicparsley', new=lambda: '/Mock/AtomicParsley')
 class TestAtomicParser(TestCase):
     def get_test_data(self):
         with open('tests/metadata.js', 'r') as f:
             data = f.read()
         return data
 
+    @skipIf(os.environ.get('TRAVIS') == '1', 'skip on Travis CI')
     def test_atomicparsley_finding(self):
         self.assertIn('AtomicParsley', get_atomicparsley())
 
