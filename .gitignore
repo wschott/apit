@@ -1,5 +1,6 @@
 .DS_Store
 *.swp
-debug.log
-updates.log
-logs
+*.pyc
+.coverage
+*.egg-info
+htmlcov
