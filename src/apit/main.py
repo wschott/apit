@@ -19,7 +19,7 @@ def main(options):
     files = get_files(options.path, FILE_FILTER)
     if len(files) == 0:
         raise ApitError('No matching files found')
-    logging.debug('Path containing files to process: %s', options.path)
+    logging.debug('Input path: %s', options.path)
 
     logging_debug_filelist('Matched files:', files)
 

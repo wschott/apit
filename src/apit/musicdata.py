@@ -23,14 +23,14 @@ def generate_store_lookup_url(user_url: str) -> str:
 def fetch_store_json_string(url: str) -> str:
     openUrl = urllib.request.urlopen(url)
     if openUrl.getcode() != 200:
-        raise ApitError('Connection to store failed error: %s' % openUrl.getcode())
+        raise ApitError('Connection to Apple Music/iTunes Store failed with error code: %s' % openUrl.getcode())
     return openUrl.read()
 
-def extract_album_and_song_data(itunes_json_string: str) -> Album:
-    itunes_data = json.loads(itunes_json_string)
+def extract_album_and_song_data(metadata_json: str) -> Album:
+    itunes_data = json.loads(metadata_json)
 
     if 'results' not in itunes_data or 'resultCount' not in itunes_data or itunes_data['resultCount'] == 0:
-        raise ApitError('Apple Music/iTunes Store results empty')
+        raise ApitError('Apple Music/iTunes Store metadata results empty')
 
     return _find_album_data(itunes_data['results'])
 

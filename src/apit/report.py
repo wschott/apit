@@ -20,5 +20,5 @@ def report_to_shell(file: Path, status: CompletedProcess, force=False):
         print('stderr:')
         logging.error('the following error occured during processing: %s', status.stderr)
 
-def _to_result(returncode) -> str:
+def _to_result(returncode: int) -> str:
     return 'error' if returncode else 'success'
