@@ -1,0 +1,2 @@
+class ApitError(Exception):
+    pass

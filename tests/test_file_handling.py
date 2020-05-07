@@ -1,0 +1,29 @@
+from pathlib import Path
+
+import pytest
+
+from apit.file_handling import extract_disc_and_track_number, get_files
+
+
+# TODO create temporary files for testing?
+def test_get_files():
+    assert get_files('tests/fixtures/folder-iteration') == [
+        Path('tests/fixtures/folder-iteration/1 first.m4a'),
+        Path('tests/fixtures/folder-iteration/2 second.mp3'),
+        Path('tests/fixtures/folder-iteration/3 third.mp4')
+    ]
+
+def test_get_files_using_filter():
+    assert get_files('tests/fixtures/folder-iteration', '.m4a') == [
+        Path('tests/fixtures/folder-iteration/1 first.m4a')
+    ]
+
+def test_extract_disc_and_track_number_using_both_numbers():
+    assert extract_disc_and_track_number(Path('2-14 song title.m4a')) == (2, 14)
+
+def test_extract_disc_and_track_number_using_only_track_number():
+    assert extract_disc_and_track_number(Path('14 song title.m4a')) == (1, 14)
+
+def test_extract_disc_and_track_number_using_invalid_filename():
+    with pytest.raises(Exception):
+        assert extract_disc_and_track_number(Path('song title.m4a')) == (1, 14)

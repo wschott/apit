@@ -1,0 +1,49 @@
+import json
+import re
+import urllib.request
+from typing import Any, List
+
+from apit.album import Album
+from apit.error import ApitError
+from apit.song import Song
+
+# format (as of 2020-05): https://music.apple.com/us/album/album-name/123456789
+REGEX_STORE_URL_COUNTRY_CODE_ID = r'^https?:\/\/(?:music|itunes)\.apple\.com\/(?P<country_code>[a-z]{2})\/[a-z]+\/.+\/(id)?(?P<id>\d+)'
+
+def generate_store_lookup_url(user_url: str) -> str:
+    match = re.match(REGEX_STORE_URL_COUNTRY_CODE_ID, user_url)
+
+    if not match:
+        raise ApitError(f'Invalid URL format: {user_url}')
+
+    country_code = match.groupdict()['country_code']
+    id = match.groupdict()['id']
+    return f'https://itunes.apple.com/lookup?entity=song&country={country_code}&id={id}'
+
+def fetch_store_json_string(url: str) -> str:
+    openUrl = urllib.request.urlopen(url)
+    if openUrl.getcode() != 200:
+        raise ApitError('Connection to store failed error: %s' % openUrl.getcode())
+    return openUrl.read()
+
+def extract_album_and_song_data(itunes_json_string: str) -> Album:
+    itunes_data = json.loads(itunes_json_string)
+
+    if 'results' not in itunes_data or 'resultCount' not in itunes_data or itunes_data['resultCount'] == 0:
+        raise ApitError('Apple Music/iTunes Store results empty')
+
+    return _find_album_data(itunes_data['results'])
+
+def _find_album_data(music_data: List[Any]) -> Album:
+    album: Album
+    for item in music_data:
+        if 'collectionType' in item and item['collectionType'] in ['Album', 'Compilation']:
+            album = Album(item)
+            break
+
+    if album:
+        for item in music_data:
+            if 'kind' in item and item['kind'] == 'song':
+                album.addSong(Song(item))
+
+    return album

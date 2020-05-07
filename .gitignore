@@ -1,6 +1,12 @@
 .DS_Store
-*.swp
-*.pyc
+*.py[cod]
+*.egg-info/
+__pycache__/
+build/
+dist/
+
 .coverage
-*.egg-info
-htmlcov
+htmlcov/
+.tox/
+.pytest_cache/
+.mypy_cache/
