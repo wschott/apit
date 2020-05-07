@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from apit.error import ApitError
 from apit.file_handling import extract_disc_and_track_number, get_files
 
 
@@ -25,5 +26,5 @@ def test_extract_disc_and_track_number_using_only_track_number():
     assert extract_disc_and_track_number(Path('14 song title.m4a')) == (1, 14)
 
 def test_extract_disc_and_track_number_using_invalid_filename():
-    with pytest.raises(Exception):
+    with pytest.raises(ApitError):
         assert extract_disc_and_track_number(Path('song title.m4a')) == (1, 14)
