@@ -7,7 +7,7 @@ from apit.report import report_to_shell
 
 def execute(files: List[Path], options):
     for file in files:
-        report_to_shell(file, show_metadata(file))
+        report_to_shell(file, show_metadata(file), force=True)
 
 def show_metadata(file: Path):
     command = ['-t']

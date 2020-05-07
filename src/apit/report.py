@@ -3,7 +3,7 @@ from pathlib import Path
 from subprocess import CompletedProcess
 
 
-def report_to_shell(file: Path, status: CompletedProcess):
+def report_to_shell(file: Path, status: CompletedProcess, force=False):
     # log_level_by_status = logging.ERROR if status.returncode else logging.INFO
     print('-' * 80)
     file_str = 'File: %s' % file.name
@@ -13,7 +13,7 @@ def report_to_shell(file: Path, status: CompletedProcess):
     # logging.log(log_level_by_status, result_str)
     print(result_str)
     logging.debug('Command: %s', status.args)
-    if logging.getLogger().isEnabledFor(logging.INFO):
+    if force or logging.getLogger().isEnabledFor(logging.INFO):
         print('stdout:')
         print(status.stdout)
     if status.returncode:
