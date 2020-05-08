@@ -11,6 +11,8 @@ DEFAULT_AP_LOCATIONS = (
     '~/Applications/AtomicParsley',
     '/Applications/AtomicParsley',
 )
+REGEX_OUTER_QUOTE = re.compile(r'^(?P<start>[^\"]*\"{1})(?P<inner>.+)(?P<end>\"{1}[^\"]*)')
+
 
 def execute_command_for_file(file: Path, command: Union[List[str], str], shell: bool = False) -> subprocess.CompletedProcess:
     try:
@@ -56,8 +58,7 @@ def _escape_shell_arguments(string: str) -> str:
     return str_to_escape.replace('$', '\\$').replace('`', '\\`')
 
 def _escape_inner_quotes(string: str) -> str:
-    REGEX_OUTER_QUOTE = r'^(?P<start>[^\"]*\"{1})(?P<inner>.+)(?P<end>\"{1}[^\"]*)'
-    match = re.match(REGEX_OUTER_QUOTE, string)
+    match = REGEX_OUTER_QUOTE.match(string)
     if not match:
         raise ApitError(f'An error occured while escaping: {string}')
     return ''.join([
