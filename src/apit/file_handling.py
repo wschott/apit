@@ -7,7 +7,8 @@ from apit.error import ApitError
 
 REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME = r'^(?:(?P<disc_number>\d+)-)?(?P<track_number>\d+).+'
 
-def get_files(path: Path, filter_ext: Optional[Union[List[str], str]] = None) -> List[Path]:
+def collect_files(path: Path, filter_ext: Optional[Union[List[str], str]] = None) -> List[Path]:
+    # TODO handle non-existing folder
     unfiltered_files = [Path(f) for f in os.scandir(path) if f.is_file()]
 
     sorted_files = sorted(unfiltered_files)

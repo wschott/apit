@@ -4,7 +4,7 @@ from pathlib import Path
 
 from apit.debug_helper import logging_debug_filelist
 from apit.error import ApitError
-from apit.file_handling import get_files
+from apit.file_handling import collect_files
 from apit.logger import ColoredFormatter
 
 FILE_FILTER = '.m4a'
@@ -16,7 +16,7 @@ def main(options):
 
     logging.debug('CLI options: %s', options)
 
-    files = get_files(options.path, FILE_FILTER)
+    files = collect_files(options.path, FILE_FILTER)
     if len(files) == 0:
         raise ApitError('No matching files found')
     logging.debug('Input path: %s', options.path)
