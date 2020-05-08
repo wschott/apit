@@ -37,6 +37,7 @@ or old style iTunes: http://itunes.apple.com/{COUNTRY_CODE}/album/album-name/id{
 Example:
   - https://music.apple.com/us/album/album-name/123456789
   - http://itunes.apple.com/us/album/album-name/id123456789
+  - http://test-domain.com/us/test-name/42/123456789?i=09876
 """)
 
     parser.add_argument('-v', dest='verbose_level', action='count',

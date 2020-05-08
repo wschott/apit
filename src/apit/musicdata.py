@@ -8,17 +8,18 @@ from apit.error import ApitError
 from apit.song import Song
 
 # format (as of 2020-05): https://music.apple.com/us/album/album-name/123456789
-REGEX_STORE_URL_COUNTRY_CODE_ID = r'^https?:\/\/(?:music|itunes)\.apple\.com\/(?P<country_code>[a-z]{2})\/[a-z]+\/.+\/(id)?(?P<id>\d+)'
+# old format: http://itunes.apple.com/us/album/album-name/id123456789
+REGEX_STORE_URL_COUNTRY_CODE_ID = re.compile(r'^https?:\/\/[^\/]*\/(?P<country_code>[a-z]{2})\/[^\/]+\/[^\/]+\/(id)?(?P<id>\d+)')
 
 def generate_store_lookup_url(user_url: str) -> str:
-    match = re.match(REGEX_STORE_URL_COUNTRY_CODE_ID, user_url)
+    match = REGEX_STORE_URL_COUNTRY_CODE_ID.match(user_url)
 
     if not match:
         raise ApitError(f'Invalid URL format: {user_url}')
 
     country_code = match.groupdict()['country_code']
-    id = match.groupdict()['id']
-    return f'https://itunes.apple.com/lookup?entity=song&country={country_code}&id={id}'
+    album_id = match.groupdict()['id']
+    return f'https://itunes.apple.com/lookup?entity=song&country={country_code}&id={album_id}'
 
 def fetch_store_json_string(url: str) -> str:
     openUrl = urllib.request.urlopen(url)

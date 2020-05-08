@@ -77,6 +77,10 @@ or the old style iTunes format:
     http://itunes.apple.com/{COUNTRY_CODE}/album/album-name/id{ID}
     e.g. http://itunes.apple.com/us/album/album-name/id123456789
 
+Even this format will match:
+
+    http://x/us/x/9/123456789?i=09876
+
 This will lookup the metadata of the album with the ID _123456789_ in the _US_ store of Apple Music/iTunes (and optionally download that data to `~/.apit`).
 
 ### Attention: Beware of album variations (e.g. deluxe editions)
