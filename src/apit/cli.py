@@ -60,7 +60,7 @@ def _to_path(path_string: str) -> Path:
     path = Path(path_string).expanduser()
 
     if not path.is_dir():
-        raise ArgumentTypeError(f'path "{path_string}" is invalid')
+        raise ArgumentTypeError(f'Invalid path: {path_string}')
 
     return path
 
