@@ -82,5 +82,5 @@ def cli():
         options = parse_args(sys.argv[1:])
         sys.exit(main(options))
     except ApitError as e:
-        print(e)
+        print(e, file=sys.stderr)
         sys.exit(2)
