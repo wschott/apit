@@ -11,7 +11,7 @@ def _generate_cache_filename(album: Album) -> str:
     filename_parts = [
         album['artistName'],
         album['collectionName'],
-        album['collectionId']
+        album['collectionId'],
     ]
     filename: List[str] = [re.sub(r'\W+', '_', str(f)) for f in filename_parts]
     return f'{"-".join(filename)}.json'

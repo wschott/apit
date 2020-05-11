@@ -49,11 +49,19 @@ def separator() -> str:
     return '-' * SEPARATOR_LENGTH
 
 def preview_line(action: Action) -> str:
-    text = TABLE_LINE_FORMAT % (_is_selected(action), pad_with_spaces(truncate_filename(action.file)), action.preview_msg)
+    text = TABLE_LINE_FORMAT % (
+        _is_selected(action),
+        pad_with_spaces(truncate_filename(action.file)),
+        action.preview_msg
+    )
     return to_colored_text(text=text, color=_to_color_for_preview(action))
 
 def result_line(action: Action) -> str:
-    text = TABLE_LINE_FORMAT % (_is_successful(action), pad_with_spaces(truncate_filename(action.file)), action.status_msg)
+    text = TABLE_LINE_FORMAT % (
+        _is_successful(action),
+        pad_with_spaces(truncate_filename(action.file)),
+        action.status_msg
+    )
     return to_colored_text(text=text, color=_to_color_for_result(action))
 
 def _is_successful(action: Action) -> str:
