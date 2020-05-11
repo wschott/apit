@@ -1,8 +1,5 @@
 from pathlib import Path
 
-import pytest
-
-from apit.error import ApitError
 from apit.file_handling import collect_files, extract_disc_and_track_number
 
 
@@ -22,12 +19,18 @@ def test_collect_files_using_filter():
         Path('tests/fixtures/folder-iteration/1 first.m4a')
     ]
 
-def test_extract_disc_and_track_number_using_both_numbers():
-    assert extract_disc_and_track_number(Path('2-14 song title.m4a')) == (2, 14)
+def test_extract_disc_and_track_number_using_disc_and_track_number():
+    file_match = extract_disc_and_track_number(Path('2-14 song title.m4a'))
+    assert file_match.valid
+    assert file_match.disc == 2
+    assert file_match.track == 14
 
 def test_extract_disc_and_track_number_using_only_track_number():
-    assert extract_disc_and_track_number(Path('14 song title.m4a')) == (1, 14)
+    file_match = extract_disc_and_track_number(Path('14 song title.m4a'))
+    assert file_match.valid
+    assert file_match.disc == 1
+    assert file_match.track == 14
 
 def test_extract_disc_and_track_number_using_invalid_filename():
-    with pytest.raises(ApitError):
-        assert extract_disc_and_track_number(Path('song title.m4a')) == (1, 14)
+    file_match = extract_disc_and_track_number(Path('song title.m4a'))
+    assert not file_match.valid

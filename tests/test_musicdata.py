@@ -2,8 +2,8 @@ import pytest
 
 from apit.error import ApitError
 from apit.musicdata import (
-    extract_album_and_song_data,
-    fetch_store_json_string,
+    extract_album_with_songs,
+    fetch_store_json,
     generate_store_lookup_url,
 )
 
@@ -28,30 +28,33 @@ def test_generate_store_lookup_url_using_invalid_url():
     with pytest.raises(ApitError):
         generate_store_lookup_url('http://invalid-url.com/')
 
-def test_process_album(test_metadata):
-    album = extract_album_and_song_data(test_metadata)
+def test_extract_album_with_songs(test_metadata):
+    album = extract_album_with_songs(test_metadata)
 
     assert album['collectionId'] == 1440742903
     assert album['artistName'] == 'Kanye West'
     assert album['collectionName'] == 'My Beautiful Dark Twisted Fantasy'
 
-def test_process_songs(test_metadata):
-    album = extract_album_and_song_data(test_metadata)
-
-    song = album.getSong(3)
+    song = album.get_song(disc=1, track=3)
     assert song['kind'] == 'song'
     assert song['discNumber'] == 1
     assert song['trackNumber'] == 3
     assert song['trackName'] == 'Power'
 
-def test_process_album_invalid_json():
+def test_extract_album_with_songs_invalid_json():
     with pytest.raises(ApitError):
-        extract_album_and_song_data('{"results":[], "resultCount": 0}')
+        extract_album_with_songs('')
+    with pytest.raises(ApitError):
+        extract_album_with_songs('{"test":[], "resultCount": 0}')
+    with pytest.raises(ApitError):
+        extract_album_with_songs('{"results":[], "test": 0}')
+    with pytest.raises(ApitError):
+        extract_album_with_songs('{"results":[], "resultCount": 0}')
 
 @pytest.mark.integration
 @pytest.mark.xfail
 def test_real_fetching_of_data_from_itunes():
-    json = fetch_store_json_string(REAL_LOOKUP_URL)
+    json = fetch_store_json(REAL_LOOKUP_URL)
     print(json)
     assert b'{\n "resultCount":15,\n "results": [\n{' in json
     assert 0

@@ -1,11 +1,59 @@
+from collections import namedtuple
 from pathlib import Path
 
 import pytest
 
+from apit.metadata import Album, Song
+
+MockAction = namedtuple('MockAction', ['needs_confirmation', 'executed', 'successful', 'actionable'])
+
+
+@pytest.fixture
+def mock_action_needs_confirmation():
+    return MockAction(True, None, None, None)
+
+@pytest.fixture
+def mock_action_not_needs_confirmation():
+    return MockAction(False, None, None, None)
+
+@pytest.fixture
+def mock_action_failed():
+    return MockAction(None, True, False, None)
+
+@pytest.fixture
+def mock_action_success():
+    return MockAction(None, True, True, None)
+
+@pytest.fixture
+def mock_action_not_executed():
+    return MockAction(None, False, False, None)
+
+@pytest.fixture
+def mock_action_actionable():
+    return MockAction(None, None, None, True)
+
+@pytest.fixture
+def mock_action_not_actionable():
+    return MockAction(None, None, None, False)
 
 @pytest.fixture
 def test_metadata():
     return Path('tests/fixtures/metadata.json').read_text()
+
+@pytest.fixture
+def test_album():
+    return Album({
+        'collectionId': 12345,
+        'artistName': 'Test Artist',
+        'collectionName': 'Test Collection',
+    })
+
+@pytest.fixture
+def test_song():
+    return Song({
+        'discNumber': 2,
+        'trackNumber': 3,
+    })
 
 @pytest.fixture
 def mock_atomicparsley_exe(monkeypatch):

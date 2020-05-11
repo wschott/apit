@@ -1,11 +1,10 @@
 import json
 import re
 import urllib.request
-from typing import Any, List
+from typing import List
 
-from apit.album import Album
 from apit.error import ApitError
-from apit.song import Song
+from apit.metadata import Album, Song
 
 # format (as of 2020-05): https://music.apple.com/us/album/album-name/123456789
 # old format: http://itunes.apple.com/us/album/album-name/id123456789
@@ -21,30 +20,34 @@ def generate_store_lookup_url(user_url: str) -> str:
     album_id = match.groupdict()['id']
     return f'https://itunes.apple.com/lookup?entity=song&country={country_code}&id={album_id}'
 
-def fetch_store_json_string(url: str) -> str:
+def fetch_store_json(url: str) -> str:
     openUrl = urllib.request.urlopen(url)
     if openUrl.getcode() != 200:
         raise ApitError('Connection to Apple Music/iTunes Store failed with error code: %s' % openUrl.getcode())
     return openUrl.read()
 
-def extract_album_and_song_data(metadata_json: str) -> Album:
-    itunes_data = json.loads(metadata_json)
+def extract_album_with_songs(metadata_json: str) -> Album:
+    try:
+        itunes_data = json.loads(metadata_json)
+    except json.JSONDecodeError:
+        raise ApitError('Apple Music/iTunes Store metadata results format error')
 
     if 'results' not in itunes_data or 'resultCount' not in itunes_data or itunes_data['resultCount'] == 0:
         raise ApitError('Apple Music/iTunes Store metadata results empty')
 
-    return _find_album_data(itunes_data['results'])
+    return _find_album_with_songs(itunes_data['results'])
 
-def _find_album_data(music_data: List[Any]) -> Album:
-    album: Album
+def _find_album_with_songs(music_data) -> Album:
+    album = _find_album(music_data)
+    for song in _find_songs(music_data):
+        album.add_song(song)
+    return album
+
+def _find_album(music_data) -> Album:
     for item in music_data:
         if 'collectionType' in item and item['collectionType'] in ['Album', 'Compilation']:
-            album = Album(item)
-            break
+            return Album(item)
+    raise ApitError('No album found in metadata')
 
-    if album:
-        for item in music_data:
-            if 'kind' in item and item['kind'] == 'song':
-                album.addSong(Song(item))
-
-    return album
+def _find_songs(music_data) -> List[Song]:
+    return [Song(item) for item in music_data if 'kind' in item and item['kind'] == 'song']

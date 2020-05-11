@@ -1,6 +1,9 @@
 from unittest.mock import call, patch
 
-from apit.command.tag import _generate_metadata_update_command, update_metadata
+from apit.atomic_parser import (
+    _generate_metadata_update_command,
+    update_metadata,
+)
 
 ALBUM = {
     'artistName': 'Album Artist',

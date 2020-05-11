@@ -15,10 +15,7 @@ REGEX_OUTER_QUOTE = re.compile(r'^(?P<start>[^\"]*\"{1})(?P<inner>.+)(?P<end>\"{
 
 
 def execute_command_for_file(file: Path, command: Union[List[str], str], shell: bool = False) -> subprocess.CompletedProcess:
-    try:
-        shell_command = _generate_shell_command(_find_atomicparsley_executable(DEFAULT_AP_LOCATIONS), file, command, shell)
-    except ApitError as e:
-        raise ApitError('%s Default locations: %s' % (e, ', '.join(DEFAULT_AP_LOCATIONS)))
+    shell_command = _generate_shell_command(_find_atomicparsley_executable(DEFAULT_AP_LOCATIONS), file, command, shell)
     return _run_subprocess(shell_command, shell=shell)
 
 def _run_subprocess(shell_command: Union[List[str], str], shell: bool) -> subprocess.CompletedProcess:

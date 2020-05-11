@@ -1,4 +1,3 @@
-import pkgutil
 import sys
 from argparse import (
     ArgumentParser,
@@ -8,7 +7,7 @@ from argparse import (
 from pathlib import Path
 from typing import List
 
-import apit.command
+from apit.actions import AVAILAIBLE_ACTIONS
 from apit.error import ApitError
 from apit.main import main
 
@@ -56,7 +55,7 @@ Example:
         help='[only tag command] save the downloaded metadata to disk'
     )
     parser.add_argument(
-        'command', choices=_determine_available_commands(),
+        'command', choices=[ActionType.COMMAND_NAME for ActionType in AVAILAIBLE_ACTIONS],
         help='available commands: "show" or "tag" metadata'
     )
     parser.add_argument(
@@ -70,9 +69,6 @@ Example:
 
     return parser.parse_args(args)
 
-def _determine_available_commands() -> List[str]:
-    return [module.name for module in pkgutil.iter_modules(apit.command.__path__)] # type: ignore
-
 def _to_path(path_string: str) -> Path:
     path = Path(path_string).expanduser()
 
@@ -84,8 +80,7 @@ def _to_path(path_string: str) -> Path:
 def cli():
     try:
         options = parse_args(sys.argv[1:])
-        # TODO sys.exit() instead of nothing?
-        main(options)
+        sys.exit(main(options))
     except ApitError as e:
-        # TODO sys.exit() instead of SystemExit?
-        raise SystemExit(e)
+        print(e)
+        sys.exit(2)
