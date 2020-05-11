@@ -40,21 +40,38 @@ Example:
   - http://test-domain.com/us/test-name/42/123456789?i=09876
 """)
 
-    parser.add_argument('-v', dest='verbose_level', action='count',
-                        help='increase verbosity of reporting (-vv prints debug messages)')
-    parser.add_argument('-t', '--temp', dest='has_overwrite_flag', action='store_false', default=True,
-                        help='[only tag command] create temporary files with updated metadata (instead of overwriting files)')
-    parser.add_argument('-c', '--cache', dest='has_search_result_cache_flag', action='store_true',
-                        help='[only tag command] save the downloaded metadata to disk')
-    available_commands = [module.name for module in pkgutil.iter_modules(apit.command.__path__)] # type: ignore
-    parser.add_argument('command', choices=available_commands,
-                        help='available commands: "show" or "tag" metadata')
-    parser.add_argument('path', metavar='PATH', type=_to_path,
-                        help='path containing m4a files')
-    parser.add_argument('source', metavar='SOURCE', nargs='?',
-                        help='[only tag command] optional url (to be downloaded) or file (already downloaded) containing Apple Music/iTunes Store data')
+    parser.add_argument(
+        '-v', dest='verbose_level',
+        action='count',
+        help='increase verbosity of reporting (-vv prints debug messages)'
+    )
+    parser.add_argument(
+        '-t', '--temp', dest='has_overwrite_flag',
+        action='store_false', default=True,
+        help='[only tag command] create temporary files with updated metadata (instead of overwriting files)'
+    )
+    parser.add_argument(
+        '-c', '--cache', dest='has_search_result_cache_flag',
+        action='store_true',
+        help='[only tag command] save the downloaded metadata to disk'
+    )
+    parser.add_argument(
+        'command', choices=_determine_available_commands(),
+        help='available commands: "show" or "tag" metadata'
+    )
+    parser.add_argument(
+        'path', metavar='PATH', type=_to_path,
+        help='path containing m4a files'
+    )
+    parser.add_argument(
+        'source', metavar='SOURCE', nargs='?',
+        help='[only tag command] optional url (to be downloaded) or file (already downloaded) containing Apple Music/iTunes Store data'
+    )
 
     return parser.parse_args(args)
+
+def _determine_available_commands() -> List[str]:
+    return [module.name for module in pkgutil.iter_modules(apit.command.__path__)] # type: ignore
 
 def _to_path(path_string: str) -> Path:
     path = Path(path_string).expanduser()
