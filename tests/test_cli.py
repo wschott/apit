@@ -3,7 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from apit.cli import parse_args, _to_path
+from apit.cli import _to_path, parse_args
+
 
 def test_parse_args():
     args = parse_args(['show', './tests/fixtures'])
@@ -11,6 +12,7 @@ def test_parse_args():
     assert args.path == Path('./tests/fixtures')
     assert args.has_overwrite_flag
     assert not args.has_search_result_cache_flag
+
 
 def test_parse_args_optional_args():
     args = parse_args(['-v', 'show', './tests/fixtures'])
@@ -31,6 +33,7 @@ def test_parse_args_optional_args():
     args = parse_args(['tag', './tests/fixtures', 'test-metadata-file.json'])
     assert args.source == 'test-metadata-file.json'
 
+
 def test_parse_args_complex_args(tmp_path):
     args = parse_args(['--cache', '--temp', '-v', 'tag', str(tmp_path), 'test-metadata-file.json'])
     assert args.has_search_result_cache_flag
@@ -40,26 +43,32 @@ def test_parse_args_complex_args(tmp_path):
     assert args.path == tmp_path
     assert args.source == 'test-metadata-file.json'
 
+
 def test_parse_args_missing_command():
     with pytest.raises(SystemExit):
         parse_args(['.'])
+
 
 def test_parse_args_missing_folder():
     with pytest.raises(SystemExit):
         parse_args(['show'])
 
+
 def test_parse_args_invalid_folder():
     with pytest.raises(SystemExit):
         parse_args(['show', './non-existing-folder'])
+
 
 def test_parse_args_invalid_option():
     with pytest.raises(SystemExit):
         parse_args(['-x', 'show', './tests/fixtures'])
 
+
 def test_to_path(tmp_path):
     # TODO test expanddir()
     assert _to_path('.') == Path('.')
     assert _to_path(str(tmp_path)) == tmp_path
+
 
 def test_to_path_invalid_folder():
     with pytest.raises(ArgumentTypeError):

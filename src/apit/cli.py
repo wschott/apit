@@ -69,6 +69,7 @@ Example:
 
     return parser.parse_args(args)
 
+
 def _to_path(path_string: str) -> Path:
     path = Path(path_string).expanduser()
 
@@ -76,6 +77,7 @@ def _to_path(path_string: str) -> Path:
         raise ArgumentTypeError(f'Invalid path: {path_string}')
 
     return path
+
 
 def cli():
     try:

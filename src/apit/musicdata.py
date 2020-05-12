@@ -10,6 +10,7 @@ from apit.metadata import Album, Song
 # old format: http://itunes.apple.com/us/album/album-name/id123456789
 REGEX_STORE_URL_COUNTRY_CODE_ID = re.compile(r'^https?:\/\/[^\/]*\/(?P<country_code>[a-z]{2})\/[^\/]+\/[^\/]+\/(id)?(?P<id>\d+)')
 
+
 def generate_store_lookup_url(user_url: str) -> str:
     match = REGEX_STORE_URL_COUNTRY_CODE_ID.match(user_url)
 
@@ -20,11 +21,13 @@ def generate_store_lookup_url(user_url: str) -> str:
     album_id = match.groupdict()['id']
     return f'https://itunes.apple.com/lookup?entity=song&country={country_code}&id={album_id}'
 
+
 def fetch_store_json(url: str) -> str:
-    openUrl = urllib.request.urlopen(url)
-    if openUrl.getcode() != 200:
-        raise ApitError('Connection to Apple Music/iTunes Store failed with error code: %s' % openUrl.getcode())
-    return openUrl.read()
+    open_url = urllib.request.urlopen(url)
+    if open_url.getcode() != 200:
+        raise ApitError('Connection to Apple Music/iTunes Store failed with error code: %s' % open_url.getcode())
+    return open_url.read()
+
 
 def extract_album_with_songs(metadata_json: str) -> Album:
     try:
@@ -37,17 +40,20 @@ def extract_album_with_songs(metadata_json: str) -> Album:
 
     return _find_album_with_songs(itunes_data['results'])
 
+
 def _find_album_with_songs(music_data) -> Album:
     album = _find_album(music_data)
     for song in _find_songs(music_data):
         album.add_song(song)
     return album
 
+
 def _find_album(music_data) -> Album:
     for item in music_data:
         if 'collectionType' in item and item['collectionType'] in ['Album', 'Compilation']:
             return Album(item)
     raise ApitError('No album found in metadata')
+
 
 def _find_songs(music_data) -> List[Song]:
     return [Song(item) for item in music_data if 'kind' in item and item['kind'] == 'song']

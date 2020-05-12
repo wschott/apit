@@ -99,8 +99,10 @@ class TagAction(Action):
 
         return {'album': album, 'should_overwrite': options.has_overwrite_flag}
 
+
 def is_url(source: str) -> bool:
     return source.startswith('http')
+
 
 def get_metadata_json(source) -> str:
     logging.info('Input source: %s', source)

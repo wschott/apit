@@ -11,6 +11,7 @@ def ask_user_for_input(question: str, abortion: str) -> str:
             raise ApitError(abortion)
         return user_input
 
+
 def ask_user_for_confirmation(question: str = 'Apply?', abortion: str = 'Aborted.'):
     user_input = ask_user_for_input(
         question=f"{question} Enter [y/n]?: ",

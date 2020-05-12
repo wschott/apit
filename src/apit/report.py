@@ -23,6 +23,7 @@ STR_NOT_SELECTED = ' '
 STR_SUCCESS = '✓'
 STR_FAIL = '✘'
 
+
 class Color(Enum):
     NONE = -1
     RED = 1
@@ -31,10 +32,12 @@ class Color(Enum):
     BLUE = 4
     MAGENTA = 5
 
+
 def to_colored_text(text, color: Color):
     if color == Color.NONE:
         return text
     return f'{PREFIX % color.value}{text}{SUFFIX}'
+
 
 def truncate_filename(path: Path, length: int = FILENAME_TRUNCATION_LIMIT) -> str:
     if len(path.name) <= length:
@@ -42,11 +45,14 @@ def truncate_filename(path: Path, length: int = FILENAME_TRUNCATION_LIMIT) -> st
 
     return path.name[:(length - len(ELLIPSIS))] + ELLIPSIS
 
+
 def pad_with_spaces(string: str, length: int = FILENAME_TRUNCATION_LIMIT) -> str:
     return string.ljust(length, ' ')
 
+
 def separator() -> str:
     return '-' * SEPARATOR_LENGTH
+
 
 def preview_line(action: Action) -> str:
     text = TABLE_LINE_FORMAT % (
@@ -56,6 +62,7 @@ def preview_line(action: Action) -> str:
     )
     return to_colored_text(text=text, color=_to_color_for_preview(action))
 
+
 def result_line(action: Action) -> str:
     text = TABLE_LINE_FORMAT % (
         _is_successful(action),
@@ -64,16 +71,20 @@ def result_line(action: Action) -> str:
     )
     return to_colored_text(text=text, color=_to_color_for_result(action))
 
+
 def _is_successful(action: Action) -> str:
     return STR_SUCCESS if action.successful else STR_FAIL
 
+
 def _is_selected(action: Action) -> str:
     return STR_SELECTED if action.actionable else STR_NOT_SELECTED
+
 
 def _to_color_for_preview(action: Action) -> Color:
     if not action.actionable:
         return Color.YELLOW
     return Color.NONE
+
 
 def _to_color_for_result(action: Action) -> Color:
     if not action.executed:
@@ -82,12 +93,14 @@ def _to_color_for_result(action: Action) -> Color:
         return Color.RED
     return Color.GREEN
 
+
 def print_actions_preview(actions: List[Action]) -> None:
     print('Preview:')
     print(separator())
     for action in actions:
         print(preview_line(action))
     print()
+
 
 def print_report(actions: List[Action]) -> None:
     successes = filter_successes(actions)
@@ -107,6 +120,7 @@ def print_report(actions: List[Action]) -> None:
     print_summary(actions)
     print_summary_line(len(successes), len(errors), len(skipped))
 
+
 def print_processing_result(action: Action) -> None:
     print(separator())
     print(result_line(action))
@@ -125,11 +139,13 @@ def print_processing_result(action: Action) -> None:
             print('>> stderr:')
             print(action.commandStatus.stderr.strip())
 
+
 def print_summary(actions: List[Action]) -> None:
     print('\nSummary:')
     print(separator())
     for action in actions:
         print(result_line(action))
+
 
 def print_summary_line(successes: int, errors: int, skipped: int) -> None:
     summary = []

@@ -14,19 +14,24 @@ STORE_URL_OLD = 'http://itunes.apple.com/us/album/test-album/id12345'
 LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=12345'
 REAL_LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903'
 
+
 def test_generate_store_lookup_url_using_valid_url():
     assert generate_store_lookup_url(STORE_URL) == LOOKUP_URL
 
+
 def test_generate_store_lookup_url_using_valid_old_url():
     assert generate_store_lookup_url(STORE_URL_OLD) == LOOKUP_URL
+
 
 def test_generate_store_lookup_url_using_valid_random_url():
     assert generate_store_lookup_url(STORE_URL_COMPLEX) == LOOKUP_URL
     assert generate_store_lookup_url(STORE_URL_ANYTHING) == LOOKUP_URL
 
+
 def test_generate_store_lookup_url_using_invalid_url():
     with pytest.raises(ApitError):
         generate_store_lookup_url('http://invalid-url.com/')
+
 
 def test_extract_album_with_songs(test_metadata):
     album = extract_album_with_songs(test_metadata)
@@ -41,6 +46,7 @@ def test_extract_album_with_songs(test_metadata):
     assert song['trackNumber'] == 3
     assert song['trackName'] == 'Power'
 
+
 def test_extract_album_with_songs_invalid_json():
     with pytest.raises(ApitError):
         extract_album_with_songs('')
@@ -50,6 +56,7 @@ def test_extract_album_with_songs_invalid_json():
         extract_album_with_songs('{"results":[], "test": 0}')
     with pytest.raises(ApitError):
         extract_album_with_songs('{"results":[], "resultCount": 0}')
+
 
 @pytest.mark.integration
 @pytest.mark.xfail

@@ -16,6 +16,7 @@ def _generate_cache_filename(album: Album) -> str:
     filename: List[str] = [re.sub(r'\W+', '_', str(f)) for f in filename_parts]
     return f'{"-".join(filename)}.json'
 
+
 def save_to_cache(json: str, cache_path: Path, album: Album) -> None:
     cache_file = cache_path / _generate_cache_filename(album)
 

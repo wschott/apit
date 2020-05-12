@@ -2,7 +2,7 @@ from pathlib import Path
 from subprocess import CompletedProcess
 from typing import List
 
-from apit.cmd import execute_command_for_file
+from apit.cmd import execute_command
 from apit.metadata import Album, Song
 
 BLACKLIST = [
@@ -20,6 +20,7 @@ ITEM_TYPE_MAP = {
     'song': 'Normal',
 }
 
+
 # https://affiliate.itunes.apple.com/resources/documentation/genre-mapping/
 # GENRE_MAP = {
 #     'Hip Hop/Rap': 18,
@@ -30,15 +31,18 @@ ITEM_TYPE_MAP = {
 
 def read_metadata(file: Path) -> CompletedProcess:
     command = ['-t']
-    return execute_command_for_file(file, command)
+    return execute_command(file, command)
+
 
 def is_itunes_bought_file(file: Path) -> bool:
-    processResult = read_metadata(file)
-    return any(map(lambda item: item in processResult.stdout, BLACKLIST))
+    command_status = read_metadata(file)
+    return any(map(lambda item: item in command_status.stdout, BLACKLIST))
+
 
 def update_metadata(file: Path, album: Album, song: Song, should_overwrite: bool) -> CompletedProcess:
     command = _generate_metadata_update_command(album, song, should_overwrite)
-    return execute_command_for_file(file, command, shell=True)
+    return execute_command(file, command, shell=True)
+
 
 def _generate_metadata_update_command(album_metadata: Album, track_metadata: Song, should_overwrite: bool) -> List[str]:
     command = [

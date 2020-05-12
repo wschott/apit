@@ -53,13 +53,16 @@ EXPECTED_UPDATE_COMMAND = ' '.join(
     ]
 )
 
+
 def test_generate_metadata_update_command():
     assert _generate_metadata_update_command(ALBUM, SONG, should_overwrite=False) == EXPECTED_GENERATED_COMMAND
+
 
 @patch('apit.cmd._run_subprocess')
 def test_metadata_updating(mock_run_subprocess, mock_atomicparsley_exe):
     _ = update_metadata('dummy.m4a', ALBUM, SONG, should_overwrite=False)
     assert mock_run_subprocess.call_args == call(EXPECTED_UPDATE_COMMAND, shell=True)
+
 
 @patch('apit.cmd._run_subprocess')
 def test_metadata_updating_with_overwriting(mock_run_subprocess, mock_atomicparsley_exe):
