@@ -1,2 +1,2 @@
-from .album import Album
-from .song import Song
+from .album import Album  # noqa: F401
+from .song import Song  # noqa: F401

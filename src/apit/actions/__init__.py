@@ -1,6 +1,6 @@
 from typing import List, Type
 
-from .base import (
+from .base import (  # noqa: F401
     Action,
     all_actions_successful,
     any_action_needs_confirmation,
