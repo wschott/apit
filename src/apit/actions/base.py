@@ -17,12 +17,12 @@ class Action:
         self.commandStatus: Optional[CompletedProcess] = None # TODO not part of Action base class
 
     @property
-    def successful(self) -> bool:
-        raise NotImplementedError
-
-    @property
     def executed(self) -> bool:
         return self._executed
+
+    @property
+    def successful(self) -> bool:
+        raise NotImplementedError
 
     def apply(self) -> None:
         raise NotImplementedError
