@@ -1,4 +1,7 @@
+import pytest
+
 from apit.actions import (
+    Action,
     all_actions_successful,
     any_action_needs_confirmation,
     filter_errors,
@@ -46,3 +49,49 @@ def test_filter_not_actionable(mock_action_actionable, mock_action_not_actionabl
     assert filter_not_actionable([mock_action_actionable, mock_action_actionable]) == []
     assert filter_not_actionable([mock_action_actionable, mock_action_not_actionable]) == [mock_action_not_actionable]
     assert filter_not_actionable([mock_action_not_actionable, mock_action_not_actionable]) == [mock_action_not_actionable, mock_action_not_actionable]
+
+
+def test_action_to_action_options():
+    with pytest.raises(NotImplementedError):
+        Action.to_action_options({'test-key': 'test-value'})
+
+
+def test_action_init():
+    action = Action('file-path', {'test-key': 'test-value'})
+
+    assert action.file == 'file-path'
+    assert action.options == {'test-key': 'test-value'}
+    assert not action.executed
+    assert not action.successful
+    assert not action.result
+
+    with pytest.raises(NotImplementedError):
+        action.apply()
+    with pytest.raises(NotImplementedError):
+        action.needs_confirmation
+    with pytest.raises(NotImplementedError):
+        action.actionable
+    with pytest.raises(NotImplementedError):
+        action.not_actionable_msg
+    with pytest.raises(NotImplementedError):
+        action.preview_msg
+    with pytest.raises(NotImplementedError):
+        action.status_msg
+
+
+def test_action_mark_as_success():
+    action = Action('file-path', {})
+
+    action.mark_as_success('test-success')
+    assert action.executed
+    assert action.successful
+    assert action.result == 'test-success'
+
+
+def test_action_mark_as_fail():
+    action = Action('file-path', {})
+
+    action.mark_as_fail('test-fail')
+    assert action.executed
+    assert not action.successful
+    assert action.result == 'test-fail'

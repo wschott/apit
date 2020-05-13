@@ -125,19 +125,19 @@ def print_processing_result(action: Action) -> None:
     print(separator())
     print(result_line(action))
     print()
-    if action.commandStatus:
+    if action.result:
         if action.successful:
-            logging.info('Command: %s' % action.commandStatus.args)
-            print(action.commandStatus.stdout.strip())
-            logging.info('stderr: %s', action.commandStatus.stderr.strip())
+            logging.info('Command: %s' % action.result.args)
+            print(action.result.stdout.strip())
+            logging.info('stderr: %s', action.result.stderr.strip())
             print()
         else:
             print('>> Command:')
-            print(action.commandStatus.args)
+            print(action.result.args)
             print('>> stdout:')
-            print(action.commandStatus.stdout.strip())
+            print(action.result.stdout.strip())
             print('>> stderr:')
-            print(action.commandStatus.stderr.strip())
+            print(action.result.stderr.strip())
 
 
 def print_summary(actions: List[Action]) -> None:

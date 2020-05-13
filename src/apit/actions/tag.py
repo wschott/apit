@@ -40,16 +40,16 @@ class TagAction(Action):
     def song(self) -> Song:
         return self.album.get_song(disc=self.file_match.disc, track=self.file_match.track)
 
-    @property
-    def successful(self) -> bool:
-        return self.executed and not bool(self.commandStatus.returncode)
-
     def apply(self) -> None:
         if not self.actionable:
             return
 
-        self.commandStatus = update_metadata(self.file, self.album, self.song, self.options['should_overwrite'])
-        self._executed = True
+        commandStatus = update_metadata(self.file, self.album, self.song, self.options['should_overwrite'])
+
+        if not bool(commandStatus.returncode):
+            self.mark_as_success(commandStatus)
+        else:
+            self.mark_as_fail(commandStatus)
 
     @property
     def not_actionable_msg(self) -> str:

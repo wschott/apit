@@ -13,10 +13,8 @@ class Action:
         self.options = options
 
         self._executed: bool = False
-
-        # TODO sub init -> create empty method, overwritten in sub classes?
-        self._success: Optional[bool] = None  # TODO set to False by default?
-        self.commandStatus: Optional[CompletedProcess] = None  # TODO not part of Action base class
+        self._success: Optional[bool] = None
+        self._result: Optional[CompletedProcess] = None
 
     @property
     def executed(self) -> bool:
@@ -24,7 +22,21 @@ class Action:
 
     @property
     def successful(self) -> bool:
-        raise NotImplementedError
+        return self._success
+
+    @property
+    def result(self):
+        return self._result
+
+    def mark_as_success(self, result) -> None:
+        self._executed = True
+        self._success = True
+        self._result = result
+
+    def mark_as_fail(self, result) -> None:
+        self._executed = True
+        self._success = False
+        self._result = result
 
     def apply(self) -> None:
         raise NotImplementedError
