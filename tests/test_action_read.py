@@ -26,7 +26,7 @@ def test_read_action_after_init():
 
 
 @patch('apit.cmd._run_subprocess')
-def test_read_action_apply(mock_run_subprocess):
+def test_read_action_apply(mock_run_subprocess, mock_atomicparsley_exe):
     mock_commandStatus = MagicMock()
     mock_commandStatus.returncode = 0
     mock_run_subprocess.return_value = mock_commandStatus
@@ -42,7 +42,7 @@ def test_read_action_apply(mock_run_subprocess):
 
 
 @patch('apit.cmd._run_subprocess')
-def test_read_action_apply_error_while_reading(mock_run_subprocess):
+def test_read_action_apply_error_while_reading(mock_run_subprocess, mock_atomicparsley_exe):
     mock_commandStatus = MagicMock()
     mock_commandStatus.returncode = 1
     mock_run_subprocess.return_value = mock_commandStatus
