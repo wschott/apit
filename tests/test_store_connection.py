@@ -1,4 +1,3 @@
-import json
 import urllib.error
 from unittest.mock import MagicMock, patch
 
@@ -53,27 +52,3 @@ def test_fetch_store_json_with_url_error():
     with patch('urllib.request.urlopen', side_effect=urllib.error.URLError('test-msg')):
         with pytest.raises(ApitError, match='due to error: test-msg'):
             fetch_store_json(LOOKUP_URL)
-
-
-@pytest.mark.integration
-def test_fetch_store_json_with_real_data_from_itunes():
-    REAL_LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903'
-
-    json_str = fetch_store_json(REAL_LOOKUP_URL)
-
-    data = json.loads(json_str)
-
-    assert data['resultCount'] == 15
-
-    # test some album data
-    assert data['results'][0]['collectionId'] == 1440742903
-    assert data['results'][0]['collectionType'] == 'Album'
-    assert data['results'][0]['artistName'] == 'Kanye West'
-    assert data['results'][0]['collectionName'] == 'My Beautiful Dark Twisted Fantasy'
-    assert data['results'][0]['copyright'] == '℗ 2010 Roc-A-Fella Records, LLC'
-
-    # test some song data
-    assert data['results'][1]['kind'] == 'song'
-    assert data['results'][1]['trackName'] == 'Dark Fantasy'
-    assert data['results'][1]['trackNumber'] == 1
-    assert data['results'][1]['trackCount'] == 13
