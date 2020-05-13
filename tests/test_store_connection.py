@@ -1,14 +1,11 @@
 import json
-from unittest.mock import patch, MagicMock
+import urllib.error
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 from apit.error import ApitError
-from apit.musicdata import (
-    extract_album_with_songs,
-    fetch_store_json,
-    generate_store_lookup_url,
-)
+from apit.store.connection import fetch_store_json, generate_store_lookup_url
 
 STORE_URL = 'https://music.apple.com/us/album/test-album/12345'
 STORE_URL_COMPLEX = 'http://test.com/us/test/42/12345?i=09876/54321'
@@ -35,48 +32,26 @@ def test_generate_store_lookup_url_using_invalid_url():
         generate_store_lookup_url('http://invalid-url.com/')
 
 
-def test_extract_album_with_songs(test_metadata):
-    album = extract_album_with_songs(test_metadata)
-
-    assert album['collectionId'] == 1440742903
-    assert album['artistName'] == 'Kanye West'
-    assert album['collectionName'] == 'My Beautiful Dark Twisted Fantasy'
-
-    song = album.get_song(disc=1, track=3)
-    assert song['kind'] == 'song'
-    assert song['discNumber'] == 1
-    assert song['trackNumber'] == 3
-    assert song['trackName'] == 'Power'
-
-
-def test_extract_album_with_songs_invalid_json():
-    with pytest.raises(ApitError):
-        extract_album_with_songs('')
-    with pytest.raises(ApitError):
-        extract_album_with_songs('{"test":[], "resultCount": 0}')
-    with pytest.raises(ApitError):
-        extract_album_with_songs('{"results":[], "test": 0}')
-    with pytest.raises(ApitError):
-        extract_album_with_songs('{"results":[], "resultCount": 0}')
-
-
 def test_fetch_store_json():
-    mock_response = MagicMock()
-    mock_response.getcode.return_value = 200
-    mock_response.read.return_value = b'{"resultCount":12, "results": [{}]}'
+    response_attrs = {'read.return_value': b'{"resultCount":12, "results": [{}]}'}
+    mock = MagicMock()
+    mock.__enter__.return_value = MagicMock(**response_attrs)
 
-    with patch('urllib.request.urlopen', return_value=mock_response):
+    with patch('urllib.request.urlopen', return_value=mock):
         json = fetch_store_json(LOOKUP_URL)
 
     assert '{"resultCount":12, "results": [{}]}' == json
 
 
 def test_fetch_store_json_with_http_error():
-    mock_response = MagicMock()
-    mock_response.getcode.return_value = 500
+    with patch('urllib.request.urlopen', side_effect=urllib.error.HTTPError(url=None, code=500, msg='test-msg', hdrs=None, fp=None)):
+        with pytest.raises(ApitError, match='due to HTTP error code "500": test-msg'):
+            fetch_store_json(LOOKUP_URL)
 
-    with patch('urllib.request.urlopen', return_value=mock_response):
-        with pytest.raises(ApitError):
+
+def test_fetch_store_json_with_url_error():
+    with patch('urllib.request.urlopen', side_effect=urllib.error.URLError('test-msg')):
+        with pytest.raises(ApitError, match='due to error: test-msg'):
             fetch_store_json(LOOKUP_URL)
 
 

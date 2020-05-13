@@ -7,11 +7,10 @@ from apit.error import ApitError
 from apit.file_handling import extract_disc_and_track_number
 from apit.metadata import Album, Song
 from apit.metadata_cache import save_to_cache
-from apit.musicdata import (
+from apit.store_data_parser import (
     extract_album_with_songs,
-    fetch_store_json,
-    generate_store_lookup_url,
 )
+from apit.store.connection import fetch_store_json, generate_store_lookup_url
 from apit.user_input import ask_user_for_input
 
 from .base import Action

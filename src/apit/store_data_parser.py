@@ -1,33 +1,8 @@
 import json
-import re
-import urllib.request
 from typing import List
 
 from apit.error import ApitError
 from apit.metadata import Album, Song
-
-# format (as of 2020-05): https://music.apple.com/us/album/album-name/123456789
-# old format: http://itunes.apple.com/us/album/album-name/id123456789
-REGEX_STORE_URL_COUNTRY_CODE_ID = re.compile(r'^https?:\/\/[^\/]*\/(?P<country_code>[a-z]{2})\/[^\/]+\/[^\/]+\/(id)?(?P<id>\d+)')
-
-
-def generate_store_lookup_url(user_url: str) -> str:
-    match = REGEX_STORE_URL_COUNTRY_CODE_ID.match(user_url)
-
-    if not match:
-        raise ApitError(f'Invalid URL format: {user_url}')
-
-    country_code = match.groupdict()['country_code']
-    album_id = match.groupdict()['id']
-    return f'https://itunes.apple.com/lookup?entity=song&country={country_code}&id={album_id}'
-
-
-def fetch_store_json(url: str) -> str:
-    open_url = urllib.request.urlopen(url)
-    if open_url.getcode() != 200:
-        raise ApitError('Connection to Apple Music/iTunes Store failed with error code: %s' % open_url.getcode())
-    data_read = open_url.read()
-    return data_read.decode('utf-8')
 
 
 def extract_album_with_songs(metadata_json: str) -> Album:
