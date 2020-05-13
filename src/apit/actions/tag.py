@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Mapping, Union
 
 from apit.atomic_parser import is_itunes_bought_file, update_metadata
 from apit.error import ApitError
@@ -20,7 +20,7 @@ from .base import Action
 class TagAction(Action):
     COMMAND_NAME: str = 'tag'
 
-    def __init__(self, file: Path, options):
+    def __init__(self, file: Path, options: Mapping[str, Union[Album, bool]]):
         super().__init__(file, options)
 
         self.album: Album = self.options['album']
@@ -80,7 +80,7 @@ class TagAction(Action):
         return 'tagged'
 
     @staticmethod
-    def to_action_options(options) -> Dict[str, Any]:
+    def to_action_options(options) -> Mapping[str, Union[Album, bool]]:
         source: str = options.source
 
         if not source:
@@ -104,7 +104,7 @@ def is_url(source: str) -> bool:
     return source.startswith('http')
 
 
-def get_metadata_json(source) -> str:
+def get_metadata_json(source: str) -> str:
     logging.info('Input source: %s', source)
     if is_url(source):
         logging.info('Use URL to download metadata: %s', source)

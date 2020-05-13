@@ -1,11 +1,13 @@
 from pathlib import Path
 from subprocess import CompletedProcess  # TODO should not import such things
-from typing import List, Optional, Type
+from typing import Any, List, Mapping, Optional, Type
 
 from apit.error import ApitError
 
 
 class Action:
+    COMMAND_NAME: str = '_BaseAction'
+
     def __init__(self, file: Path, options):
         self.file = file
         self.options = options
@@ -45,6 +47,10 @@ class Action:
 
     @property
     def status_msg(self) -> str:
+        raise NotImplementedError
+
+    @staticmethod
+    def to_action_options(options) -> Mapping[str, Any]:
         raise NotImplementedError
 
 

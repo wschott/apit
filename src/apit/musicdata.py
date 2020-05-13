@@ -43,8 +43,7 @@ def extract_album_with_songs(metadata_json: str) -> Album:
 
 def _find_album_with_songs(music_data) -> Album:
     album = _find_album(music_data)
-    for song in _find_songs(music_data):
-        album.add_song(song)
+    album.add_songs(_find_songs(music_data))
     return album
 
 

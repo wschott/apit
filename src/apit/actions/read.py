@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Mapping
 
 from apit.atomic_parser import read_metadata
 
@@ -36,5 +36,5 @@ class ReadAction(Action):
         return 'successful'
 
     @staticmethod
-    def to_action_options(options) -> Dict[str, Any]:
+    def to_action_options(options) -> Mapping[str, Any]:
         return {}

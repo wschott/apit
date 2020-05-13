@@ -12,5 +12,5 @@ LEVEL_TO_COLOR_MAP = {
 
 
 class ColoredFormatter(logging.Formatter):
-    def format(self, record: logging.LogRecord):
+    def format(self, record: logging.LogRecord) -> str:
         return to_colored_text(super().format(record), LEVEL_TO_COLOR_MAP.get(record.levelno, Color.NONE))

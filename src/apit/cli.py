@@ -79,7 +79,7 @@ def _to_path(path_string: str) -> Path:
     return path
 
 
-def cli():
+def cli() -> None:
     try:
         options = parse_args(sys.argv[1:])
         sys.exit(main(options))

@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Type
+from typing import Any, List, Mapping, Type
 
 from apit.actions import (
     AVAILAIBLE_ACTIONS,
@@ -31,7 +31,7 @@ def main(options) -> int:
 
     ActionType: Type[Action] = find_action_type(options.command, AVAILAIBLE_ACTIONS)
 
-    action_options: Dict[str, Any] = ActionType.to_action_options(options)
+    action_options: Mapping[str, Any] = ActionType.to_action_options(options)
     actions: List[Action] = [ActionType(file, action_options) for file in files]
 
     if any_action_needs_confirmation(actions):
@@ -45,7 +45,7 @@ def main(options) -> int:
     return 0 if all_actions_successful(actions) else 1
 
 
-def configure_logging(verbose_level):
+def configure_logging(verbose_level: int) -> None:
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(ColoredFormatter('%(levelname)s: %(message)s'))
 
