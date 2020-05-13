@@ -26,7 +26,8 @@ def fetch_store_json(url: str) -> str:
     open_url = urllib.request.urlopen(url)
     if open_url.getcode() != 200:
         raise ApitError('Connection to Apple Music/iTunes Store failed with error code: %s' % open_url.getcode())
-    return open_url.read()
+    data_read = open_url.read()
+    return data_read.decode('utf-8')
 
 
 def extract_album_with_songs(metadata_json: str) -> Album:

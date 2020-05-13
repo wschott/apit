@@ -1,3 +1,6 @@
+import json
+from unittest.mock import patch, MagicMock
+
 import pytest
 
 from apit.error import ApitError
@@ -12,7 +15,6 @@ STORE_URL_COMPLEX = 'http://test.com/us/test/42/12345?i=09876/54321'
 STORE_URL_ANYTHING = 'http://x/us/x/9/12345?i=09876'
 STORE_URL_OLD = 'http://itunes.apple.com/us/album/test-album/id12345'
 LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=12345'
-REAL_LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903'
 
 
 def test_generate_store_lookup_url_using_valid_url():
@@ -58,10 +60,45 @@ def test_extract_album_with_songs_invalid_json():
         extract_album_with_songs('{"results":[], "resultCount": 0}')
 
 
+def test_fetch_store_json():
+    mock_response = MagicMock()
+    mock_response.getcode.return_value = 200
+    mock_response.read.return_value = b'{"resultCount":12, "results": [{}]}'
+
+    with patch('urllib.request.urlopen', return_value=mock_response):
+        json = fetch_store_json(LOOKUP_URL)
+
+    assert '{"resultCount":12, "results": [{}]}' == json
+
+
+def test_fetch_store_json_with_http_error():
+    mock_response = MagicMock()
+    mock_response.getcode.return_value = 500
+
+    with patch('urllib.request.urlopen', return_value=mock_response):
+        with pytest.raises(ApitError):
+            fetch_store_json(LOOKUP_URL)
+
+
 @pytest.mark.integration
-@pytest.mark.xfail
-def test_real_fetching_of_data_from_itunes():
-    json = fetch_store_json(REAL_LOOKUP_URL)
-    print(json)
-    assert b'{\n "resultCount":15,\n "results": [\n{' in json
-    assert 0
+def test_fetch_store_json_with_real_data_from_itunes():
+    REAL_LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903'
+
+    json_str = fetch_store_json(REAL_LOOKUP_URL)
+
+    data = json.loads(json_str)
+
+    assert data['resultCount'] == 15
+
+    # test some album data
+    assert data['results'][0]['collectionId'] == 1440742903
+    assert data['results'][0]['collectionType'] == 'Album'
+    assert data['results'][0]['artistName'] == 'Kanye West'
+    assert data['results'][0]['collectionName'] == 'My Beautiful Dark Twisted Fantasy'
+    assert data['results'][0]['copyright'] == '℗ 2010 Roc-A-Fella Records, LLC'
+
+    # test some song data
+    assert data['results'][1]['kind'] == 'song'
+    assert data['results'][1]['trackName'] == 'Dark Fantasy'
+    assert data['results'][1]['trackNumber'] == 1
+    assert data['results'][1]['trackCount'] == 13
