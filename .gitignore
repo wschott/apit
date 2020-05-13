@@ -5,7 +5,7 @@ __pycache__/
 build/
 dist/
 
-.coverage
+.coverage*
 htmlcov/
 .tox/
 .pytest_cache/

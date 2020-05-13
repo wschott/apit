@@ -27,7 +27,6 @@
 - pass args to functions for better testability
 - https://docs.pytest.org/en/latest/monkeypatch.html
 - use capsys fixture to capture and analyze stdout/stderr: https://docs.pytest.org/en/latest/capture.html
-- use pytest-cov?
 - simplify loops (and other constructs) using FP
 - use and configure flake8?
 - setup dev mode for VS code (e.g. w/ pip install flake8 ...)
