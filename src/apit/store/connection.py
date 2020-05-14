@@ -9,7 +9,7 @@ from apit.error import ApitError
 REGEX_STORE_URL_COUNTRY_CODE_ID = re.compile(r'^https?:\/\/[^\/]*\/(?P<country_code>[a-z]{2})\/[^\/]+\/[^\/]+\/(id)?(?P<id>\d+)')
 
 
-def generate_store_lookup_url(user_url: str) -> str:
+def generate_metadata_lookup_url(user_url: str) -> str:
     match = REGEX_STORE_URL_COUNTRY_CODE_ID.match(user_url)
 
     if not match:
@@ -20,7 +20,7 @@ def generate_store_lookup_url(user_url: str) -> str:
     return f'https://itunes.apple.com/lookup?entity=song&country={country_code}&id={album_id}'
 
 
-def fetch_store_json(url: str) -> str:
+def download_metadata(url: str) -> str:
     try:
         with urllib.request.urlopen(url) as response:
             data_read = response.read()

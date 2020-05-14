@@ -1,29 +1,110 @@
 import pytest
 
 from apit.error import ApitError
-from apit.store_data_parser import extract_album_with_songs
+from apit.metadata import find_song
+from apit.store.constants import STORE_KEY
+from apit.store_data_parser import (
+    _find_album,
+    _find_songs,
+    extract_by_key,
+    extract_songs,
+    to_album,
+    to_song,
+)
+from tests.conftest import (
+    assert_dummy_test_album,
+    assert_dummy_test_song,
+    dummy_album,
+)
 
 
-def test_extract_album_with_songs(test_metadata):
-    album = extract_album_with_songs(test_metadata)
+def test_extract_songs(test_metadata):
+    songs = extract_songs(test_metadata)
 
-    assert album['collectionId'] == 1440742903
-    assert album['artistName'] == 'Kanye West'
-    assert album['collectionName'] == 'My Beautiful Dark Twisted Fantasy'
+    assert len(songs) == 14
 
-    song = album.get_song(disc=1, track=3)
-    assert song['kind'] == 'song'
-    assert song['discNumber'] == 1
-    assert song['trackNumber'] == 3
-    assert song['trackName'] == 'Power'
+    song = find_song(songs, disc=1, track=3)
+
+    assert song.album_artist == 'Kanye West'
+    assert song.copyright == '℗ 2010 Roc-A-Fella Records, LLC'
+
+    assert song.collection_id == 1440742903
+    assert song.album_name == 'My Beautiful Dark Twisted Fantasy'
+    assert song.media_kind == 'song'
+    assert song.disc_number == 1
+    assert song.track_number == 3
+    assert song.title == 'Power'
 
 
-def test_extract_album_with_songs_invalid_json():
+def test_extract_songs_using_invalid_metadata():
+    with pytest.raises(ApitError, match='format error'):
+        extract_songs('')
+    with pytest.raises(ApitError, match='results empty'):
+        extract_songs('{"test":[], "resultCount": 0}')
+    with pytest.raises(ApitError, match='results empty'):
+        extract_songs('{"results":[], "test": 0}')
+    with pytest.raises(ApitError, match='results empty'):
+        extract_songs('{"results":[], "resultCount": 0}')
+
+
+def test_find_album(album_metadata_as_json_obj):
+    album = _find_album(album_metadata_as_json_obj)
+
+    assert_dummy_test_album(album)
+
+
+def test_find_album_using_invalid_metadata():
+    with pytest.raises(ApitError, match='No album found'):
+        _find_album([])
+    with pytest.raises(ApitError, match='No album found'):
+        _find_album([{'collectionType': 'Not Album'}])
+
+
+def test_to_album(album_metadata_as_json_obj):
+    album = to_album(album_metadata_as_json_obj[0])
+
+    assert_dummy_test_album(album)
+
+
+def test_to_album_using_invalid_metadata():
     with pytest.raises(ApitError):
-        extract_album_with_songs('')
+        to_album({'invalid-key': 'value'})
+
+
+def test_find_songs(song_metadata_as_json_obj, test_album):
+    songs = _find_songs(song_metadata_as_json_obj, test_album)
+
+    assert len(songs) == 2
+
+    song = find_song(songs, disc=2, track=3)
+    assert_dummy_test_song(song)
+
+
+def test_find_songs_using_invalid_metadata():
+    test_album = dummy_album()
+
+    assert _find_songs([], test_album) == []
+    assert _find_songs([{'something': 'not song'}], test_album) == []
+    assert _find_songs([{'kind': 'not song'}], test_album) == []
+
+
+def test_to_song(song_metadata_as_json_obj, test_album):
+    song = to_song(test_album, song_metadata_as_json_obj[0])
+
+    assert_dummy_test_song(song)
+
+
+def test_to_song_using_invalid_metadata(test_album):
     with pytest.raises(ApitError):
-        extract_album_with_songs('{"test":[], "resultCount": 0}')
-    with pytest.raises(ApitError):
-        extract_album_with_songs('{"results":[], "test": 0}')
-    with pytest.raises(ApitError):
-        extract_album_with_songs('{"results":[], "resultCount": 0}')
+        to_song(test_album, {'invalid-key': 'value'})
+
+
+def test_extract_by_key():
+    assert extract_by_key(STORE_KEY.MEDIA_KIND, {'kind': 'song'}) == 'song'
+
+
+def test_extract_by_key_using_invalid_metadata():
+    with pytest.raises(ApitError, match='Unknown metadata key'):
+        extract_by_key('invalid-key', {'kind': 'song'})
+    with pytest.raises(ApitError, match='Metadata key not found'):
+        extract_by_key(STORE_KEY.MEDIA_KIND, {'invalid-key': 'song'})

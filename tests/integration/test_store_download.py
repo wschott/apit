@@ -1,17 +1,16 @@
 import json
-from pathlib import Path
 
 import pytest
 
 from apit.metadata_cache import save_to_cache
-from apit.store.connection import fetch_store_json
+from apit.store.connection import download_metadata
 
 
 @pytest.mark.integration
-def test_fetch_store_json_with_real_data_from_itunes():
+def test_download_metadata_using_real_itunes_data():
     REAL_LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903'
 
-    json_str = fetch_store_json(REAL_LOOKUP_URL)
+    json_str = download_metadata(REAL_LOOKUP_URL)
 
     data = json.loads(json_str)
 
@@ -32,15 +31,14 @@ def test_fetch_store_json_with_real_data_from_itunes():
 
 
 @pytest.mark.integration
-def test_downloaded_store_json_is_saved_using_unicode_chars(tmp_path, test_album):
+def test_downloaded_metadata_json_is_saved_using_unicode_chars(tmp_path):
+    cache_file = tmp_path / 'test-file.json'
     REAL_LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903'
 
-    json_str = fetch_store_json(REAL_LOOKUP_URL)
-    save_to_cache(json_str, tmp_path, test_album)
+    json_str = download_metadata(REAL_LOOKUP_URL)
+    save_to_cache(json_str, cache_file)
 
-    with Path(tmp_path / 'Test_Artist-Test_Collection-12345.json') as json_file:
-        data_read = json_file.read_text()
+    data_read = cache_file.read_text()
     assert data_read == json_str
-
     data = json.loads(data_read)
     assert data['results'][0]['copyright'] == '℗ 2010 Roc-A-Fella Records, LLC'

@@ -1,27 +1,22 @@
-import logging
 import os
 import re
 from pathlib import Path
 from typing import List
 
-from apit.metadata import Album
+from apit.metadata import Song
 
 
-def _generate_cache_filename(album: Album) -> str:
+def generate_cache_filename(cache_path: Path, song: Song) -> Path:
     filename_parts = [
-        album['artistName'],
-        album['collectionName'],
-        album['collectionId'],
+        song.album_artist,
+        song.album_name,
+        song.collection_id,
     ]
     filename: List[str] = [re.sub(r'\W+', '_', str(f)) for f in filename_parts]
-    return f'{"-".join(filename)}.json'
+    return cache_path / f'{"-".join(filename)}.json'
 
 
-def save_to_cache(json: str, cache_path: Path, album: Album) -> None:
-    cache_file = cache_path / _generate_cache_filename(album)
-
-    if not cache_path.exists():
-        os.makedirs(cache_path)
-
+def save_to_cache(json: str, cache_file: Path) -> None:
+    if not cache_file.parent.exists():
+        os.makedirs(cache_file.parent)
     cache_file.write_text(json)
-    logging.info('Downloaded metadata cached in: %s', cache_file)

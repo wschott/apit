@@ -1,14 +1,17 @@
 import logging
 from pathlib import Path
-from typing import Mapping, Union
+from typing import List, Mapping, Union
 
 from apit.atomic_parser import is_itunes_bought_file, update_metadata
 from apit.error import ApitError
 from apit.file_handling import extract_disc_and_track_number
-from apit.metadata import Album, Song
-from apit.metadata_cache import save_to_cache
-from apit.store.connection import fetch_store_json, generate_store_lookup_url
-from apit.store_data_parser import extract_album_with_songs
+from apit.metadata import Album, Song, find_song
+from apit.metadata_cache import generate_cache_filename, save_to_cache
+from apit.store.connection import (
+    download_metadata,
+    generate_metadata_lookup_url,
+)
+from apit.store_data_parser import extract_songs
 from apit.user_input import ask_user_for_input
 
 from .base import Action
@@ -17,12 +20,12 @@ from .base import Action
 class TagAction(Action):
     COMMAND_NAME: str = 'tag'
 
-    def __init__(self, file: Path, options: Mapping[str, Union[Album, bool]]):
+    def __init__(self, file: Path, options: Mapping[str, Union[List[Song], bool]]):
         super().__init__(file, options)
 
-        self.album: Album = self.options['album']
-        self.is_original = is_itunes_bought_file(self.file)
-        self.file_match = extract_disc_and_track_number(self.file)
+        self._is_original = is_itunes_bought_file(self.file)
+        self._file_match = extract_disc_and_track_number(self.file)
+        self._song = find_song(self.options['songs'], disc=self._file_match.disc, track=self._file_match.track)
 
     @property
     def needs_confirmation(self) -> bool:
@@ -30,43 +33,43 @@ class TagAction(Action):
 
     @property
     def actionable(self) -> bool:
-        return self.file_match.valid and self.metadata_matched and not self.is_original
+        return self._file_match.valid and self.metadata_matched and not self._is_original
 
     @property
     def metadata_matched(self) -> bool:
-        return self.album.has_song(disc=self.file_match.disc, track=self.file_match.track)
+        return self._song is not None
 
     @property
     def song(self) -> Song:
-        return self.album.get_song(disc=self.file_match.disc, track=self.file_match.track)
+        return self._song
 
     def apply(self) -> None:
         if not self.actionable:
             return
 
-        commandStatus = update_metadata(self.file, self.album, self.song, self.options['should_overwrite'])
+        command_status = update_metadata(self.file, self.song, self.options['should_overwrite'])
 
-        if not bool(commandStatus.returncode):
-            self.mark_as_success(commandStatus)
+        if not bool(command_status.returncode):
+            self.mark_as_success(command_status)
         else:
-            self.mark_as_fail(commandStatus)
+            self.mark_as_fail(command_status)
 
     @property
     def not_actionable_msg(self) -> str:
-        if not self.file_match.valid:
+        if not self._file_match.valid:
             return 'filename not matchable'
-        elif self.is_original:
+        elif self._is_original:
             return 'original iTunes Store file'
         elif not self.metadata_matched:
             return 'file not matched against metadata'
-        raise NotImplementedError
+        raise ApitError('Unknown state')
         # TODO return '?'
 
     @property
     def preview_msg(self) -> str:
         if not self.actionable:
             return f'[{self.not_actionable_msg}]'
-        return self.song["trackCensoredName"]
+        return self.song.title
 
     @property
     def status_msg(self) -> str:
@@ -77,7 +80,7 @@ class TagAction(Action):
         return 'tagged'
 
     @staticmethod
-    def to_action_options(options) -> Mapping[str, Union[Album, bool]]:
+    def to_action_options(options) -> Mapping[str, Union[List[Song], bool]]:
         source: str = options.source
 
         if not source:
@@ -88,13 +91,17 @@ class TagAction(Action):
 
         metadata_json = get_metadata_json(source)
 
-        album = extract_album_with_songs(metadata_json)
+        songs = extract_songs(metadata_json)
 
         if options.has_search_result_cache_flag and is_url(source):
             # TODO find better location for this code
-            save_to_cache(metadata_json, options.cache_path, album)
+            if not len(songs):
+                raise ApitError('Failed to generate a cache filename due to missing song')
+            cache_file = generate_cache_filename(options.cache_path, songs[0])
+            save_to_cache(metadata_json, cache_file)
+            logging.info('Downloaded metadata cached in: %s', cache_file)
 
-        return {'album': album, 'should_overwrite': options.has_overwrite_flag}
+        return {'songs': songs, 'should_overwrite': options.has_overwrite_flag}
 
 
 def is_url(source: str) -> bool:
@@ -105,9 +112,9 @@ def get_metadata_json(source: str) -> str:
     logging.info('Input source: %s', source)
     if is_url(source):
         logging.info('Use URL to download metadata: %s', source)
-        query_url = generate_store_lookup_url(source)
+        query_url = generate_metadata_lookup_url(source)
         logging.info('Query URL: %s', query_url)
-        return fetch_store_json(query_url)
+        return download_metadata(query_url)
     elif Path(source).exists():
         logging.info('Use downloaded metadata file: %s', source)
         return Path(source).read_text()

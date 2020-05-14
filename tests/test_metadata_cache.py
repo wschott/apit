@@ -1,28 +1,27 @@
-from apit.metadata_cache import _generate_cache_filename, save_to_cache
+from pathlib import Path
 
-EXPECTED_FILENAME = 'Test_Artist-Test_Collection-12345.json'
-
-
-def test_cache_filename_generation(test_album):
-    assert _generate_cache_filename(test_album) == EXPECTED_FILENAME
+from apit.metadata_cache import generate_cache_filename, save_to_cache
 
 
-def test_cache_file_creation(tmp_path, test_metadata, test_album):
-    expected_logfile_path = tmp_path / EXPECTED_FILENAME
-    assert not expected_logfile_path.exists()
-
-    save_to_cache(test_metadata, tmp_path, test_album)
-
-    assert expected_logfile_path.exists()
-    assert expected_logfile_path.read_text() == test_metadata
+def test_generate_cache_filename(test_song):
+    assert generate_cache_filename(Path('.'), test_song) == Path('./Album_Artist-Test_Album_Namè-12345.json')
 
 
-def test_cache_file_creation_creates_folder_hierarchy(tmp_path, test_metadata, test_album):
-    sub_path = tmp_path / 'test-folder'
-    expected_logfile_path = sub_path / EXPECTED_FILENAME
-    assert not expected_logfile_path.exists()
+def test_cache_file_creation(tmp_path, test_metadata):
+    cache_file = tmp_path / 'test-file.json'
+    assert not cache_file.exists()
 
-    save_to_cache(test_metadata, sub_path, test_album)
+    save_to_cache(test_metadata, cache_file)
 
-    assert expected_logfile_path.exists()
-    assert expected_logfile_path.read_text() == test_metadata
+    assert cache_file.exists()
+    assert cache_file.read_text() == test_metadata
+
+
+def test_cache_file_creation_creates_folder_hierarchy(tmp_path, test_metadata):
+    cache_file = tmp_path / 'test-folder/test-file.json'
+    assert not cache_file.exists()
+
+    save_to_cache(test_metadata, cache_file)
+
+    assert cache_file.exists()
+    assert cache_file.read_text() == test_metadata
