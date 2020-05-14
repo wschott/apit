@@ -17,12 +17,12 @@ class ReadAction(Action):
         return True
 
     def apply(self) -> None:
-        commandStatus = read_metadata(self.file)
+        command_status = read_metadata(self.file)
 
-        if not bool(commandStatus.returncode):
-            self.mark_as_success(commandStatus)
+        if not bool(command_status.returncode):
+            self.mark_as_success(command_status)
         else:
-            self.mark_as_fail(commandStatus)
+            self.mark_as_fail(command_status)
 
     @property
     def preview_msg(self) -> str:

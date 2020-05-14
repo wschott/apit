@@ -1,4 +1,4 @@
-from unittest.mock import call, patch
+from unittest.mock import MagicMock, call, patch
 
 from apit.atomic_parser import is_itunes_bought_file, read_metadata
 
@@ -6,20 +6,12 @@ EXPECTED_SHOW_COMMAND = ['/Mock/AtomicParsley', 'dummy.m4a', '-t']
 
 
 def test_is_itunes_bought_file(monkeypatch):
-    class MockCompletedProcess:
-        def __init__(self, stdout):
-            self.stdout = stdout
-
-    monkeypatch.setattr('apit.atomic_parser.read_metadata', lambda *args: MockCompletedProcess('Atom "ownr" contains'))
+    monkeypatch.setattr('apit.atomic_parser.read_metadata', lambda *args: MagicMock(stdout='Atom "ownr" contains'))
     assert is_itunes_bought_file('tests/fixtures/1 itunes file.m4a')
 
 
 def test_is_itunes_bought_file_not_itunes_file(monkeypatch):
-    class MockCompletedProcess:
-        def __init__(self, stdout):
-            self.stdout = stdout
-
-    monkeypatch.setattr('apit.atomic_parser.read_metadata', lambda *args: MockCompletedProcess('Atom "dummy" contains'))
+    monkeypatch.setattr('apit.atomic_parser.read_metadata', lambda *args: MagicMock(stdout='Atom "dummy" contains'))
     assert not is_itunes_bought_file('tests/fixtures/1 itunes file.m4a')
 
 
