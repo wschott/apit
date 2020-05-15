@@ -21,7 +21,7 @@ def collect_files(path: Path, filter_ext: Optional[Union[List[str], str]] = None
     return [f for f in sorted_files if f.suffix in filter_ext]
 
 
-def extract_disc_and_track_number(path: Path) -> Tuple[int, int]:
+def extract_disc_and_track_number(path: Path) -> Optional[Tuple[int, int]]:
     match = REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME.match(path.name)
 
     if not match:
