@@ -19,6 +19,7 @@
 
 # Development
 
+- refactor test data/fixture setup
 - reasearch alternative tagging tools
   - mutagen (has mp3 support)
   - ...
