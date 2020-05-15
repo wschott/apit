@@ -5,10 +5,11 @@ import pytest
 from apit.metadata_cache import save_to_cache
 from apit.store.connection import download_metadata
 
+REAL_LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903'
+
 
 @pytest.mark.integration
 def test_download_metadata_using_real_itunes_data():
-    REAL_LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903'
 
     json_str = download_metadata(REAL_LOOKUP_URL)
 
@@ -33,7 +34,6 @@ def test_download_metadata_using_real_itunes_data():
 @pytest.mark.integration
 def test_downloaded_metadata_json_is_saved_using_unicode_chars(tmp_path):
     cache_file = tmp_path / 'test-file.json'
-    REAL_LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903'
 
     json_str = download_metadata(REAL_LOOKUP_URL)
     save_to_cache(json_str, cache_file)

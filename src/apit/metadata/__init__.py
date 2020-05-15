@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import List, Optional
 
 from .album import Album  # noqa: F401
 from .song import Song

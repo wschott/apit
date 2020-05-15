@@ -29,6 +29,15 @@ Examples:
   - with disc number (e.g. disc 2)
     - "2-14 title.m4a", "2.14 title.m4a", "2.14. title.m4a"
 
+Source requirement
+------------------
+one of the following:
+- path to an existing file with already downloaded metadata
+- URL to Apple Music/iTunes Store in order to download metadata
+- album ID (with optional country code) of Apple Music/iTunes Store in order to download metadata
+  - "us,123456789"
+  - "123456789" (uses your system's locale for store determination)
+
 URL format requirements
 -----------------------
 COUNTRY_CODE and ID required:
@@ -66,7 +75,7 @@ Example:
     )
     parser.add_argument(
         'source', metavar='SOURCE', nargs='?',
-        help='[only tag command] optional url (to be downloaded) or file (already downloaded) containing Apple Music/iTunes Store data'
+        help='[only tag command] optional url (to be downloaded) or file (already downloaded) containing Apple Music/iTunes Store data or album ID (with optional country code)'
     )
 
     return parser.parse_args(args)

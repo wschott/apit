@@ -5,11 +5,12 @@ from typing import List, Mapping, Optional, Union
 from apit.atomic_parser import is_itunes_bought_file, update_metadata
 from apit.error import ApitError
 from apit.file_handling import extract_disc_and_track_number
-from apit.metadata import Album, Song, find_song
+from apit.metadata import Song, find_song
 from apit.metadata_cache import generate_cache_filename, save_to_cache
 from apit.store.connection import (
     download_metadata,
-    generate_metadata_lookup_url,
+    generate_lookup_url_by_str,
+    generate_lookup_url_by_url,
 )
 from apit.store_data_parser import extract_songs
 from apit.user_input import ask_user_for_input
@@ -120,11 +121,16 @@ def get_metadata_json(source: str) -> str:
     logging.info('Input source: %s', source)
     if is_url(source):
         logging.info('Use URL to download metadata: %s', source)
-        query_url = generate_metadata_lookup_url(source)
+        query_url = generate_lookup_url_by_url(source)
         logging.info('Query URL: %s', query_url)
         return download_metadata(query_url)
     elif Path(source).exists():
         logging.info('Use downloaded metadata file: %s', source)
         return Path(source).read_text()
+    elif isinstance(source, str):
+        logging.info('Use URL composition to download metadata: %s', source)
+        query_url = generate_lookup_url_by_str(source)
+        logging.info('Query URL: %s', query_url)
+        return download_metadata(query_url)
     else:
         raise ApitError(f"Invalid input source: {source}")
