@@ -58,12 +58,12 @@ Example:
     parser.add_argument(
         '-t', '--temp', dest='has_overwrite_flag',
         action='store_false', default=True,
-        help='[only tag command] create temporary files with updated metadata (instead of overwriting files)'
+        help='[tag] create temporary files with updated metadata (instead of overwriting files)'
     )
     parser.add_argument(
         '-c', '--cache', dest='has_search_result_cache_flag',
         action='store_true',
-        help='[only tag command] save the downloaded metadata to disk'
+        help='[tag] save the downloaded metadata to disk'
     )
     parser.add_argument(
         'command', choices=[ActionType.COMMAND_NAME for ActionType in AVAILAIBLE_ACTIONS],
@@ -75,7 +75,7 @@ Example:
     )
     parser.add_argument(
         'source', metavar='SOURCE', nargs='?',
-        help='[only tag command] optional url (to be downloaded) or file (already downloaded) containing Apple Music/iTunes Store data or album ID (with optional country code)'
+        help='[tag] optional url (to be downloaded) or file (already downloaded) containing Apple Music/iTunes Store data or album ID (with optional country code)'
     )
 
     return parser.parse_args(args)
