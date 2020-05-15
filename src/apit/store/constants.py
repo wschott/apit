@@ -19,7 +19,7 @@ class STORE_KEY(Enum):
     TITLE           = 'trackCensoredName'  # alternatively: 'trackName' without stars '*'
     ALBUM_NAME      = 'collectionCensoredName'  # alternatively: 'collectionName' without stars '*'; in ALBUM: both fields are present as well
     GENRE           = 'primaryGenreName'
-    YEAR            = 'releaseDate'
+    RELEASE_DATE    = 'releaseDate'
     TRACK_NUMBER    = 'trackNumber'
     TRACK_TOTAL     = 'trackCount'
     DISC_NUMBER     = 'discNumber'

@@ -174,4 +174,4 @@ def assert_dummy_test_song(song):
     assert song.genre == 'Test Genré'
     assert song.content_id == 98765
     assert song.rating == 'explicit'
-    assert song.year == '2010-01-01T07:00:00Z'
+    assert song.release_date == '2010-01-01T07:00:00Z'

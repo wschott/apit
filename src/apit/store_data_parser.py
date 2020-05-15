@@ -51,7 +51,7 @@ def to_song(album: Album, item: Dict[str, Any]) -> Song:
         disc_total=extract_by_key(STORE_KEY.DISC_TOTAL, item),
         title=extract_by_key(STORE_KEY.TITLE, item),
         artist=extract_by_key(STORE_KEY.ARTIST, item),
-        year=extract_by_key(STORE_KEY.YEAR, item),
+        release_date=extract_by_key(STORE_KEY.RELEASE_DATE, item),
         genre=extract_by_key(STORE_KEY.GENRE, item),
         album_name=extract_by_key(STORE_KEY.ALBUM_NAME, item),
         content_id=extract_by_key(STORE_KEY.CONTENT_ID, item),

@@ -38,7 +38,7 @@ def _generate_metadata_update_command(track: Song, should_overwrite: bool) -> Li
         f'--title "{track.title}"',
         f'--album "{track.album_name}"',
         f'--genre "{track.genre}"',
-        f'--year "{track.year}"',
+        f'--year "{track.release_date}"',
         f'--disknum {track.disc_number}/{track.disc_total}',
         f'--tracknum {track.track_number}/{track.track_total}',
         f'--advisory {AP_RATING_MAPPING[to_rating(track.rating)]}',

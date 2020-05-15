@@ -10,7 +10,7 @@ class Song:
                  disc_total: int,
                  title: str,
                  artist: str,
-                 year: str,
+                 release_date: str,
                  genre: str,
                  album_name: str,
                  content_id: int,
@@ -26,7 +26,7 @@ class Song:
         self._disc_total    = disc_total
         self._title         = title
         self._artist        = artist
-        self._year          = year
+        self._release_date  = release_date
         self._genre         = genre
         self._album_name    = album_name
         self._content_id    = content_id
@@ -67,8 +67,8 @@ class Song:
         return self._artist
 
     @property
-    def year(self) -> str:
-        return self._year
+    def release_date(self) -> str:
+        return self._release_date
 
     @property
     def genre(self) -> str:

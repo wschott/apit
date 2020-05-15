@@ -32,7 +32,7 @@ def test_song():
         genre='Test Genré',
         content_id=98765,
         rating='explicit',
-        year='2010-01-01T07:00:00Z',
+        release_date='2010-01-01T07:00:00Z',
     )
 
     assert song.album_artist == 'Album Artist'
@@ -49,7 +49,7 @@ def test_song():
     assert song.genre == 'Test Genré'
     assert song.content_id == 98765
     assert song.rating == 'explicit'
-    assert song.year == '2010-01-01T07:00:00Z'
+    assert song.release_date == '2010-01-01T07:00:00Z'
 
 
 def test_find_song():
