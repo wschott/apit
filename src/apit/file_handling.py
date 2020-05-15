@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
-REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME = re.compile(r'^[#]?((?P<disc>\d+)[-.])?(?P<track>\d+)[.]?.+')
+REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME = re.compile(r'^[#]?((?P<disc>\d+)[-.])?(?P<track>\d+).+')
 
 
 def collect_files(path: Path, filter_ext: Optional[Union[List[str], str]] = None) -> List[Path]:
