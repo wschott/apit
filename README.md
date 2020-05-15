@@ -55,14 +55,17 @@ Place the built `AtomicParsley` executable inside one of these folders:
 
 The filename of your files must have the following format in order to match them against the Apple Music/iTunes Store metadata:
 
-1. **optional**: **disc number** (followed by "-")
-2. **required**: **track number**
+1. **optional**: **disc number** (followed by "-" or ".")
+2. **required**: **track number** (followed by an optional ".")
 3. **required**: `.m4a` **extension**
 
 Examples:
-   - `14.m4a` (defaults to disc 1)
-   - `14 song name.m4a`
-   - `2-14 song name.m4a` (disc 2)
+
+   - without disc number (defaults to disc 1)
+      - `14.m4a`, `14 title.m4a`, `14. title.m4a`, `#14.m4a`, `#14 title.m4a`
+      - `2. 14 title.m4a` (track 2: title contains the number 14)
+   - with disc number (e.g. disc 2)
+      - `2-14 title.m4a`, `2.14 title.m4a`, `2.14. title.m4a`
 
 ### Metadata source requirement
 

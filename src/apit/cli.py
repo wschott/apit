@@ -18,14 +18,16 @@ def parse_args(args: List[str]):
 
 Filename format requirements
 ----------------------------
-1. optional: disc number (followed by "-")
-2. required: track number
+1. optional: disc number (followed by "-" or ".")
+2. required: track number (followed by an optional ".")
 3. required: ".m4a" extension
 
 Examples:
-  - "14.m4a" (defaults to disc 1)
-  - "14 song name.m4a"
-  - "2-14 song name.m4a" (disc 2)
+  - without disc number (defaults to disc 1)
+    - "14.m4a", "14 title.m4a", "14. title.m4a", "#14.m4a", "#14 title.m4a"
+    - "2. 14 title.m4a" (track 2: title contains the number 14)
+  - with disc number (e.g. disc 2)
+    - "2-14 title.m4a", "2.14 title.m4a", "2.14. title.m4a"
 
 URL format requirements
 -----------------------
