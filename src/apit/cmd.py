@@ -6,7 +6,7 @@ from typing import List, Union
 from apit.defaults import DEFAULT_AP_LOCATIONS
 from apit.error import ApitError
 
-REGEX_OUTER_QUOTE = re.compile(r'^(?P<start>[^\"]*\"{1})(?P<inner>.+)(?P<end>\"{1}[^\"]*)')
+REGEX_OUTER_QUOTE = re.compile(r'^(?P<start>[^"]*")(?P<inner>.+)(?P<end>"[^"]*)')
 
 
 def execute_command(file: Path, command: Union[List[str], str], shell: bool = False) -> subprocess.CompletedProcess:
@@ -59,7 +59,7 @@ def _escape_shell_arguments(string: str) -> str:
 def _escape_inner_quotes(string: str) -> str:
     match = REGEX_OUTER_QUOTE.match(string)
     if not match:
-        raise ApitError(f'An error occured while escaping: {string}')
+        raise ApitError(f'An error occurred while escaping: {string}')
     return ''.join([
         match.groupdict()['start'],
         match.groupdict()['inner'].replace('"', '\\"'),
