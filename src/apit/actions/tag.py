@@ -119,18 +119,17 @@ def is_url(source: str) -> bool:
 
 def get_metadata_json(source: str) -> str:
     logging.info('Input source: %s', source)
-    if is_url(source):
+    if Path(source).exists():
+        logging.info('Use downloaded metadata file: %s', source)
+        return Path(source).read_text()
+    elif is_url(source):
         logging.info('Use URL to download metadata: %s', source)
         query_url = generate_lookup_url_by_url(source)
         logging.info('Query URL: %s', query_url)
         return download_metadata(query_url)
-    elif Path(source).exists():
-        logging.info('Use downloaded metadata file: %s', source)
-        return Path(source).read_text()
     elif isinstance(source, str):
         logging.info('Use URL composition to download metadata: %s', source)
         query_url = generate_lookup_url_by_str(source)
         logging.info('Query URL: %s', query_url)
         return download_metadata(query_url)
-    else:
-        raise ApitError(f"Invalid input source: {source}")
+    raise ApitError(f"Invalid input source: {source}")
