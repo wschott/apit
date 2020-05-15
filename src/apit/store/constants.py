@@ -8,7 +8,7 @@ from enum import Enum
 from apit.error import ApitError
 
 COLLECTION_TYPE_KEY = 'collectionType'
-VALID_COLLECTION_TYPE_VALUES_FOR_ALBUMS = ['Album', 'Compilation']
+VALID_COLLECTION_TYPE_FOR_ALBUM = 'Album'
 KIND_KEY = 'kind'
 VALID_KIND_VALUES_FOR_SONG = 'song'
 

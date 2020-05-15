@@ -7,7 +7,7 @@ from apit.store.constants import (
     COLLECTION_TYPE_KEY,
     KIND_KEY,
     STORE_KEY,
-    VALID_COLLECTION_TYPE_VALUES_FOR_ALBUMS,
+    VALID_COLLECTION_TYPE_FOR_ALBUM,
     VALID_KIND_VALUES_FOR_SONG,
 )
 
@@ -26,7 +26,7 @@ def extract_songs(metadata_json: str) -> List[Song]:
 
 def _find_album(music_data: List[Dict[str, Any]]) -> Album:
     for item in music_data:
-        if COLLECTION_TYPE_KEY in item and item[COLLECTION_TYPE_KEY] in VALID_COLLECTION_TYPE_VALUES_FOR_ALBUMS:
+        if COLLECTION_TYPE_KEY in item and item[COLLECTION_TYPE_KEY] == VALID_COLLECTION_TYPE_FOR_ALBUM:
             return to_album(item)
     raise ApitError('No album found in metadata')
 
