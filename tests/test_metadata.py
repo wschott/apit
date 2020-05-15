@@ -33,6 +33,7 @@ def test_song():
         content_id=98765,
         rating='explicit',
         release_date='2010-01-01T07:00:00Z',
+        compilation=True,
     )
 
     assert song.album_artist == 'Album Artist'
@@ -50,6 +51,7 @@ def test_song():
     assert song.content_id == 98765
     assert song.rating == 'explicit'
     assert song.release_date == '2010-01-01T07:00:00Z'
+    assert song.compilation
 
 
 def test_find_song():

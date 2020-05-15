@@ -20,6 +20,7 @@ EXPECTED_GENERATED_COMMAND = [
     '--stik "Normal"',
     '--albumArtist "Album Artist"',
     '--copyright "℗ 2010 Album Copyright"',
+    '--compilation false',
     '--cnID "98765"',
 ]
 
@@ -32,6 +33,7 @@ EXPECTED_UPDATE_COMMAND = ' '.join(
         '--advisory explicit --stik "Normal"',
         '--albumArtist "Album Artist"',
         '--copyright "℗ 2010 Album Copyright"',
+        '--compilation false',
         '--cnID "98765"'
     ]
 )

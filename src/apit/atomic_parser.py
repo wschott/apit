@@ -45,6 +45,7 @@ def _generate_metadata_update_command(track: Song, should_overwrite: bool) -> Li
         f'--stik "{AP_ITEM_KIND_MAPPING[to_item_kind(track.media_kind)]}"',
         f'--albumArtist "{track.album_artist}"',
         f'--copyright "{track.copyright}"',
+        f'--compilation {to_atomicparsley_bool(track.compilation)}',
         f'--cnID "{track.content_id}"',
     ]
 
@@ -61,3 +62,7 @@ def _generate_metadata_update_command(track: Song, should_overwrite: bool) -> Li
         command.append('--overWrite')
 
     return command
+
+
+def to_atomicparsley_bool(value) -> str:
+    return "true" if value else "false"

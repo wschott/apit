@@ -15,7 +15,6 @@
 - save artwork to file
   - "--artwork /path/to/art.jpg"
   - use json property "artworkUrl100", manipulate to use 600x600, download artwork and pass as value to file
-- research about more AtomicParsley flags: --composer, --grouping, --bpm, --compilation, --encodingTool, --gapless
 
 
 # Development

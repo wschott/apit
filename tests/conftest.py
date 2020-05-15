@@ -51,6 +51,7 @@ def song_metadata_as_json_obj2(disc, track):
             'kind': 'song',
             'trackId': 461746,
             'collectionId': 12345,
+            'collectionArtistName': 'Compilation Artist',  # TODO add test for this one
         }
     ]
 
@@ -175,3 +176,4 @@ def assert_dummy_test_song(song):
     assert song.content_id == 98765
     assert song.rating == 'explicit'
     assert song.release_date == '2010-01-01T07:00:00Z'
+    assert not song.compilation

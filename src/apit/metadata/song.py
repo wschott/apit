@@ -17,6 +17,7 @@ class Song:
                  collection_id: int,
                  rating: str,
                  media_kind: str,
+                 compilation: bool,
                  ):
         self._album         = album
 
@@ -33,6 +34,7 @@ class Song:
         self._collection_id = collection_id
         self._rating        = rating
         self._media_kind    = media_kind
+        self._compilation   = compilation
 
     @property
     def copyright(self) -> str:
@@ -93,3 +95,7 @@ class Song:
     @property
     def media_kind(self) -> str:
         return self._media_kind
+
+    @property
+    def compilation(self) -> bool:
+        return self._compilation

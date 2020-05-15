@@ -43,6 +43,13 @@ def to_album(item: Dict[str, Any]) -> Album:
 
 
 def to_song(album: Album, item: Dict[str, Any]) -> Song:
+    try:
+        _ = extract_by_key(STORE_KEY.COLLECTION_ARTIST, item)
+    except ApitError:
+        is_compilation = False
+    else:
+        is_compilation = True
+
     return Song(
         album=album,
         track_number=extract_by_key(STORE_KEY.TRACK_NUMBER, item),
@@ -60,6 +67,7 @@ def to_song(album: Album, item: Dict[str, Any]) -> Song:
         rating=extract_by_key(STORE_KEY.RATING, item),
         # TODO convert to enum?
         media_kind=extract_by_key(STORE_KEY.MEDIA_KIND, item),
+        compilation=is_compilation,
     )
 
 
