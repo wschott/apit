@@ -52,7 +52,7 @@ AP_RATING_MAPPING = {
 }
 
 
-def to_rating(rating_str):
+def to_rating(rating_str: str) -> STORE_RATING:
     try:
         return STORE_RATING(rating_str)
     except ValueError as e:
@@ -70,7 +70,7 @@ AP_ITEM_KIND_MAPPING = {
 }
 
 
-def to_item_kind(kind_str):
+def to_item_kind(kind_str: str) -> STORE_KIND:
     try:
         return STORE_KIND(kind_str)
     except ValueError as e:

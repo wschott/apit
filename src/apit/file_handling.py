@@ -27,7 +27,7 @@ def extract_disc_and_track_number(path: Path) -> Tuple[int, int]:
     if not match:
         return None
 
-    disc = match.groupdict()['disc'] if match.groupdict()['disc'] is not None else 1
-    track = match.groupdict()['track']
+    disc = int(match.groupdict()['disc']) if match.groupdict()['disc'] is not None else 1
+    track = int(match.groupdict()['track'])
 
-    return int(disc), int(track)
+    return disc, track

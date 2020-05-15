@@ -29,7 +29,7 @@ class TagAction(Action):
         self._track: Optional[int] = None
         if disc_and_track is not None:
             self._disc, self._track = disc_and_track
-        self._song = find_song(self.options['songs'], disc=self._disc, track=self._track)
+        self._song: Optional[Song] = find_song(self.options['songs'], disc=self._disc, track=self._track)
 
     @property
     def file_matched(self) -> bool:
