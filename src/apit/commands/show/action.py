@@ -1,13 +1,8 @@
-from typing import Any, Mapping
-
+from apit.action import Action
 from apit.atomic_parser import read_metadata
-
-from .base import Action
 
 
 class ReadAction(Action):
-    COMMAND_NAME: str = 'show'
-
     @property
     def needs_confirmation(self) -> bool:
         return False
@@ -33,7 +28,3 @@ class ReadAction(Action):
         if not self.successful:
             return '[error]'
         return 'successful'
-
-    @staticmethod
-    def to_action_options(options) -> Mapping[str, Any]:
-        return {}

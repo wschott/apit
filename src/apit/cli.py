@@ -1,13 +1,8 @@
 import sys
-from argparse import (
-    ArgumentParser,
-    ArgumentTypeError,
-    RawDescriptionHelpFormatter,
-)
-from pathlib import Path
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from typing import List
 
-from apit.actions import AVAILAIBLE_ACTIONS
+from apit.commands import AVAILABLE_COMMANDS
 from apit.error import ApitError
 from apit.main import main
 
@@ -76,7 +71,7 @@ Example:
         help='[tag] set artwork size for download (default: %(default)s)'
     )
     parser.add_argument(
-        'command', choices=[ActionType.COMMAND_NAME for ActionType in AVAILAIBLE_ACTIONS],
+        'command', choices=[CommandType.COMMAND_NAME for CommandType in AVAILABLE_COMMANDS],
         help='available commands: "show" or "tag" metadata'
     )
     parser.add_argument(

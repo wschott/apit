@@ -1,6 +1,8 @@
+from pathlib import Path
+
 import pytest
 
-from apit.actions import (
+from apit.action import (
     Action,
     all_actions_successful,
     any_action_needs_confirmation,
@@ -51,15 +53,10 @@ def test_filter_not_actionable(mock_action_actionable, mock_action_not_actionabl
     assert filter_not_actionable([mock_action_not_actionable, mock_action_not_actionable]) == [mock_action_not_actionable, mock_action_not_actionable]
 
 
-def test_action_to_action_options():
-    with pytest.raises(NotImplementedError):
-        Action.to_action_options({'test-key': 'test-value'})
-
-
 def test_action_init():
-    action = Action('file-path', {'test-key': 'test-value'})
+    action = Action(Path('file-path'), {'test-key': 'test-value'})
 
-    assert action.file == 'file-path'
+    assert action.file == Path('file-path')
     assert action.options == {'test-key': 'test-value'}
     assert not action.executed
     assert not action.successful
@@ -80,7 +77,7 @@ def test_action_init():
 
 
 def test_action_mark_as_success():
-    action = Action('file-path', {})
+    action = Action(Path('file-path'), {})
 
     action.mark_as_success('test-success')
     assert action.executed
@@ -89,7 +86,7 @@ def test_action_mark_as_success():
 
 
 def test_action_mark_as_fail():
-    action = Action('file-path', {})
+    action = Action(Path('file-path'), {})
 
     action.mark_as_fail('test-fail')
     assert action.executed

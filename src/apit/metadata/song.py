@@ -35,6 +35,12 @@ class Song:
         self._media_kind    = media_kind
         self._compilation   = compilation
 
+    def __str__(self) -> str:
+        return f"<{self.__class__.__name__} '{self.track_number_padded} {self.title}'>"
+
+    def __repr__(self) -> str:
+        return str(self)
+
     @property
     def copyright(self) -> str:
         return self._album.copyright

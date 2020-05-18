@@ -1,23 +1,22 @@
+import logging
 from pathlib import Path
-from subprocess import CompletedProcess  # TODO should not import such things
-from typing import Any, List, Mapping, Optional, Type
-
-from apit.error import ApitError
+from subprocess import CompletedProcess
+from typing import List, Optional
 
 
 class Action:
-    COMMAND_NAME: str = '_BaseAction'
-
     def __init__(self, file: Path, options):
         self.file = file
         self.options = options
+
+        logging.info(f'{self} options: {options}')
 
         self._executed: bool = False
         self._success: Optional[bool] = None
         self._result: Optional[CompletedProcess] = None
 
     def __str__(self) -> str:
-        return f'<{self.__class__.__name__} {self.file.name}>'
+        return f'<{self.__class__.__name__} {self.file.name!r}>'
 
     @property
     def executed(self) -> bool:
@@ -64,10 +63,6 @@ class Action:
     def status_msg(self) -> str:
         raise NotImplementedError
 
-    @staticmethod
-    def to_action_options(options) -> Mapping[str, Any]:
-        raise NotImplementedError
-
 
 def any_action_needs_confirmation(actions: List[Action]) -> bool:
     return any(action.needs_confirmation for action in actions)
@@ -87,10 +82,3 @@ def filter_errors(actions: List[Action]) -> List[Action]:
 
 def filter_not_actionable(actions: List[Action]) -> List[Action]:
     return [action for action in actions if not action.actionable]
-
-
-def find_action_type(command_name: str, action_types: List[Type[Action]]) -> Type[Action]:
-    for action_type in action_types:
-        if action_type.COMMAND_NAME == command_name:
-            return action_type
-    raise ApitError(f'Command "{command_name}" not found')

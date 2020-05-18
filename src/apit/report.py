@@ -3,7 +3,7 @@ from enum import Enum
 from pathlib import Path
 from typing import List
 
-from apit.actions import (
+from apit.action import (
     Action,
     filter_errors,
     filter_not_actionable,

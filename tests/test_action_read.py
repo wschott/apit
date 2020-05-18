@@ -3,12 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from apit.actions import ReadAction
-
-
-def test_read_action_to_action_options():
-    assert ReadAction.to_action_options({}) == {}
-    assert ReadAction.to_action_options({'key': 'value'}) == {}
+from apit.commands.show.action import ReadAction
 
 
 def test_read_action_after_init():
