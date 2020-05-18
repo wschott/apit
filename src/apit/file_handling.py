@@ -21,13 +21,16 @@ MIME_TPYE_TO_EXTENSION_MAP = {
 }
 
 
-def collect_files(path: Path, filter_ext: Optional[Union[List[str], str]] = None) -> List[Path]:
+def collect_files(path_string: str, filter_ext: Optional[Union[List[str], str]] = None) -> List[Path]:
+    path = Path(path_string).expanduser()
+
+    if not path.exists():
+        raise ApitError(f'Invalid path: {path}')
+
     if path.is_file():
         unfiltered_files = [path]
     elif path.is_dir():
         unfiltered_files = [Path(f) for f in os.scandir(path) if f.is_file()]
-    else:
-        raise ApitError('Invalid path: %s' % path)
 
     sorted_files = sorted(unfiltered_files)
 

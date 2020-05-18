@@ -1,15 +1,12 @@
-from argparse import ArgumentTypeError
-from pathlib import Path
-
 import pytest
 
-from apit.cli import _to_path, parse_args
+from apit.cli import parse_args
 
 
 def test_parse_args():
     args = parse_args(['show', './tests/fixtures'])
     assert args.command == 'show'
-    assert args.path == Path('./tests/fixtures')
+    assert args.path == './tests/fixtures'
     assert args.has_overwrite_flag
     assert not args.has_search_result_cache_flag
 
@@ -47,7 +44,7 @@ def test_parse_args_complex_args(tmp_path):
     assert not args.has_overwrite_flag
     assert args.verbose_level == 1
     assert args.command == 'tag'
-    assert args.path == tmp_path
+    assert args.path == str(tmp_path)
     assert args.source == 'test-metadata-file.json'
 
 
@@ -61,26 +58,6 @@ def test_parse_args_missing_folder():
         parse_args(['show'])
 
 
-def test_parse_args_invalid_folder():
-    with pytest.raises(SystemExit):
-        parse_args(['show', './non-existing-folder'])
-
-
 def test_parse_args_invalid_option():
     with pytest.raises(SystemExit):
         parse_args(['-x', 'show', './tests/fixtures'])
-
-
-def test_to_path_using_folder(tmp_path):
-    # TODO test expanddir()
-    assert _to_path('.') == Path('.')
-    assert _to_path(str(tmp_path)) == tmp_path
-
-
-def test_to_path_using_single_file():
-    assert _to_path('tests/fixtures/folder-iteration/1 first.m4a') == Path('tests/fixtures/folder-iteration/1 first.m4a')
-
-
-def test_to_path_invalid_folder():
-    with pytest.raises(ArgumentTypeError):
-        _to_path('./non-existing-folder')

@@ -80,7 +80,7 @@ Example:
         help='available commands: "show" or "tag" metadata'
     )
     parser.add_argument(
-        'path', metavar='PATH', type=_to_path,
+        'path', metavar='PATH',
         help='path containing m4a files'
     )
     parser.add_argument(
@@ -89,15 +89,6 @@ Example:
     )
 
     return parser.parse_args(args)
-
-
-def _to_path(path_string: str) -> Path:
-    path = Path(path_string).expanduser()
-
-    if not path.exists():
-        raise ArgumentTypeError(f'Invalid path: {path_string}')
-
-    return path
 
 
 def cli() -> None:

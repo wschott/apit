@@ -15,6 +15,7 @@ from apit.file_handling import (
 
 # TODO create temporary files for testing?
 def test_collect_files_using_folder():
+    # TODO test expanddir()
     assert collect_files(Path('tests/fixtures/folder-iteration')) == [
         Path('tests/fixtures/folder-iteration/1 first.m4a'),
         Path('tests/fixtures/folder-iteration/2 second.mp3'),
