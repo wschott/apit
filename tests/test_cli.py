@@ -64,10 +64,14 @@ def test_parse_args_invalid_option():
         parse_args(['-x', 'show', './tests/fixtures'])
 
 
-def test_to_path(tmp_path):
+def test_to_path_using_folder(tmp_path):
     # TODO test expanddir()
     assert _to_path('.') == Path('.')
     assert _to_path(str(tmp_path)) == tmp_path
+
+
+def test_to_path_using_single_file():
+    assert _to_path('tests/fixtures/folder-iteration/1 first.m4a') == Path('tests/fixtures/folder-iteration/1 first.m4a')
 
 
 def test_to_path_invalid_folder():

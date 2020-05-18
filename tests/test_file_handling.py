@@ -1,14 +1,23 @@
 from pathlib import Path
 
+import pytest
+
+from apit.error import ApitError
 from apit.file_handling import collect_files, extract_disc_and_track_number
 
 
 # TODO create temporary files for testing?
-def test_collect_files():
+def test_collect_files_using_folder():
     assert collect_files(Path('tests/fixtures/folder-iteration')) == [
         Path('tests/fixtures/folder-iteration/1 first.m4a'),
         Path('tests/fixtures/folder-iteration/2 second.mp3'),
         Path('tests/fixtures/folder-iteration/3 third.mp4')
+    ]
+
+
+def test_collect_files_using_single_file():
+    assert collect_files(Path('tests/fixtures/folder-iteration/1 first.m4a')) == [
+        Path('tests/fixtures/folder-iteration/1 first.m4a'),
     ]
 
 
@@ -19,6 +28,11 @@ def test_collect_files_using_filter():
     assert collect_files(Path('tests/fixtures/folder-iteration'), ['.m4a']) == [
         Path('tests/fixtures/folder-iteration/1 first.m4a')
     ]
+
+
+def test_collect_files_using_non_existing_folder():
+    with pytest.raises(ApitError, match='Invalid path'):
+        collect_files(Path('./non-existing'))
 
 
 def test_extract_disc_and_track_number_using_only_track_number():

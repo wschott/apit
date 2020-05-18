@@ -84,7 +84,7 @@ Example:
 def _to_path(path_string: str) -> Path:
     path = Path(path_string).expanduser()
 
-    if not path.is_dir():
+    if not path.exists():
         raise ArgumentTypeError(f'Invalid path: {path_string}')
 
     return path

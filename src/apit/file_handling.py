@@ -3,12 +3,19 @@ import re
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
+from apit.error import ApitError
+from apit.metadata import Song
+
 REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME = re.compile(r'^[#]?((?P<disc>\d+)[-.])?(?P<track>\d+).+')
 
 
 def collect_files(path: Path, filter_ext: Optional[Union[List[str], str]] = None) -> List[Path]:
-    # TODO handle non-existing folder
-    unfiltered_files = [Path(f) for f in os.scandir(path) if f.is_file()]
+    if path.is_file():
+        unfiltered_files = [path]
+    elif path.is_dir():
+        unfiltered_files = [Path(f) for f in os.scandir(path) if f.is_file()]
+    else:
+        raise ApitError('Invalid path: %s' % path)
 
     sorted_files = sorted(unfiltered_files)
 
