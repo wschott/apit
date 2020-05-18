@@ -33,6 +33,13 @@ def test_parse_args_optional_args():
     args = parse_args(['tag', './tests/fixtures', 'test-metadata-file.json'])
     assert args.source == 'test-metadata-file.json'
 
+    args = parse_args(['-a', 'tag', './tests/fixtures'])
+    assert args.has_embed_artwork_flag
+    assert args.artwork_size == 600
+
+    args = parse_args(['--artwork-size', '700', 'tag', './tests/fixtures'])
+    assert args.artwork_size == 700
+
 
 def test_parse_args_complex_args(tmp_path):
     args = parse_args(['--cache', '--temp', '-v', 'tag', str(tmp_path), 'test-metadata-file.json'])

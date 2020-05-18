@@ -1,5 +1,6 @@
 import os
 import re
+from enum import Enum
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
@@ -7,6 +8,17 @@ from apit.error import ApitError
 from apit.metadata import Song
 
 REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME = re.compile(r'^[#]?((?P<disc>\d+)[-.])?(?P<track>\d+).+')
+
+
+class MIME_TYPE(Enum):
+    JPEG = 'image/jpeg'
+    PNG = 'image/png'
+
+
+MIME_TPYE_TO_EXTENSION_MAP = {
+    MIME_TYPE.JPEG: 'jpg',
+    MIME_TYPE.PNG: 'png',
+}
 
 
 def collect_files(path: Path, filter_ext: Optional[Union[List[str], str]] = None) -> List[Path]:
@@ -38,3 +50,24 @@ def extract_disc_and_track_number(path: Path) -> Optional[Tuple[int, int]]:
     track = int(match.groupdict()['track'])
 
     return disc, track
+
+
+def generate_cache_filename(cache_path: Path, song: Song) -> Path:
+    filename_prefix = _generate_filename_prefix(song)
+    return cache_path / f'{filename_prefix}.json'
+
+
+def generate_artwork_filename(cache_path: Path, song: Song, image_type: MIME_TYPE) -> Path:
+    filename_prefix = _generate_filename_prefix(song)
+    suffix = MIME_TPYE_TO_EXTENSION_MAP[image_type]
+    return cache_path / f'{filename_prefix}.{suffix}'
+
+
+def _generate_filename_prefix(song):
+    filename_parts = [
+        song.album_artist,
+        song.album_name,
+        song.collection_id,
+    ]
+    filename: List[str] = [re.sub(r'\W+', '_', str(f)) for f in filename_parts]
+    return "-".join(filename)

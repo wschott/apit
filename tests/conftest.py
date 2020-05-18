@@ -62,6 +62,7 @@ def album_metadata_as_json_obj2():
             'collectionType': 'Album',
             'artistName': 'Album Artist',
             'copyright': '℗ 2010 Album Copyright',
+            'artworkUrl100': 'cover-url',
         }
     ]
 
@@ -158,6 +159,7 @@ def pytest_collection_modifyitems(config, items):
 def assert_dummy_test_album(album):
     assert album.album_artist == 'Album Artist'
     assert album.copyright == '℗ 2010 Album Copyright'
+    assert album.artwork_url == 'cover-url'
 
 
 def assert_dummy_test_song(song):
@@ -177,3 +179,4 @@ def assert_dummy_test_song(song):
     assert song.rating == 'explicit'
     assert song.release_date == '2010-01-01T07:00:00Z'
     assert not song.compilation
+    assert song.artwork_url == 'cover-url'

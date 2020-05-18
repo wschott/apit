@@ -9,9 +9,11 @@ def test_album():
     album = Album(
         album_artist='Album Artist',
         copyright='℗ 2010 Album Copyright',
+        artwork_url='cover-url',
     )
     assert album.album_artist == 'Album Artist'
     assert album.copyright == '℗ 2010 Album Copyright'
+    assert album.artwork_url == 'cover-url'
 
 
 def test_song():
@@ -19,6 +21,7 @@ def test_song():
         album=Album(
             album_artist='Album Artist',
             copyright='℗ 2010 Album Copyright',
+            artwork_url='cover-url',
         ),
         collection_id=12345,
         artist='Track Artist',
@@ -52,6 +55,7 @@ def test_song():
     assert song.rating == 'explicit'
     assert song.release_date == '2010-01-01T07:00:00Z'
     assert song.compilation
+    assert song.artwork_url == 'cover-url'
 
 
 def test_find_song():

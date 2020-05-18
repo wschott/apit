@@ -20,7 +20,6 @@ class Song:
                  compilation: bool,
                  ):
         self._album         = album
-
         self._track_number  = track_number
         self._track_total   = track_total
         self._disc_number   = disc_number
@@ -99,3 +98,7 @@ class Song:
     @property
     def compilation(self) -> bool:
         return self._compilation
+
+    @property
+    def artwork_url(self) -> str:
+        return self._album.artwork_url

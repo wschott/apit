@@ -112,6 +112,15 @@ Example using an ID:
     $ apit tag ~/Music/Music/Media/Artist/Album/ us,123456789 # separator character is a comma (",")
     $ apit tag ~/Music/Music/Media/Artist/Album/ 123456789    # uses your system's locale for store determination
 
+## Artwork
+
+Optionally, you can use artwork from Apple Music/iTunes Store and save them to your files using `--artwork` (short: `-a`). Additionally, you can specify your desired pixel size (default: 600).
+
+Examples:
+
+    $ apit -a tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+    $ apit -a --artwork-size 1000 tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+
 ## Metadata cache
 
 The downloaded metadata can be saved to your disk for later usage using `--cache` (short: `-c`).

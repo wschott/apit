@@ -1,6 +1,6 @@
 from pathlib import Path
 from subprocess import CompletedProcess
-from typing import List
+from typing import List, Optional
 
 from apit.cmd import execute_command
 from apit.metadata import Song
@@ -27,12 +27,12 @@ def is_itunes_bought_file(file: Path) -> bool:
     return any(map(lambda item: item in command_status.stdout, BLACKLIST))
 
 
-def update_metadata(file: Path, song: Song, should_overwrite: bool) -> CompletedProcess:
-    command = _generate_metadata_update_command(song, should_overwrite)
+def update_metadata(file: Path, song: Song, should_overwrite: bool, cover_path: Optional[Path] = None) -> CompletedProcess:
+    command = _generate_metadata_update_command(song, should_overwrite, cover_path)
     return execute_command(file, command, shell=True)
 
 
-def _generate_metadata_update_command(track: Song, should_overwrite: bool) -> List[str]:
+def _generate_metadata_update_command(track: Song, should_overwrite: bool, cover_path: Optional[Path] = None) -> List[str]:
     command = [
         f'--artist "{track.artist}"',
         f'--title "{track.title}"',
@@ -48,6 +48,8 @@ def _generate_metadata_update_command(track: Song, should_overwrite: bool) -> Li
         f'--compilation {to_atomicparsley_bool(track.compilation)}',
         f'--cnID "{track.content_id}"',
     ]
+    if cover_path:
+        command.append(f'--artwork REMOVE_ALL --artwork {cover_path}')  # first, remove all artwork
 
     # command.append(f'--xID "{track[]}"')
 

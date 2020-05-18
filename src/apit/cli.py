@@ -66,6 +66,16 @@ Example:
         help='[tag] save the downloaded metadata to disk'
     )
     parser.add_argument(
+        '-a', '--artwork', dest='has_embed_artwork_flag',
+        action='store_true',
+        help='[tag] download artwork to disk and save in files'
+    )
+    parser.add_argument(
+        '--artwork-size', dest='artwork_size', metavar='SIZE',
+        type=int, default=600,
+        help='[tag] set artwork size for download (default: %(default)s)'
+    )
+    parser.add_argument(
         'command', choices=[ActionType.COMMAND_NAME for ActionType in AVAILAIBLE_ACTIONS],
         help='available commands: "show" or "tag" metadata'
     )

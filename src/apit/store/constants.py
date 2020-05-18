@@ -29,14 +29,12 @@ class STORE_KEY(Enum):
     CONTENT_ID      = 'trackId'
     COLLECTION_ID   = 'collectionId'  # same as ALBUM:collectionId   # TODO rename to PLAYLIST_ID?
     COLLECTION_ARTIST = 'collectionArtistName'  # presence indicates, that this is part of a compilation
-
     # TODO ARTIST_ID       = 'artistId'
 
     # album values
     ALBUM_ARTIST    = 'artistName'
     COPYRIGHT       = 'copyright'
-
-    # TODO ARTWORK_URL_100 = (METADATA_SOURCE.ALBUM, 'artworkUrl100')  # TODO change to 600x600, download and save to file
+    ARTWORK_URL     = 'artworkUrl100'
 
 
 class STORE_RATING(Enum):

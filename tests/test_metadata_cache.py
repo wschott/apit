@@ -1,10 +1,4 @@
-from pathlib import Path
-
-from apit.metadata_cache import generate_cache_filename, save_to_cache
-
-
-def test_generate_cache_filename(test_song):
-    assert generate_cache_filename(Path('.'), test_song) == Path('./Album_Artist-Test_Album_Namè-12345.json')
+from apit.metadata_cache import save_to_cache
 
 
 def test_cache_file_creation(tmp_path, test_metadata):

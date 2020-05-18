@@ -12,9 +12,7 @@
 - add apit execution logging to ~/.apit/logs/?
 - allow setting AtomicParsley location using a cli option
 - allow setting cli flag to optionally overwrite original itunes files (-> don't skip them)?
-- save artwork to file
-  - "--artwork /path/to/art.jpg"
-  - use json property "artworkUrl100", manipulate to use 600x600, download artwork and pass as value to file
+- add flag to add a new artwork instead of removing all before adding
 
 
 # Development

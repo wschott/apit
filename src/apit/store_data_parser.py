@@ -39,6 +39,7 @@ def to_album(item: Dict[str, Any]) -> Album:
     return Album(
         album_artist=extract_by_key(STORE_KEY.ALBUM_ARTIST, item),
         copyright=extract_by_key(STORE_KEY.COPYRIGHT, item),
+        artwork_url=extract_by_key(STORE_KEY.ARTWORK_URL, item),
     )
 
 
