@@ -84,7 +84,7 @@ class TagAction(Action):
     def preview_msg(self) -> str:
         if not self.actionable:
             return f'[{self.not_actionable_msg}]'
-        return self.song.title
+        return f'{self.song.track_number_padded} {self.song.title}'
 
     @property
     def status_msg(self) -> str:

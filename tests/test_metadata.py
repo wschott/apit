@@ -30,7 +30,7 @@ def test_song():
         disc_number=2,
         disc_total=3,
         track_number=3,
-        track_total=5,
+        track_total=12,
         title='Track (feat. Other & $Artist) [Bonus Track]',
         genre='Test Genré',
         content_id=98765,
@@ -48,7 +48,7 @@ def test_song():
     assert song.disc_number == 2
     assert song.disc_total == 3
     assert song.track_number == 3
-    assert song.track_total == 5
+    assert song.track_total == 12
     assert song.title == 'Track (feat. Other & $Artist) [Bonus Track]'
     assert song.genre == 'Test Genré'
     assert song.content_id == 98765
@@ -56,6 +56,7 @@ def test_song():
     assert song.release_date == '2010-01-01T07:00:00Z'
     assert song.compilation
     assert song.artwork_url == 'cover-url'
+    assert song.track_number_padded == '2-03'
 
 
 def test_find_song():
