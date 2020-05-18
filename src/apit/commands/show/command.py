@@ -10,10 +10,7 @@ from .action import ReadAction
 
 
 class ShowCommand(Command):
-    COMMAND_NAME = 'show'
-
-    @staticmethod
-    def execute(files: List[Path], options):
+    def execute(self, files: List[Path], options):
         actions: List[ReadAction] = [ReadAction(file, {}) for file in files]
 
         if any_action_needs_confirmation(actions):

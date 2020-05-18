@@ -31,10 +31,7 @@ from .action import TagAction
 
 
 class TagCommand(Command):
-    COMMAND_NAME = 'tag'
-
-    @staticmethod
-    def execute(files: List[Path], options):
+    def execute(self, files: List[Path], options):
         pre_action_options = to_pre_action_options(options)
 
         actions: List[Action] = []

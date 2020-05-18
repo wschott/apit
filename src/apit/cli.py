@@ -71,7 +71,7 @@ Example:
         help='[tag] set artwork size for download (default: %(default)s)'
     )
     parser.add_argument(
-        'command', choices=[CommandType.COMMAND_NAME for CommandType in AVAILABLE_COMMANDS],
+        'command', choices=AVAILABLE_COMMANDS,
         help='available commands: "show" or "tag" metadata'
     )
     parser.add_argument(

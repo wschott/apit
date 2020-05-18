@@ -1,4 +1,7 @@
+from pathlib import Path
+from typing import List
+
+
 class Command:
-    @property
-    def COMMAND_NAME(self) -> str:
+    def execute(self, files: List[Path], options):
         raise NotImplementedError

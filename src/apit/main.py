@@ -23,7 +23,7 @@ def main(options) -> int:
     options.cache_path = Path(CACHE_PATH).expanduser()
 
     CommandType: Type[Command] = determine_command_type(options.command)
-    return CommandType.execute(files, options)
+    return CommandType().execute(files, options)
 
 
 def configure_logging(verbose_level: int) -> None:
