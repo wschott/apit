@@ -16,6 +16,9 @@ class Action:
         self._success: Optional[bool] = None
         self._result: Optional[CompletedProcess] = None
 
+    def __str__(self) -> str:
+        return f'<{self.__class__.__name__} {self.file.name}>'
+
     @property
     def executed(self) -> bool:
         return self._executed
