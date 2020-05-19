@@ -19,13 +19,3 @@ class ReadAction(Action):
             self.mark_as_fail(e)
         else:
             self.mark_as_success(result)
-
-    @property
-    def preview_msg(self) -> str:
-        return ''
-
-    @property
-    def status_msg(self) -> str:
-        if not self.successful:
-            return '[error]'
-        return 'successful'

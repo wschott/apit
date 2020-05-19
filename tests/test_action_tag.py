@@ -1,8 +1,6 @@
 from pathlib import Path
 from unittest.mock import MagicMock, call
 
-import pytest
-
 from apit.commands.tag.action import TagAction
 from apit.error import ApitError
 from apit.metadata import Song
@@ -35,11 +33,6 @@ def test_tag_action_after_init(test_song: Song):
     assert action.metadata_matched
     assert action.song == test_song
     assert action.actionable
-    assert action.preview_msg == '2-3 Track (feat. Other & $Artist) [Bonus Track]'
-    assert action.status_msg == '[error]'
-    with pytest.raises(ApitError, match='Unknown state'):
-        # TODO determine what should be done in this case; is it even a valid state?
-        action.not_actionable_msg
 
 
 def test_tag_action_file_matched(monkeypatch, test_song: Song):
@@ -103,7 +96,6 @@ def test_tag_action_not_actionable_due_to_missing_file(monkeypatch, test_song: S
     monkeypatch.setitem(action.options, 'is_original', False)
 
     assert not action.actionable
-    assert action.not_actionable_msg == 'filename not matchable'
 
 
 def test_tag_action_not_actionable_due_to_missing_metadata(monkeypatch, test_song: Song):
@@ -115,7 +107,6 @@ def test_tag_action_not_actionable_due_to_missing_metadata(monkeypatch, test_son
     monkeypatch.setitem(action.options, 'is_original', False)
 
     assert not action.actionable
-    assert action.not_actionable_msg == 'file not matched against metadata'
 
 
 def test_tag_action_not_actionable_due_to_itunes_original(monkeypatch, test_song: Song):
@@ -127,7 +118,6 @@ def test_tag_action_not_actionable_due_to_itunes_original(monkeypatch, test_song
     monkeypatch.setitem(action.options, 'is_original', True)
 
     assert not action.actionable
-    assert action.not_actionable_msg == 'original iTunes Store file'
 
 
 def test_tag_action_needs_confirmation(monkeypatch, test_song: Song):
@@ -150,65 +140,6 @@ def test_tag_action_needs_confirmation_false(monkeypatch):
     monkeypatch.setitem(action.options, 'is_original', False)
 
     assert not action.needs_confirmation
-
-
-def test_tag_action_preview_msg_actionable(monkeypatch, test_song: Song):
-    action = TagAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
-
-    monkeypatch.setitem(action.options, 'song', test_song)
-    monkeypatch.setitem(action.options, 'disc', test_song.disc_number)
-    monkeypatch.setitem(action.options, 'track', test_song.track_number)
-    monkeypatch.setitem(action.options, 'is_original', False)
-
-    assert action.preview_msg == '2-3 Track (feat. Other & $Artist) [Bonus Track]'
-
-
-def test_tag_action_preview_msg_not_actionable(monkeypatch):
-    action = TagAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
-
-    monkeypatch.setitem(action.options, 'song', None)
-    monkeypatch.setitem(action.options, 'disc', None)
-    monkeypatch.setitem(action.options, 'track', None)
-    monkeypatch.setitem(action.options, 'is_original', False)
-
-    assert action.preview_msg.startswith('[')
-    assert action.preview_msg.endswith(']')
-
-
-def test_tag_action_status_msg_not_actionable(monkeypatch):
-    action = TagAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
-
-    monkeypatch.setitem(action.options, 'song', None)
-    monkeypatch.setitem(action.options, 'disc', None)
-    monkeypatch.setitem(action.options, 'track', None)
-    monkeypatch.setitem(action.options, 'is_original', False)
-
-    assert action.status_msg.startswith('[skipped: ')
-    assert action.status_msg.endswith(']')
-
-
-def test_tag_action_status_msg_not_successful(monkeypatch, test_song: Song):
-    action = TagAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
-
-    monkeypatch.setitem(action.options, 'song', test_song)
-    monkeypatch.setitem(action.options, 'disc', test_song.disc_number)
-    monkeypatch.setitem(action.options, 'track', test_song.track_number)
-    monkeypatch.setitem(action.options, 'is_original', False)
-    monkeypatch.setattr(action, '_success', False)
-
-    assert action.status_msg == '[error]'
-
-
-def test_tag_action_status_msg_successful(monkeypatch, test_song: Song):
-    action = TagAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
-
-    monkeypatch.setitem(action.options, 'song', test_song)
-    monkeypatch.setitem(action.options, 'disc', test_song.disc_number)
-    monkeypatch.setitem(action.options, 'track', test_song.track_number)
-    monkeypatch.setitem(action.options, 'is_original', False)
-    monkeypatch.setattr(action, '_success', True)
-
-    assert action.status_msg == 'tagged'
 
 
 def test_tag_action_apply_not_actionable(monkeypatch):

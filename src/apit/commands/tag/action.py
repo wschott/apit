@@ -35,28 +35,3 @@ class TagAction(Action):
             self.mark_as_fail(e)
         else:
             self.mark_as_success(result)
-
-    @property
-    def not_actionable_msg(self) -> str:
-        if not self.file_matched:
-            return 'filename not matchable'
-        elif self.options['is_original']:
-            return 'original iTunes Store file'
-        elif not self.metadata_matched:
-            return 'file not matched against metadata'
-        raise ApitError('Unknown state')
-        # TODO return '?'
-
-    @property
-    def preview_msg(self) -> str:
-        if not self.actionable:
-            return f'[{self.not_actionable_msg}]'
-        return f'{self.song.track_number_padded} {self.song.title}'
-
-    @property
-    def status_msg(self) -> str:
-        if not self.actionable:
-            return f'[skipped: {self.not_actionable_msg}]'
-        if not self.successful:
-            return '[error]'
-        return 'tagged'

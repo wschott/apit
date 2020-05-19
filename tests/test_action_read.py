@@ -1,8 +1,6 @@
 from pathlib import Path
 from unittest.mock import MagicMock, call
 
-import pytest
-
 from apit.commands.show.action import ReadAction
 from apit.error import ApitError
 
@@ -16,24 +14,6 @@ def test_read_action_after_init():
     assert not action.successful
     assert not action.needs_confirmation
     assert action.actionable
-    assert action.preview_msg == ''
-    assert action.status_msg == '[error]'
-    with pytest.raises(NotImplementedError):
-        action.not_actionable_msg
-
-
-def test_read_action_status_msg(monkeypatch):
-    action = ReadAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
-    monkeypatch.setattr(action, '_success', True)
-
-    assert action.status_msg == 'successful'
-
-
-def test_read_action_status_msg_not_successful(monkeypatch):
-    action = ReadAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
-    monkeypatch.setattr(action, '_success', False)
-
-    assert action.status_msg == '[error]'
 
 
 def test_read_action_apply(monkeypatch):

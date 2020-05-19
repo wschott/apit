@@ -8,6 +8,11 @@ from apit.action import (
     filter_not_actionable,
     filter_successes,
 )
+from apit.commands.show.action import ReadAction
+from apit.commands.show.reporter import ReadActionReporter
+from apit.commands.tag.action import TagAction
+from apit.commands.tag.reporter import TagActionReporter
+from apit.report_action import ActionReporter
 
 PREFIX = '\033[3%dm'
 SUFFIX = '\033[0m'
@@ -57,7 +62,7 @@ def preview_line(action: Action) -> str:
     text = TABLE_LINE_FORMAT % (
         _is_selected(action),
         pad_with_spaces(truncate_filename(action.file)),
-        action.preview_msg
+        to_action_reporter(action).preview_msg
     )
     return to_colored_text(text=text, color=_to_color_for_preview(action))
 
@@ -66,7 +71,7 @@ def result_line(action: Action) -> str:
     text = TABLE_LINE_FORMAT % (
         _is_successful(action),
         pad_with_spaces(truncate_filename(action.file)),
-        action.status_msg
+        to_action_reporter(action).status_msg
     )
     return to_colored_text(text=text, color=_to_color_for_result(action))
 
@@ -152,3 +157,10 @@ def print_summary_line(successes: int, errors: int, skipped: int) -> None:
 
     summary_text = f" {', '.join(summary)} "
     print('\n' + to_colored_text('=' * 30, bar_color) + summary_text + to_colored_text('=' * 30, bar_color))
+
+
+def to_action_reporter(action: Action) -> ActionReporter:
+    if isinstance(action, ReadAction):
+        return ReadActionReporter(action)
+    elif isinstance(action, TagAction):
+        return TagActionReporter(action)

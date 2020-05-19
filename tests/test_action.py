@@ -68,12 +68,6 @@ def test_action_init():
         action.needs_confirmation
     with pytest.raises(NotImplementedError):
         action.actionable
-    with pytest.raises(NotImplementedError):
-        action.not_actionable_msg
-    with pytest.raises(NotImplementedError):
-        action.preview_msg
-    with pytest.raises(NotImplementedError):
-        action.status_msg
 
 
 def test_action_mark_as_success():

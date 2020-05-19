@@ -50,18 +50,6 @@ class Action:
     def actionable(self) -> bool:
         raise NotImplementedError
 
-    @property
-    def not_actionable_msg(self) -> str:
-        raise NotImplementedError
-
-    @property
-    def preview_msg(self) -> str:
-        raise NotImplementedError
-
-    @property
-    def status_msg(self) -> str:
-        raise NotImplementedError
-
 
 def any_action_needs_confirmation(actions: List[Action]) -> bool:
     return any(action.needs_confirmation for action in actions)
