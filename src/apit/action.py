@@ -1,7 +1,6 @@
 import logging
 from pathlib import Path
-from subprocess import CompletedProcess
-from typing import List, Optional
+from typing import Any, List, Optional
 
 
 class Action:
@@ -13,7 +12,7 @@ class Action:
 
         self._executed: bool = False
         self._success: Optional[bool] = None
-        self._result: Optional[CompletedProcess] = None
+        self._result: Optional[Any] = None
 
     def __str__(self) -> str:
         return f'<{self.__class__.__name__} {self.file.name!r}>'
