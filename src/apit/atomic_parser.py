@@ -15,7 +15,7 @@ from apit.store.constants import (
 )
 
 
-def read_metadata(file: Path) -> CompletedProcess:
+def read_metadata(file: Path):
     command = ['-t']
     command_status = execute_command(file, command)
 
