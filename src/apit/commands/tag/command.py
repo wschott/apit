@@ -1,7 +1,7 @@
 import logging
 import urllib.request
 from pathlib import Path
-from typing import Any, List, Mapping, Optional, Union
+from typing import List, Mapping, Optional, Union
 
 from apit.action import (
     Action,
@@ -34,16 +34,7 @@ class TagCommand(Command):
     def execute(self, files: List[Path], options):
         pre_action_options = to_pre_action_options(options)
 
-        actions: List[Action] = []
-        for file in files:
-            disc_and_track = extract_disc_and_track_number(file)
-            disc: Optional[int] = None
-            track: Optional[int] = None
-            if disc_and_track is not None:
-                disc, track = disc_and_track
-            song = find_song(pre_action_options['songs'], disc=disc, track=track)
-            action_options: Mapping[str, Any] = to_action_options(song, pre_action_options)
-            actions.append(TagAction(file, action_options))
+        actions: List[Action] = [TagAction(file, to_action_options(file, pre_action_options)) for file in files]
 
         if any_action_needs_confirmation(actions):
             print_actions_preview(actions)
@@ -107,9 +98,18 @@ def to_pre_action_options(options) -> Mapping[str, Union[List[Song], bool]]:
     }
 
 
-def to_action_options(song, options) -> Mapping[str, Union[List[Song], bool]]:
+def to_action_options(file: Path, options) -> Mapping[str, Union[Optional[Song], bool, Optional[int], Optional[Path]]]:
+    disc_and_track = extract_disc_and_track_number(file)
+    disc: Optional[int] = None
+    track: Optional[int] = None
+    if disc_and_track is not None:
+        disc, track = disc_and_track
+    song: Optional[Song] = find_song(options['songs'], disc=disc, track=track)
+
     return {
         'song': song,
+        'disc': disc,
+        'track': track,
         'should_overwrite': options['should_overwrite'],
         'cover_path': options['cover_path'],
     }

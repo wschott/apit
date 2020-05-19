@@ -1,28 +1,21 @@
 from pathlib import Path
-from typing import List, Mapping, Optional, Union
+from typing import Mapping, Optional, Union
 
 from apit.action import Action
 from apit.atomic_parser import is_itunes_bought_file, update_metadata
 from apit.error import ApitError
-from apit.file_handling import extract_disc_and_track_number
 from apit.metadata import Song
 
 
 class TagAction(Action):
-    def __init__(self, file: Path, options: Mapping[str, Union[List[Song], bool]]):
+    def __init__(self, file: Path, options: Mapping[str, Union[Optional[Song], bool, Optional[int], Optional[Path]]]):
         super().__init__(file, options)
 
         self._is_original = is_itunes_bought_file(self.file)
-        disc_and_track = extract_disc_and_track_number(self.file)
-        self._disc: Optional[int] = None
-        self._track: Optional[int] = None
-        if disc_and_track is not None:
-            self._disc, self._track = disc_and_track
-        self._song: Optional[Song] = self.options['song']
 
     @property
     def file_matched(self) -> bool:
-        return bool(self._disc) and bool(self._track)
+        return bool(self.options['disc']) and bool(self.options['track'])
 
     @property
     def needs_confirmation(self) -> bool:
@@ -34,11 +27,11 @@ class TagAction(Action):
 
     @property
     def metadata_matched(self) -> bool:
-        return self._song is not None
+        return self.options['song'] is not None
 
     @property
     def song(self) -> Song:
-        return self._song
+        return self.options['song']
 
     def apply(self) -> None:
         if not self.actionable:
