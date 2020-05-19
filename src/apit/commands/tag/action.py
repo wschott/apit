@@ -1,18 +1,10 @@
-from pathlib import Path
-from typing import Mapping, Optional, Union
-
 from apit.action import Action
-from apit.atomic_parser import is_itunes_bought_file, update_metadata
+from apit.atomic_parser import update_metadata
 from apit.error import ApitError
 from apit.metadata import Song
 
 
 class TagAction(Action):
-    def __init__(self, file: Path, options: Mapping[str, Union[Optional[Song], bool, Optional[int], Optional[Path]]]):
-        super().__init__(file, options)
-
-        self._is_original = is_itunes_bought_file(self.file)
-
     @property
     def file_matched(self) -> bool:
         return bool(self.options['disc']) and bool(self.options['track'])
@@ -23,7 +15,7 @@ class TagAction(Action):
 
     @property
     def actionable(self) -> bool:
-        return self.file_matched and self.metadata_matched and not self._is_original
+        return self.file_matched and self.metadata_matched and not self.options['is_original']
 
     @property
     def metadata_matched(self) -> bool:
@@ -48,7 +40,7 @@ class TagAction(Action):
     def not_actionable_msg(self) -> str:
         if not self.file_matched:
             return 'filename not matchable'
-        elif self._is_original:
+        elif self.options['is_original']:
             return 'original iTunes Store file'
         elif not self.metadata_matched:
             return 'file not matched against metadata'

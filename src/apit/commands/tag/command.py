@@ -8,6 +8,7 @@ from apit.action import (
     all_actions_successful,
     any_action_needs_confirmation,
 )
+from apit.atomic_parser import is_itunes_bought_file
 from apit.command import Command
 from apit.error import ApitError
 from apit.file_handling import (
@@ -104,12 +105,12 @@ def to_action_options(file: Path, options) -> Mapping[str, Union[Optional[Song],
     track: Optional[int] = None
     if disc_and_track is not None:
         disc, track = disc_and_track
-    song: Optional[Song] = find_song(options['songs'], disc=disc, track=track)
 
     return {
-        'song': song,
+        'song': find_song(options['songs'], disc=disc, track=track),
         'disc': disc,
         'track': track,
+        'is_original': is_itunes_bought_file(file),
         'should_overwrite': options['should_overwrite'],
         'cover_path': options['cover_path'],
     }
