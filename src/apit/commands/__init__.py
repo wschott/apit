@@ -1,6 +1,6 @@
 from typing import Mapping, Type
 
-from apit.commands.base import Command
+from apit.command import Command
 from apit.commands.show.command import ShowCommand
 from apit.commands.tag.command import TagCommand
 from apit.error import ApitError

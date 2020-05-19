@@ -6,7 +6,7 @@ from apit.action import (
     all_actions_successful,
     any_action_needs_confirmation,
 )
-from apit.commands.base import Command
+from apit.command import Command
 from apit.report import print_actions_preview, print_report
 from apit.user_input import ask_user_for_confirmation
 

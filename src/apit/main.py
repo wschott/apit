@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Type
 
 from apit.commands import determine_command_type
-from apit.commands.base import Command
+from apit.command import Command
 from apit.defaults import CACHE_PATH, FILE_FILTER
 from apit.error import ApitError
 from apit.file_handling import collect_files

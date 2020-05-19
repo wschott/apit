@@ -8,7 +8,7 @@ from apit.action import (
     all_actions_successful,
     any_action_needs_confirmation,
 )
-from apit.commands.base import Command
+from apit.command import Command
 from apit.error import ApitError
 from apit.file_handling import (
     MIME_TYPE,
