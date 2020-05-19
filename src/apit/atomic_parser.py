@@ -1,8 +1,10 @@
+import logging
 from pathlib import Path
 from subprocess import CompletedProcess
 from typing import List, Optional
 
 from apit.cmd import execute_command
+from apit.error import ApitError
 from apit.metadata import Song
 from apit.store.constants import (
     AP_ITEM_KIND_MAPPING,
@@ -19,17 +21,31 @@ BLACKLIST = [
 
 def read_metadata(file: Path) -> CompletedProcess:
     command = ['-t']
-    return execute_command(file, command)
+    command_status = execute_command(file, command)
+
+    logging.info('Command: %s', command_status.args)
+    if bool(command_status.returncode):
+        raise ApitError({'stdout': command_status.stdout.strip(), 'stderr': command_status.stderr.strip()})
+    return command_status.stdout.strip()
 
 
 def is_itunes_bought_file(file: Path) -> bool:
-    command_status = read_metadata(file)
-    return any(map(lambda item: item in command_status.stdout, BLACKLIST))
+    try:
+        result = read_metadata(file)
+    except ApitError:
+        return False
+    else:
+        return any(map(lambda item: item in result, BLACKLIST))
 
 
-def update_metadata(file: Path, song: Song, should_overwrite: bool, cover_path: Optional[Path] = None) -> CompletedProcess:
+def update_metadata(file: Path, song: Song, should_overwrite: bool, cover_path: Optional[Path] = None):
     command = _generate_metadata_update_command(song, should_overwrite, cover_path)
-    return execute_command(file, command, shell=True)
+    command_status = execute_command(file, command, shell=True)
+
+    logging.info('Command: %s', command_status.args)
+    if bool(command_status.returncode):
+        raise ApitError({'stdout': command_status.stdout.strip(), 'stderr': command_status.stderr.strip()})
+    return command_status.stdout.strip()
 
 
 def _generate_metadata_update_command(track: Song, should_overwrite: bool, cover_path: Optional[Path] = None) -> List[str]:

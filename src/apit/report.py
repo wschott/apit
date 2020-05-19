@@ -105,7 +105,7 @@ def print_actions_preview(actions: List[Action]) -> None:
 def print_report(actions: List[Action]) -> None:
     successes = filter_successes(actions)
     if successes:
-        print('Process results:')
+        print('\nProcess results:')
         for action in successes:
             print_processing_result(action)
 
@@ -125,19 +125,8 @@ def print_processing_result(action: Action) -> None:
     print(separator())
     print(result_line(action))
     print()
-    if action.result:
-        if action.successful:
-            logging.info('Command: %s' % action.result.args)
-            print(action.result.stdout.strip())
-            logging.info('stderr: %s', action.result.stderr.strip())
-            print()
-        else:
-            print('>> Command:')
-            print(action.result.args)
-            print('>> stdout:')
-            print(action.result.stdout.strip())
-            print('>> stderr:')
-            print(action.result.stderr.strip())
+    print(action.result)
+    print()
 
 
 def print_summary(actions: List[Action]) -> None:

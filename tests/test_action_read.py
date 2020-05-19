@@ -1,9 +1,9 @@
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import pytest
 
 from apit.commands.show.action import ReadAction
+from apit.error import ApitError
 
 
 def test_read_action_after_init():
@@ -21,33 +21,27 @@ def test_read_action_after_init():
         action.not_actionable_msg
 
 
-@patch('apit.cmd._run_subprocess')
-def test_read_action_apply(mock_run_subprocess, mock_atomicparsley_exe):
-    mock_result = MagicMock()
-    mock_result.returncode = 0
-    mock_run_subprocess.return_value = mock_result
+def test_read_action_apply(monkeypatch):
+    monkeypatch.setattr('apit.commands.show.action.read_metadata', lambda *args: 'mock-metadata')
     action = ReadAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
 
     action.apply()
 
-    assert action.result == mock_result
-    assert action.result.returncode == 0
+    assert action.result == 'mock-metadata'
     assert action.executed
     assert action.successful
     assert action.status_msg == 'successful'
 
 
-@patch('apit.cmd._run_subprocess')
-def test_read_action_apply_error_while_reading(mock_run_subprocess, mock_atomicparsley_exe):
-    mock_result = MagicMock()
-    mock_result.returncode = 1
-    mock_run_subprocess.return_value = mock_result
+def test_read_action_apply_error_while_reading(monkeypatch):
+    def _raise(*args):
+        raise ApitError()
+    monkeypatch.setattr('apit.commands.show.action.read_metadata', _raise)
     action = ReadAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
 
     action.apply()
 
-    assert action.result == mock_result
-    assert action.result.returncode == 1
+    assert isinstance(action.result, ApitError)
     assert action.executed
     assert not action.successful
     assert action.status_msg == '[error]'

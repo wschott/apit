@@ -1,5 +1,6 @@
 from apit.action import Action
 from apit.atomic_parser import read_metadata
+from apit.error import ApitError
 
 
 class ReadAction(Action):
@@ -12,12 +13,12 @@ class ReadAction(Action):
         return True
 
     def apply(self) -> None:
-        command_status = read_metadata(self.file)
-
-        if not bool(command_status.returncode):
-            self.mark_as_success(command_status)
+        try:
+            result = read_metadata(self.file)
+        except ApitError as e:
+            self.mark_as_fail(e)
         else:
-            self.mark_as_fail(command_status)
+            self.mark_as_success(result)
 
     @property
     def preview_msg(self) -> str:

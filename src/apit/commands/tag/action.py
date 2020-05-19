@@ -44,12 +44,12 @@ class TagAction(Action):
         if not self.actionable:
             return
 
-        command_status = update_metadata(self.file, self.song, self.options['should_overwrite'], self.options['cover_path'])
-
-        if not bool(command_status.returncode):
-            self.mark_as_success(command_status)
+        try:
+            result = update_metadata(self.file, self.song, self.options['should_overwrite'], self.options['cover_path'])
+        except ApitError as e:
+            self.mark_as_fail(e)
         else:
-            self.mark_as_fail(command_status)
+            self.mark_as_success(result)
 
     @property
     def not_actionable_msg(self) -> str:
