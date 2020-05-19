@@ -1,7 +1,11 @@
 from pathlib import Path
 from typing import List
 
-from apit.action import all_actions_successful, any_action_needs_confirmation
+from apit.action import (
+    Action,
+    all_actions_successful,
+    any_action_needs_confirmation,
+)
 from apit.commands.base import Command
 from apit.report import print_actions_preview, print_report
 from apit.user_input import ask_user_for_confirmation
@@ -11,7 +15,7 @@ from .action import ReadAction
 
 class ShowCommand(Command):
     def execute(self, files: List[Path], options):
-        actions: List[ReadAction] = [ReadAction(file, {}) for file in files]
+        actions: List[Action] = [ReadAction(file, {}) for file in files]
 
         if any_action_needs_confirmation(actions):
             print_actions_preview(actions)
