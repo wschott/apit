@@ -1,4 +1,5 @@
 from pathlib import Path
+from unittest.mock import MagicMock, call
 
 import pytest
 
@@ -21,27 +22,42 @@ def test_read_action_after_init():
         action.not_actionable_msg
 
 
-def test_read_action_apply(monkeypatch):
-    monkeypatch.setattr('apit.commands.show.action.read_metadata', lambda *args: 'mock-metadata')
+def test_read_action_status_msg(monkeypatch):
     action = ReadAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
+    monkeypatch.setattr(action, '_success', True)
 
-    action.apply()
-
-    assert action.result == 'mock-metadata'
-    assert action.executed
-    assert action.successful
     assert action.status_msg == 'successful'
 
 
-def test_read_action_apply_error_while_reading(monkeypatch):
-    def _raise(*args):
-        raise ApitError()
-    monkeypatch.setattr('apit.commands.show.action.read_metadata', _raise)
+def test_read_action_status_msg_not_successful(monkeypatch):
     action = ReadAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
+    monkeypatch.setattr(action, '_success', False)
+
+    assert action.status_msg == '[error]'
+
+
+def test_read_action_apply(monkeypatch):
+    monkeypatch.setattr('apit.commands.show.action.read_metadata', lambda *args: 'mock-metadata')
+    action = ReadAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
+    mock_mark_as_success = MagicMock()
+    monkeypatch.setattr(action, 'mark_as_success', mock_mark_as_success)
 
     action.apply()
 
-    assert isinstance(action.result, ApitError)
-    assert action.executed
-    assert not action.successful
-    assert action.status_msg == '[error]'
+    assert mock_mark_as_success.call_args == call('mock-metadata')
+
+
+def test_read_action_apply_error_while_reading(monkeypatch):
+    error = ApitError('mock-error')
+
+    def _raise(*args):
+        raise error
+
+    monkeypatch.setattr('apit.commands.show.action.read_metadata', _raise)
+    action = ReadAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
+    mock_mark_as_fail = MagicMock()
+    monkeypatch.setattr(action, 'mark_as_fail', mock_mark_as_fail)
+
+    action.apply()
+
+    assert mock_mark_as_fail.call_args == call(error)
