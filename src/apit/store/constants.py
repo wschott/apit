@@ -4,6 +4,7 @@
 # https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/
 
 from enum import Enum
+from typing import List, Mapping
 
 from apit.error import ApitError
 
@@ -43,7 +44,7 @@ class STORE_RATING(Enum):
     NONE     = 'notExplicit'
 
 
-AP_RATING_MAPPING = {
+AP_RATING_MAPPING: Mapping[STORE_RATING, str] = {
     # itunes value -> atomicparsley value
     STORE_RATING.CLEAN: 'clean',
     STORE_RATING.EXPLICIT: 'explicit',
@@ -63,7 +64,7 @@ class STORE_KIND(Enum):
     SONG  = 'song'
 
 
-AP_ITEM_KIND_MAPPING = {
+AP_ITEM_KIND_MAPPING: Mapping[STORE_KIND, str] = {
     # itunes value -> atomicparsley value
     STORE_KIND.SONG: 'Normal',
 }
@@ -84,7 +85,7 @@ def to_item_kind(kind_str: str) -> STORE_KIND:
 #     'Rock': 21,
 # }
 
-# class MP4_MAPPING(Enum):
+class MP4_MAPPING(Enum):
 #     TITLE           = '\xa9nam'
 #     ALBUM           = '\xa9alb'
 #     ARTIST          = '\xa9ART'
@@ -101,8 +102,8 @@ def to_item_kind(kind_str: str) -> STORE_KIND:
 #     CONTENT_ID      = 'cnID'
 #
 #     # TODO unused for now
-#     OWNER_NAME      = 'ownr'  # TODO use for blacklist
-#     USER_MAIL       = 'apID'  # TODO use for blacklist
+    OWNER_NAME      = 'ownr'
+    USER_MAIL       = 'apID'
 #
 #     PLAYLIST_ID     = 'plID'
 #     ARTIST_ID       = 'atID'
@@ -113,3 +114,9 @@ def to_item_kind(kind_str: str) -> STORE_KIND:
 #     PREGAP          = 'pgap'  # really pre gap?
 #     UNKNOWN1        = 'akID'  # unknown id
 #     UNKNOWN2        = 'xid '  # yes, with a space at the end; mixture of "{Record_Label_Name}:isrc:{ISRC_SONG_CODE}"
+
+
+BLACKLIST: List[str] = [
+    MP4_MAPPING.OWNER_NAME.value,
+    MP4_MAPPING.USER_MAIL.value,
+]

@@ -9,14 +9,10 @@ from apit.metadata import Song
 from apit.store.constants import (
     AP_ITEM_KIND_MAPPING,
     AP_RATING_MAPPING,
+    BLACKLIST,
     to_item_kind,
     to_rating,
 )
-
-BLACKLIST = [
-    'Atom "ownr" contains',
-    'Atom "apID" contains',
-]
 
 
 def read_metadata(file: Path) -> CompletedProcess:
