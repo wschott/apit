@@ -87,8 +87,7 @@ def to_pre_action_options(options) -> Mapping[str, Union[List[Song], bool]]:
                 artwork_cache_path = options.cache_path
             else:
                 import tempfile
-                autodeleting_temp_path = tempfile.TemporaryDirectory()
-                artwork_cache_path = Path(autodeleting_temp_path.name)
+                artwork_cache_path = Path(tempfile.gettempdir())
             cover_path = download_artwork(upscaled_url, artwork_cache_path, first_song)
             logging.info('Cover cached in: %s', cover_path)
 
