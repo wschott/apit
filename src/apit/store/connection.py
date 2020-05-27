@@ -1,11 +1,15 @@
+import logging
 import re
 import urllib.error
 import urllib.request
+from typing import Tuple
 
 from apit.error import ApitError
 
 # format (as of 2020-05): https://music.apple.com/us/album/album-name/123456789
 # old format: http://itunes.apple.com/us/album/album-name/id123456789
+from apit.file_handling import MIME_TYPE
+
 REGEX_GROUP_COUNTRY_CODE = r'(?P<country_code>[a-z]{2})'
 REGEX_GROUP_ID = r'(?P<id>\d+)'
 
@@ -66,7 +70,23 @@ def download_metadata(url: str) -> str:
         with urllib.request.urlopen(url) as response:
             data_read = response.read()
             return data_read.decode('utf-8')
-    except urllib.error.HTTPError as e:
-        raise ApitError('Connection to Apple Music/iTunes Store failed due to HTTP error code "%d": %s' % (e.code, e.reason))
     except urllib.error.URLError as e:
-        raise ApitError('Connection to Apple Music/iTunes Store failed due to error: %s' % e.reason)
+        raise ApitError('Connection to Apple Music/iTunes Store failed due to error: %s' % str(e))
+
+
+def download_artwork(url: str) -> Tuple[bytes, MIME_TYPE]:
+    try:
+        with urllib.request.urlopen(url) as response:
+            content_type = response.getheader('Content-Type')
+            logging.info('Headers: %s', response.info())
+            return response.read(), _to_mime_type(content_type)
+    except urllib.error.URLError as e:
+        raise ApitError('Connection to Apple Music/iTunes Store failed due to error: %s' % str(e))
+
+
+def _to_mime_type(content_type: str) -> MIME_TYPE:
+    try:
+        image_type = MIME_TYPE(content_type)
+    except ValueError:
+        raise ApitError('Unknown artwork content type: %s' % content_type)
+    return image_type

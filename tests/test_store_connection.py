@@ -4,10 +4,11 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from apit.error import ApitError
+from apit.file_handling import MIME_TYPE
 from apit.store.connection import (
     download_metadata,
     generate_lookup_url_by_str,
-    generate_lookup_url_by_url,
+    generate_lookup_url_by_url, download_artwork, _to_mime_type,
 )
 
 STORE_URL           = 'https://music.apple.com/us/album/test-album/12345'
@@ -17,6 +18,7 @@ STORE_URL_ANYTHING  = 'http://test/us/x/9/12345?i=09876'
 STORE_URL_OLD       = 'http://itunes.apple.com/us/album/test-album/id12345'
 LOOKUP_URL          = 'https://itunes.apple.com/lookup?entity=song&country=us&id=12345'
 LOOKUP_URL_NON_US   = 'https://itunes.apple.com/lookup?entity=song&country=xy&id=12345'
+ARTWORK_URL         = 'https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/12/12/12/12345678-1234-1234-1234-123456781234/source/600x600bb.jpg'
 
 
 def test_generate_lookup_url_by_url_using_valid_url():
@@ -71,13 +73,44 @@ def test_download_metadata():
     assert '{"resultCount":12, "results": [{}]}' == json
 
 
-def test_download_metadata_with_http_error():
-    with patch('urllib.request.urlopen', side_effect=urllib.error.HTTPError(url=None, code=500, msg='test-msg', hdrs=None, fp=None)):
-        with pytest.raises(ApitError, match='due to HTTP error code "500": test-msg'):
-            download_metadata(LOOKUP_URL)
-
-
 def test_download_metadata_with_url_error():
     with patch('urllib.request.urlopen', side_effect=urllib.error.URLError('test-msg')):
-        with pytest.raises(ApitError, match='due to error: test-msg'):
+        with pytest.raises(ApitError, match='due to error: <urlopen error test-msg>'):
             download_metadata(LOOKUP_URL)
+    with patch('urllib.request.urlopen', side_effect=urllib.error.HTTPError(url=None, code=500, msg='test-msg', hdrs=None, fp=None)):
+        with pytest.raises(ApitError, match='due to error: HTTP Error 500: test-msg'):
+            download_metadata(LOOKUP_URL)
+
+
+def test_download_artwork():
+    response_attrs = {
+        'read.return_value': b'artwork-content',
+        'info.return_value': '',
+        'getheader.return_value': 'image/jpeg',
+    }
+    mock = MagicMock()
+    mock.__enter__.return_value = MagicMock(**response_attrs)
+
+    with patch('urllib.request.urlopen', return_value=mock):
+        artwork = download_artwork(ARTWORK_URL)
+
+    assert b'artwork-content', MIME_TYPE.JPEG == artwork
+
+
+def test_download_artwork_with_url_error():
+    with patch('urllib.request.urlopen', side_effect=urllib.error.URLError('test-msg')):
+        with pytest.raises(ApitError, match='due to error: <urlopen error test-msg>'):
+            download_artwork(ARTWORK_URL)
+    with patch('urllib.request.urlopen', side_effect=urllib.error.HTTPError(url=None, code=500, msg='test-msg', hdrs=None, fp=None)):
+        with pytest.raises(ApitError, match='due to error: HTTP Error 500: test-msg'):
+            download_artwork(ARTWORK_URL)
+
+
+def test_to_mime_type():
+    assert _to_mime_type('image/jpeg') == MIME_TYPE.JPEG
+    assert _to_mime_type('image/png') == MIME_TYPE.PNG
+
+
+def test_to_mime_type_for_unknown_type():
+    with pytest.raises(ApitError, match='Unknown artwork content type: test-type'):
+        _to_mime_type('test-type')

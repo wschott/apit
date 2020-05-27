@@ -18,12 +18,12 @@ from apit.file_handling import (
     generate_cache_filename,
 )
 from apit.metadata import Song, find_song
-from apit.metadata_cache import save_to_cache
+from apit.cache import save_metadata_to_cache, save_artwork_to_cache
 from apit.report import print_actions_preview, print_report
 from apit.store.connection import (
     download_metadata,
     generate_lookup_url_by_str,
-    generate_lookup_url_by_url,
+    generate_lookup_url_by_url, download_artwork,
 )
 from apit.store_data_parser import extract_songs
 from apit.user_input import ask_user_for_confirmation, ask_user_for_input
@@ -68,16 +68,16 @@ def to_pre_action_options(options) -> Mapping[str, Union[List[Song], bool]]:
         # TODO find better location for this code
         if not len(songs):
             raise ApitError('Failed to generate a cache filename due to missing song')
-        cache_file = generate_cache_filename(options.cache_path, first_song)
-        save_to_cache(metadata_json, cache_file)
-        logging.info('Downloaded metadata cached in: %s', cache_file)
+        metadata_cache_file = generate_cache_filename(options.cache_path, first_song)
+        save_metadata_to_cache(metadata_json, metadata_cache_file)
+        logging.info('Downloaded metadata cached in: %s', metadata_cache_file)
 
-    cover_path = None
+    artwork_path = None
     if options.has_embed_artwork_flag:
-        cover_path = get_cached_artwork_path_if_exists(first_song, options)
+        artwork_path = get_cached_artwork_path_if_exists(first_song, options)
 
-        if cover_path:
-            logging.info('Use cached cover: %s', cover_path)
+        if artwork_path:
+            logging.info('Use cached cover: %s', artwork_path)
         else:
             size = options.artwork_size
             upscaled_url = upscale_artwork_url(first_song, size)
@@ -88,13 +88,15 @@ def to_pre_action_options(options) -> Mapping[str, Union[List[Song], bool]]:
             else:
                 import tempfile
                 artwork_cache_path = Path(tempfile.gettempdir())
-            cover_path = download_artwork(upscaled_url, artwork_cache_path, first_song)
-            logging.info('Cover cached in: %s', cover_path)
+            artwork_content, image_type = download_artwork(upscaled_url)
+            artwork_cache_file = generate_artwork_filename(artwork_cache_path, first_song, image_type)
+            save_artwork_to_cache(artwork_content, artwork_cache_file)
+            logging.info('Cover cached in: %s', artwork_path)
 
     return {
         'songs': songs,
         'should_overwrite': options.has_overwrite_flag,
-        'cover_path': cover_path,
+        'cover_path': artwork_path,
     }
 
 
@@ -113,21 +115,6 @@ def to_action_options(file: Path, options) -> Mapping[str, Union[Optional[Song],
         'should_overwrite': options['should_overwrite'],
         'cover_path': options['cover_path'],
     }
-
-
-def download_artwork(url, cache_path, song) -> Path:
-    with urllib.request.urlopen(url) as response:
-        # TODO HTTP error handling
-        content_type = response.getheader('Content-Type')
-        logging.info('Headers: %s', response.info())
-        try:
-            image_type = MIME_TYPE(content_type)
-        except ValueError:
-            raise ApitError('Unknown artwork content type: %s' % content_type)
-        else:
-            cover_path = generate_artwork_filename(cache_path, song, image_type)
-        cover_path.write_bytes(response.read())
-    return cover_path
 
 
 def upscale_artwork_url(song, size):
