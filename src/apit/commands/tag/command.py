@@ -95,7 +95,7 @@ def to_pre_action_options(options) -> Mapping[str, Union[List[Song], bool]]:
 
     return {
         'songs': songs,
-        'should_overwrite': options.has_overwrite_flag,
+        'should_backup': options.has_backup_flag,
         'cover_path': artwork_path,
     }
 
@@ -112,7 +112,7 @@ def to_action_options(file: Path, options) -> Mapping[str, Union[Optional[Song],
         'disc': disc,
         'track': track,
         'is_original': is_itunes_bought_file(file),
-        'should_overwrite': options['should_overwrite'],
+        'should_backup': options['should_backup'],
         'cover_path': options['cover_path'],
     }
 

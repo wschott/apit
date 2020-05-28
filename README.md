@@ -127,11 +127,11 @@ The downloaded metadata can be saved to your disk for later usage using `--cache
 
     $ apit --cache tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
 
-## Create temporary files instead of overwriting existing file
+## Create backup files
 
-You can create temporary files with the updated metadata if you put `--temp` (short: `-t`) in your command. Without `--temp` your files will be overwritten!
+You can create backup files before updating metadata if you put `--backup` (short: `-b`) in your command.
 
-    $ apit --temp tag ~/Music/Music/Media/Artist/Album/
+    $ apit --backup tag ~/Music/Music/Media/Artist/Album/
 
 ## Verbose mode
 

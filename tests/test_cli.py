@@ -7,7 +7,7 @@ def test_parse_args():
     args = parse_args(['show', './tests/fixtures'])
     assert args.command == 'show'
     assert args.path == './tests/fixtures'
-    assert args.has_overwrite_flag
+    assert not args.has_backup_flag
     assert not args.has_search_result_cache_flag
 
 
@@ -18,8 +18,8 @@ def test_parse_args_optional_args():
     args = parse_args(['-vv', 'show', './tests/fixtures'])
     assert args.verbose_level == 2
 
-    args = parse_args(['-t', 'tag', './tests/fixtures'])
-    assert not args.has_overwrite_flag
+    args = parse_args(['-b', 'tag', './tests/fixtures'])
+    assert args.has_backup_flag
 
     args = parse_args(['-c', 'tag', './tests/fixtures'])
     assert args.has_search_result_cache_flag
@@ -39,9 +39,9 @@ def test_parse_args_optional_args():
 
 
 def test_parse_args_complex_args(tmp_path):
-    args = parse_args(['--cache', '--temp', '-v', 'tag', str(tmp_path), 'test-metadata-file.json'])
+    args = parse_args(['--cache', '--backup', '-v', 'tag', str(tmp_path), 'test-metadata-file.json'])
     assert args.has_search_result_cache_flag
-    assert not args.has_overwrite_flag
+    assert args.has_backup_flag
     assert args.verbose_level == 1
     assert args.command == 'tag'
     assert args.path == str(tmp_path)

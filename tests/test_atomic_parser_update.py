@@ -46,26 +46,16 @@ EXPECTED_UPDATE_COMMAND = ' '.join(
 
 
 def test_generate_metadata_update_command():
-    assert _generate_metadata_update_command(SONG, should_overwrite=False) == EXPECTED_GENERATED_COMMAND
+    assert _generate_metadata_update_command(SONG) == EXPECTED_GENERATED_COMMAND
 
 
 @patch('apit.cmd._run_subprocess')
 def test_metadata_updating(mock_run_subprocess, mock_atomicparsley_exe):
     mock_run_subprocess.return_value = MockCompletedprocess(0, 'mock-progress', '', '')
 
-    result = update_metadata('dummy.m4a', SONG, should_overwrite=False)
+    result = update_metadata('dummy.m4a', SONG)
 
     assert mock_run_subprocess.call_args == call(EXPECTED_UPDATE_COMMAND, shell=True)
-    assert result == 'mock-progress'
-
-
-@patch('apit.cmd._run_subprocess')
-def test_metadata_updating_with_overwriting(mock_run_subprocess, mock_atomicparsley_exe):
-    mock_run_subprocess.return_value = MockCompletedprocess(0, 'mock-progress', '', '')
-
-    result = update_metadata('dummy.m4a', SONG, should_overwrite=True)
-
-    assert mock_run_subprocess.call_args == call(EXPECTED_UPDATE_COMMAND + ' --overWrite', shell=True)
     assert result == 'mock-progress'
 
 
@@ -74,6 +64,6 @@ def test_metadata_updating_file_error(mock_run_subprocess, mock_atomicparsley_ex
     mock_run_subprocess.return_value = MockCompletedprocess(1, '', 'mock-error', '')
 
     with pytest.raises(ApitError, match='mock-error'):
-        update_metadata('dummy.m4a', SONG, should_overwrite=False)
+        update_metadata('dummy.m4a', SONG)
 
     assert mock_run_subprocess.call_args == call(EXPECTED_UPDATE_COMMAND, shell=True)

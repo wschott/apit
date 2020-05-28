@@ -1,3 +1,5 @@
+import shutil
+
 from apit.action import Action
 from apit.atomic_parser import update_metadata
 from apit.error import ApitError
@@ -30,8 +32,15 @@ class TagAction(Action):
             return
 
         try:
-            result = update_metadata(self.file, self.song, self.options['should_overwrite'], self.options['cover_path'])
+            if self.options['should_backup']:
+                self.backup_song()
+
+            result = update_metadata(self.file, self.song, self.options['cover_path'])
         except ApitError as e:
             self.mark_as_fail(e)
         else:
             self.mark_as_success(result)
+
+    def backup_song(self) -> None:
+        backup_file_path = self.file.parent / f'{self.file.stem}.bak{self.file.suffix}'
+        shutil.copy2(self.file, backup_file_path)

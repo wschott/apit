@@ -51,9 +51,9 @@ Example:
         help='increase verbosity of reporting (-vv prints debug messages)'
     )
     parser.add_argument(
-        '-t', '--temp', dest='has_overwrite_flag',
-        action='store_false', default=True,
-        help='[tag] create temporary files with updated metadata (instead of overwriting files)'
+        '-b', '--backup', dest='has_backup_flag',
+        action='store_true', default=False,
+        help='[tag] create backup files before updating metadata'
     )
     parser.add_argument(
         '-c', '--cache', dest='has_search_result_cache_flag',

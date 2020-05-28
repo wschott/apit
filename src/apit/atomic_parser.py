@@ -34,8 +34,8 @@ def is_itunes_bought_file(file: Path) -> bool:
         return any(map(lambda item: item in result, BLACKLIST))
 
 
-def update_metadata(file: Path, song: Song, should_overwrite: bool, cover_path: Optional[Path] = None):
-    command = _generate_metadata_update_command(song, should_overwrite, cover_path)
+def update_metadata(file: Path, song: Song, cover_path: Optional[Path] = None):
+    command = _generate_metadata_update_command(song, cover_path)
     command_status = execute_command(file, command, shell=True)
 
     logging.info('Command: %s', command_status.args)
@@ -44,7 +44,7 @@ def update_metadata(file: Path, song: Song, should_overwrite: bool, cover_path: 
     return command_status.stdout.strip()
 
 
-def _generate_metadata_update_command(track: Song, should_overwrite: bool, cover_path: Optional[Path] = None) -> List[str]:
+def _generate_metadata_update_command(track: Song, cover_path: Optional[Path] = None) -> List[str]:
     command = [
         f'--artist "{track.artist}"',
         f'--title "{track.title}"',
@@ -71,9 +71,6 @@ def _generate_metadata_update_command(track: Song, should_overwrite: bool, cover
     # native tag writing for the following isn't supported by AtomicParsley yet
     # command.append(f'--atID "{track.artist_id}"')
     # command.append(f'--plID "{track.collection_Id}"')
-
-    if should_overwrite:
-        command.append('--overWrite')
 
     return command
 

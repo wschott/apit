@@ -12,7 +12,7 @@ def test_tag_action_after_init(test_song: Song):
         'disc': test_song.disc_number,
         'track': test_song.track_number,
         'is_original': False,
-        'should_overwrite': False,
+        'should_backup': False,
         'cover_path': None
     })
 
@@ -22,7 +22,7 @@ def test_tag_action_after_init(test_song: Song):
         'disc': test_song.disc_number,
         'track': test_song.track_number,
         'is_original': False,
-        'should_overwrite': False,
+        'should_backup': False,
         'cover_path': None
     }
     assert not action.executed
@@ -173,7 +173,7 @@ def test_tag_action_apply(monkeypatch, test_song: Song):
     monkeypatch.setitem(action.options, 'disc', test_song.disc_number)
     monkeypatch.setitem(action.options, 'track', test_song.track_number)
     monkeypatch.setitem(action.options, 'is_original', False)
-    monkeypatch.setitem(action.options, 'should_overwrite', False)
+    monkeypatch.setitem(action.options, 'should_backup', False)
     monkeypatch.setitem(action.options, 'cover_path', None)
 
     mock_mark_as_success = MagicMock()
@@ -197,7 +197,7 @@ def test_tag_action_apply_error(monkeypatch, test_song: Song):
     monkeypatch.setitem(action.options, 'disc', test_song.disc_number)
     monkeypatch.setitem(action.options, 'track', test_song.track_number)
     monkeypatch.setitem(action.options, 'is_original', False)
-    monkeypatch.setitem(action.options, 'should_overwrite', False)
+    monkeypatch.setitem(action.options, 'should_backup', False)
     monkeypatch.setitem(action.options, 'cover_path', None)
 
     mock_mark_as_fail = MagicMock()
