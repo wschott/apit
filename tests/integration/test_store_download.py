@@ -3,8 +3,8 @@ import subprocess
 
 import pytest
 
-from apit.cache import save_metadata_to_cache, save_artwork_to_cache
-from apit.store.connection import download_metadata, download_artwork
+from apit.cache import save_artwork_to_cache, save_metadata_to_cache
+from apit.store.connection import download_artwork, download_metadata
 
 REAL_LOOKUP_URL = 'https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903'
 REAL_ARTWORK_URL = 'https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/88/92/4c/88924c01-6fb3-8616-f0b3-881b1ed09e03/source/100x100bb.jpg'

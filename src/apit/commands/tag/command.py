@@ -1,5 +1,4 @@
 import logging
-import urllib.request
 from pathlib import Path
 from typing import List, Mapping, Optional, Union
 
@@ -9,6 +8,7 @@ from apit.action import (
     any_action_needs_confirmation,
 )
 from apit.atomic_parser import is_itunes_bought_file
+from apit.cache import save_artwork_to_cache, save_metadata_to_cache
 from apit.command import Command
 from apit.error import ApitError
 from apit.file_handling import (
@@ -18,12 +18,12 @@ from apit.file_handling import (
     generate_cache_filename,
 )
 from apit.metadata import Song, find_song
-from apit.cache import save_metadata_to_cache, save_artwork_to_cache
 from apit.report import print_actions_preview, print_report
 from apit.store.connection import (
+    download_artwork,
     download_metadata,
     generate_lookup_url_by_str,
-    generate_lookup_url_by_url, download_artwork,
+    generate_lookup_url_by_url,
 )
 from apit.store_data_parser import extract_songs
 from apit.user_input import ask_user_for_confirmation, ask_user_for_input

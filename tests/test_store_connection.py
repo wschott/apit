@@ -6,9 +6,11 @@ import pytest
 from apit.error import ApitError
 from apit.file_handling import MIME_TYPE
 from apit.store.connection import (
+    _to_mime_type,
+    download_artwork,
     download_metadata,
     generate_lookup_url_by_str,
-    generate_lookup_url_by_url, download_artwork, _to_mime_type,
+    generate_lookup_url_by_url,
 )
 
 STORE_URL           = 'https://music.apple.com/us/album/test-album/12345'
