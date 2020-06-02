@@ -82,11 +82,44 @@ def to_item_kind(kind_str: str) -> STORE_KIND:
 
 
 # https://affiliate.itunes.apple.com/resources/documentation/genre-mapping/
+# https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres
 # GENRE_MAP = {
-#     'Hip Hop/Rap': 18,
-#     'Hip-Hop/Rap': 18,
+#     'African': 1203,
+#     'Alternative': 20,
+#     'Arabic': 1197,
+#     'Blues': 2,
+#     'Brazilian': 1122,
+#     "Children's Music": 4,
+#     'Christian & Gospel': 22,
+#     'Classical': 5,
+#     'Comedy': 3,
+#     'Country': 6,
 #     'Dance': 17,
+#     'Easy Listening': 25,
+#     'Electronic': 7,
+#     'Fitness & Workout': 50,
+#     'Folk': 1289,
+#     'French Pop': 50000064,
+#     'Hip-Hop/Rap': 18,
+#     'Holiday': 8,
+#     'Christian & Gospel': 100000,
+#     'Instrumental': 53,
+#     'J-Pop': 27,
+#     'Jazz': 11,
+#     'Korean': 1243,
+#     'Latino': 12,
+#     'New Age': 13,
+#     'Orchestral': 1290,
+#     'Pop': 14,
+#     'R&B/Soul': 15,
+#     'Reggae': 24,
 #     'Rock': 21,
+#     'Russian': 1299,
+#     'Singer/Songwriter': 10,
+#     'Soundtrack': 16,
+#     'Turkish': 1300,
+#     'Vocal': 23,
+#     'World': 19
 # }
 
 # Atom meanings: see https://github.com/quodlibet/mutagen/blob/master/mutagen/mp4/__init__.py
