@@ -11,24 +11,7 @@ apit allows batch tagging .m4a (AAC and ALAC) file metadata tags using data from
 
 ## Requirements
 
-1. at least [Python](https://www.python.org) 3.6
-2. a [*new* version of AtomicParsley](https://bitbucket.org/wez/atomicparsley)
-
-### AtomicParsley Installation
-
-Execute the following in your terminal to compile the new version (tested using macOS Lion):
-
-    $ cd atomicparsley-source-folder/
-    $ make maintainer-clean
-    $ ./configure --disable-universal
-    $ make
-
-Place the built `AtomicParsley` executable inside one of these folders:
-
-- `$HOME/.bin/`
-- `$HOME/bin/`
-- `$HOME/Applications/`
-- `/Applications/`
+At least [Python](https://www.python.org) 3.6
 
 ## apit Installation
 

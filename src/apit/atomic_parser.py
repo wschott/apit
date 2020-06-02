@@ -1,79 +1,87 @@
-import logging
 from pathlib import Path
-from subprocess import CompletedProcess
-from typing import List, Optional
+from typing import Optional
 
-from apit.cmd import execute_command
+import mutagen
+import mutagen.mp4
+
 from apit.error import ApitError
 from apit.metadata import Song
 from apit.store.constants import (
-    AP_ITEM_KIND_MAPPING,
-    AP_RATING_MAPPING,
     BLACKLIST,
+    ITEM_KIND_MAPPING,
+    MP4_MAPPING,
+    RATING_MAPPING,
     to_item_kind,
     to_rating,
 )
 
 
-def read_metadata(file: Path):
-    command = ['-t']
-    command_status = execute_command(file, command)
-
-    logging.info('Command: %s', command_status.args)
-    if bool(command_status.returncode):
-        raise ApitError({'stdout': command_status.stdout.strip(), 'stderr': command_status.stderr.strip()})
-    return command_status.stdout.strip()
+def read_metadata(file: Path) -> mutagen.mp4.MP4:
+    try:
+        return mutagen.mp4.MP4(file)
+    except mutagen.MutagenError as e:
+        raise ApitError(e)
 
 
 def is_itunes_bought_file(file: Path) -> bool:
     try:
-        result = read_metadata(file)
+        mp4_file = read_metadata(file)
     except ApitError:
         return False
     else:
-        return any(map(lambda item: item in result, BLACKLIST))
+        return any(map(lambda item: item in mp4_file.tags, BLACKLIST))
 
 
-def update_metadata(file: Path, song: Song, cover_path: Optional[Path] = None):
-    command = _generate_metadata_update_command(song, cover_path)
-    command_status = execute_command(file, command, shell=True)
+def update_metadata(file: Path, song: Song, cover_path: Optional[Path] = None) -> mutagen.mp4.MP4:
+    mp4_file = read_metadata(file)
 
-    logging.info('Command: %s', command_status.args)
-    if bool(command_status.returncode):
-        raise ApitError({'stdout': command_status.stdout.strip(), 'stderr': command_status.stderr.strip()})
-    return command_status.stdout.strip()
-
-
-def _generate_metadata_update_command(track: Song, cover_path: Optional[Path] = None) -> List[str]:
-    command = [
-        f'--artist "{track.artist}"',
-        f'--title "{track.title}"',
-        f'--album "{track.album_name}"',
-        f'--genre "{track.genre}"',
-        f'--year "{track.release_date}"',
-        f'--disknum {track.disc_number}/{track.disc_total}',
-        f'--tracknum {track.track_number}/{track.track_total}',
-        f'--advisory {AP_RATING_MAPPING[to_rating(track.rating)]}',
-        f'--stik "{AP_ITEM_KIND_MAPPING[to_item_kind(track.media_kind)]}"',
-        f'--albumArtist "{track.album_artist}"',
-        f'--copyright "{track.copyright}"',
-        f'--compilation {to_atomicparsley_bool(track.compilation)}',
-        f'--cnID "{track.content_id}"',
-    ]
     if cover_path:
-        command.append(f'--artwork REMOVE_ALL --artwork {cover_path}')  # first, remove all artwork
+        artwork = _read_artwork_content(cover_path)
+        _modify_mp4_file(mp4_file, song, artwork)
+    else:
+        _modify_mp4_file(mp4_file, song)
+    # TODO error handling
+    try:
+        mp4_file.save()
+    except Exception as e:
+        raise ApitError(e)
+    else:
+        return mp4_file
+
+
+def _read_artwork_content(artwork_path: Path) -> mutagen.mp4.MP4Cover:
+    artwork_content = artwork_path.read_bytes()
+    if artwork_path.suffix == '.jpg':
+        return mutagen.mp4.MP4Cover(artwork_content, imageformat=mutagen.mp4.MP4Cover.FORMAT_JPEG)
+    elif artwork_path.suffix == '.png':
+        return mutagen.mp4.MP4Cover(artwork_content, imageformat=mutagen.mp4.MP4Cover.FORMAT_PNG)
+    raise ApitError('Unknown artwork image type')
+
+
+def _modify_mp4_file(mp4_file: mutagen.mp4.MP4, song: Song, artwork: mutagen.mp4.MP4Cover = None) -> mutagen.mp4.MP4:
+    mp4_file[MP4_MAPPING.ARTIST.value] = song.artist
+    mp4_file[MP4_MAPPING.TITLE.value] = song.title
+    mp4_file[MP4_MAPPING.ALBUM_NAME.value] = song.album_name
+    mp4_file[MP4_MAPPING.GENRE.value] = song.genre
+    mp4_file[MP4_MAPPING.RELEASE_DATE.value] = song.release_date
+    mp4_file[MP4_MAPPING.DISC_NUMBER.value] = [(song.disc_number, song.disc_total)]
+    mp4_file[MP4_MAPPING.TRACK_NUMBER.value] = [(song.track_number, song.track_total)]
+    mp4_file[MP4_MAPPING.RATING.value] = [RATING_MAPPING[to_rating(song.rating)]]
+    mp4_file[MP4_MAPPING.MEDIA_TYPE.value] = [ITEM_KIND_MAPPING[to_item_kind(song.media_kind)]]
+    mp4_file[MP4_MAPPING.ALBUM_ARTIST.value] = song.album_artist
+    mp4_file[MP4_MAPPING.COPYRIGHT.value] = song.copyright
+    mp4_file[MP4_MAPPING.COMPILATION.value] = song.compilation
+    mp4_file[MP4_MAPPING.CONTENT_ID.value] = [song.content_id]
+
+    if artwork:
+        # TODO first, remove all artwork
+        mp4_file[MP4_MAPPING.ARTWORK.value] = [artwork]
 
     # command.append(f'--xID "{track[]}"')
-
     # if track.genre in GENRE_MAP:
     #     command.append(f'--geID "{GENRE_MAP[track.genre]}"')
-
     # native tag writing for the following isn't supported by AtomicParsley yet
     # command.append(f'--atID "{track.artist_id}"')
     # command.append(f'--plID "{track.collection_Id}"')
 
-    return command
-
-
-def to_atomicparsley_bool(value) -> str:
-    return "true" if value else "false"
+    return mp4_file

@@ -1,6 +1,8 @@
 from enum import Enum
 from pathlib import Path
-from typing import List
+from typing import Any, Dict, List, Mapping
+
+import mutagen.mp4
 
 from apit.action import (
     Action,
@@ -13,6 +15,13 @@ from apit.commands.show.reporter import ReadActionReporter
 from apit.commands.tag.action import TagAction
 from apit.commands.tag.reporter import TagActionReporter
 from apit.report_action import ActionReporter
+from apit.store.constants import (
+    ITEM_KIND_MAPPING,
+    MP4_MAPPING,
+    RATING_MAPPING,
+    STORE_KIND,
+    STORE_RATING,
+)
 
 PREFIX = '\033[3%dm'
 SUFFIX = '\033[0m'
@@ -26,6 +35,102 @@ STR_SELECTED = '✕'
 STR_NOT_SELECTED = ' '
 STR_SUCCESS = '✓'
 STR_FAIL = '✘'
+
+
+MP4_MAPPING_TO_HUMAN_READABLE: Mapping[MP4_MAPPING, str] = {
+    MP4_MAPPING.TITLE: 'Title',
+    MP4_MAPPING.ARTIST: 'Artist',
+    MP4_MAPPING.TRACK_NUMBER: 'Track #/Total',
+    MP4_MAPPING.DISC_NUMBER: 'Disc #/Total',
+    MP4_MAPPING.GENRE: 'Genre',
+    MP4_MAPPING.RELEASE_DATE: 'Date',
+    MP4_MAPPING.ALBUM_NAME: 'Album',
+    MP4_MAPPING.ALBUM_ARTIST: 'Album Artist',
+    MP4_MAPPING.COMPOSER: 'Composer',
+    MP4_MAPPING.COPYRIGHT: 'Copyright',
+    MP4_MAPPING.COMPILATION: 'Compilation?',
+    MP4_MAPPING.GAPLESS: 'Gapless?',
+    MP4_MAPPING.RATING: 'Rating',
+    MP4_MAPPING.MEDIA_TYPE: 'Media Type',
+    MP4_MAPPING.CONTENT_ID: 'Content ID',
+    MP4_MAPPING.PLAYLIST_ID: 'Playlist ID',
+    MP4_MAPPING.ARTIST_ID: 'Artist ID',
+    MP4_MAPPING.GENRE_ID: 'Genre ID',
+    MP4_MAPPING.COMPOSER_ID: 'Composer ID',
+    MP4_MAPPING.ISRC_ID: 'ISRC',
+    MP4_MAPPING.GROUPING: 'Grouping',
+    MP4_MAPPING.COMMENT: 'Comment',
+    MP4_MAPPING.SORT_ORDER_TITLE: 'Sort Title',
+    MP4_MAPPING.SORT_ORDER_ARTIST: 'Sort Artist',
+    MP4_MAPPING.SORT_ORDER_ALBUM: 'Sort Album',
+    MP4_MAPPING.SORT_ORDER_ALBUM_ARTIST: 'Sort Album Artist',
+    MP4_MAPPING.ARTWORK: 'Artwork',
+    MP4_MAPPING.BPM: 'BPM',
+    MP4_MAPPING.TOOL: 'Tool',
+    MP4_MAPPING.LYRICS: 'Lyrics',
+    MP4_MAPPING.OWNER_NAME: 'Owner',
+    MP4_MAPPING.USER_MAIL: 'Email',
+    MP4_MAPPING.PURCHASE_DATE: 'Purchase Date',
+    MP4_MAPPING.STOREFRONT_ID: 'Storefront ID',
+}
+
+
+RATING_TO_HUMAN_READABLE: Mapping[int, str] = {
+    4: '<explicit (old value)>',  # TODO
+    RATING_MAPPING[STORE_RATING.CLEAN]: '<clean>',
+    RATING_MAPPING[STORE_RATING.EXPLICIT]: '<explicit>',
+    RATING_MAPPING[STORE_RATING.NONE]: '<inoffensive>',
+}
+
+
+MEDIA_TYPE_TO_HUMAN_READABLE: Mapping[int, str] = {
+    ITEM_KIND_MAPPING[STORE_KIND.SONG]: '<normal>',
+}
+
+
+ORDER_INFO_TRACK = [
+    MP4_MAPPING.TITLE.value,
+    MP4_MAPPING.SORT_ORDER_TITLE.value,
+    MP4_MAPPING.ARTIST.value,
+    MP4_MAPPING.SORT_ORDER_ARTIST.value,
+    MP4_MAPPING.COMPOSER.value,
+    MP4_MAPPING.TRACK_NUMBER.value,
+    MP4_MAPPING.RATING.value,
+    MP4_MAPPING.GAPLESS.value,
+    MP4_MAPPING.BPM.value,
+    MP4_MAPPING.MEDIA_TYPE.value,
+]
+ORDER_INFO_ALBUM = [
+    MP4_MAPPING.ALBUM_NAME.value,
+    MP4_MAPPING.SORT_ORDER_ALBUM.value,
+    MP4_MAPPING.ALBUM_ARTIST.value,
+    MP4_MAPPING.SORT_ORDER_ALBUM_ARTIST.value,
+    MP4_MAPPING.DISC_NUMBER.value,
+    MP4_MAPPING.COMPILATION.value,
+    MP4_MAPPING.GENRE.value,
+    MP4_MAPPING.RELEASE_DATE.value,
+    MP4_MAPPING.COPYRIGHT.value,
+]
+ORDER_INFO_IDS = [
+    MP4_MAPPING.CONTENT_ID.value,
+    MP4_MAPPING.PLAYLIST_ID.value,
+    MP4_MAPPING.ARTIST_ID.value,
+    MP4_MAPPING.GENRE_ID.value,
+    MP4_MAPPING.COMPOSER_ID.value,
+    MP4_MAPPING.ISRC_ID.value,
+]
+ORDER_INFO_MISC = [
+    MP4_MAPPING.TOOL.value,
+    MP4_MAPPING.GROUPING.value,
+    MP4_MAPPING.COMMENT.value,
+    MP4_MAPPING.ARTWORK.value,
+]
+ORDER_INFO_USER = [
+    MP4_MAPPING.OWNER_NAME.value,
+    MP4_MAPPING.USER_MAIL.value,
+    MP4_MAPPING.PURCHASE_DATE.value,
+    MP4_MAPPING.STOREFRONT_ID.value,
+]
 
 
 class Color(Enum):
@@ -129,8 +234,102 @@ def print_processing_result(action: Action) -> None:
     print(separator())
     print(result_line(action))
     print()
-    print(action.result)
+    if action.successful and isinstance(action.result, mutagen.mp4.MP4):
+        print_tags(action.result)
+    else:
+        print(action.result)
+
+
+def print_tags(mp4_file: mutagen.mp4.MP4) -> None:
+    tags_to_print = accumulate_values_to_print(mp4_file)
+
+    print('Track:')
+    print('------')
+    for tag in ORDER_INFO_TRACK:
+        print_specific_tag(tag, tags_to_print.get(tag, None))
     print()
+    print('Album:')
+    print('------')
+    for tag in ORDER_INFO_ALBUM:
+        print_specific_tag(tag, tags_to_print.get(tag, None))
+    print()
+    print('IDs:')
+    print('----')
+    for tag in ORDER_INFO_IDS:
+        print_specific_tag(tag, tags_to_print.get(tag, None))
+    print()
+    print('Misc:')
+    print('-----')
+    for tag in ORDER_INFO_MISC:
+        print_specific_tag(tag, tags_to_print.get(tag, None))
+    print()
+    print('User:')
+    print('-----')
+    for tag in ORDER_INFO_USER:
+        print_specific_tag(tag, tags_to_print.get(tag, None))
+    print()
+    print('Other:')
+    print('-----')
+    for k_v in sorted(tags_to_print.items()):
+        tag, value = k_v
+        if tag not in (ORDER_INFO_TRACK + ORDER_INFO_ALBUM + ORDER_INFO_IDS + ORDER_INFO_MISC + ORDER_INFO_USER):
+            print_specific_tag(tag, tags_to_print.get(tag, None))
+
+
+def accumulate_values_to_print(mp4_file):
+    tags_to_print: Dict[str, Any] = {}
+    for tag, tag_value in mp4_file.tags.items():
+        value_to_print = ''
+        if isinstance(tag_value, list):
+            for tag_list_value in tag_value:
+                if tag == MP4_MAPPING.ARTWORK.value:
+                    value_to_print += '<present>'
+                elif tag in [MP4_MAPPING.TRACK_NUMBER.value, MP4_MAPPING.DISC_NUMBER.value]:
+                    track = tag_list_value[0] or '<none>'
+                    disc = tag_list_value[1] or '<none>'
+                    value_to_print += f'{track}/{disc}'
+                else:
+                    value_to_print += str(tag_list_value)
+        else:
+            value_to_print += str(tag_value)
+
+        tags_to_print[tag] = tags_to_print.get(tag, '') + value_to_print
+    return tags_to_print
+
+
+def print_specific_tag(key: str, value):
+    if not value:
+        return
+
+    if key == MP4_MAPPING.RATING.value:
+        print(get_tag_with_human_readable_description(key), RATING_TO_HUMAN_READABLE[int(value)])
+    elif key == MP4_MAPPING.MEDIA_TYPE.value:
+        print(get_tag_with_human_readable_description(key), MEDIA_TYPE_TO_HUMAN_READABLE[int(value)])
+    elif key == MP4_MAPPING.LYRICS.value:
+        print(get_tag_with_human_readable_description(key), '\n' + value.replace('\r', '\n'))
+    else:
+        print(get_tag_with_human_readable_description(key), value)
+
+
+def get_tag_with_human_readable_description(key):
+    if is_known_mp4_mapping(key):
+        new_key = MP4_MAPPING(key)
+    else:
+        new_key = key
+
+    if new_key in MP4_MAPPING_TO_HUMAN_READABLE:
+        return f'{key} | ' + pad_with_spaces(MP4_MAPPING_TO_HUMAN_READABLE.get(new_key, key), 13) + ' |'
+    else:
+        return pad_with_spaces(key, 13) + ' |'
+
+
+def is_known_mp4_mapping(key: str) -> bool:
+    try:
+        MP4_MAPPING(key)
+    except ValueError:
+        return False
+    else:
+        return True
 
 
 def print_summary(actions: List[Action]) -> None:

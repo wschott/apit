@@ -2,6 +2,7 @@
 
 # Documentation:
 # https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/
+# https://godoc.org/trimmer.io/go-xmp/models/itunes
 
 from enum import Enum
 from typing import List, Mapping
@@ -27,7 +28,7 @@ class STORE_KEY(Enum):
     DISC_TOTAL      = 'discCount'
     RATING          = 'trackExplicitness'
     MEDIA_KIND      = 'kind'
-    CONTENT_ID      = 'trackId'
+    CONTENT_ID      = 'trackId'  # catalog ID
     COLLECTION_ID   = 'collectionId'  # same as ALBUM:collectionId   # TODO rename to PLAYLIST_ID?
     COLLECTION_ARTIST = 'collectionArtistName'  # presence indicates, that this is part of a compilation
     # TODO ARTIST_ID       = 'artistId'
@@ -42,13 +43,16 @@ class STORE_RATING(Enum):
     CLEAN    = 'cleaned'
     EXPLICIT = 'explicit'
     NONE     = 'notExplicit'
+    #EXPLICIT_OLD = 'explicit'
 
 
-AP_RATING_MAPPING: Mapping[STORE_RATING, str] = {
-    # itunes value -> atomicparsley value
-    STORE_RATING.CLEAN: 'clean',
-    STORE_RATING.EXPLICIT: 'explicit',
-    STORE_RATING.NONE: 'remove',
+RATING_MAPPING: Mapping[STORE_RATING, int] = {
+    # itunes value -> mutagen value
+    STORE_RATING.CLEAN: 2,
+    STORE_RATING.EXPLICIT: 1,
+    STORE_RATING.NONE: 0,
+
+    #STORE_RATING.EXPLICIT_OLD: 4,  # TODO
 }
 
 
@@ -64,9 +68,9 @@ class STORE_KIND(Enum):
     SONG  = 'song'
 
 
-AP_ITEM_KIND_MAPPING: Mapping[STORE_KIND, str] = {
-    # itunes value -> atomicparsley value
-    STORE_KIND.SONG: 'Normal',
+ITEM_KIND_MAPPING: Mapping[STORE_KIND, int] = {
+    # itunes value -> mutagen value
+    STORE_KIND.SONG: 1,
 }
 
 
@@ -85,36 +89,48 @@ def to_item_kind(kind_str: str) -> STORE_KIND:
 #     'Rock': 21,
 # }
 
+# Atom meanings: see https://github.com/quodlibet/mutagen/blob/master/mutagen/mp4/__init__.py
 class MP4_MAPPING(Enum):
-#     TITLE           = '\xa9nam'
-#     ALBUM           = '\xa9alb'
-#     ARTIST          = '\xa9ART'
-#     ALBUM_ARTIST    = 'aART'
-#     YEAR            = '\xa9day'
-#     GENRE           = '\xa9gen'
-#     COPYRIGHT       = 'cprt'
-#     TRACK_NUMBER    = 'trkn'
-#     DISC_NUMBER     = 'disk'
-#
-#     RATING          = 'rtng'  # TODO int
-#     MEDIA_KIND      = 'stik'  # TODO int
-#
-#     CONTENT_ID      = 'cnID'
-#
-#     # TODO unused for now
+    TITLE           = '\xa9nam'
+    ALBUM_NAME      = '\xa9alb'
+    ARTIST          = '\xa9ART'
+    ALBUM_ARTIST    = 'aART'
+    RELEASE_DATE    = '\xa9day'
+    GENRE           = '\xa9gen'
+    COPYRIGHT       = 'cprt'
+    TRACK_NUMBER    = 'trkn'
+    DISC_NUMBER     = 'disk'
+    RATING          = 'rtng'  # TODO int
+    MEDIA_TYPE      = 'stik'  # TODO int
+    CONTENT_ID      = 'cnID'  # catalog ID
+    COMPILATION     = 'cpil'  # bool
+    ARTWORK         = 'covr'
+
     OWNER_NAME      = 'ownr'
     USER_MAIL       = 'apID'
-#
-#     PLAYLIST_ID     = 'plID'
-#     ARTIST_ID       = 'atID'
-#     GENRE_ID        = 'geID'
-#     STOREFRONT_ID   = 'sfID'
-#     COMPOSER_ID     = 'cmID'  # really composer?
-#     COMPILATION     = 'cpil'
-#     PREGAP          = 'pgap'  # really pre gap?
-#     UNKNOWN1        = 'akID'  # unknown id
-#     UNKNOWN2        = 'xid '  # yes, with a space at the end; mixture of "{Record_Label_Name}:isrc:{ISRC_SONG_CODE}"
 
+    # TODO unused for now
+    GAPLESS         = 'pgap'
+    BPM             = 'tmpo'
+    COMPOSER        = '\xa9wrt'
+    COMMENT         = '\xa9cmt'
+    GROUPING        = '\xa9grp'
+    TOOL            = '\xa9too'
+    LYRICS          = '\xa9lyr'
+    PURCHASE_DATE   = 'purd'
+
+    PLAYLIST_ID     = 'plID'
+    ARTIST_ID       = 'atID'
+    GENRE_ID        = 'geID'
+    COMPOSER_ID     = 'cmID'  # really composer id?
+    ISRC_ID         = 'xid '  # yes, with a space at the end; mixture of "{Record_Label_Name}:isrc:{ISRC_SONG_CODE}"
+    STOREFRONT_ID   = 'sfID'
+
+    SORT_ORDER_TITLE = 'sonm'
+    SORT_ORDER_ARTIST = 'soar'
+    SORT_ORDER_ALBUM = 'soal'
+    SORT_ORDER_ALBUM_ARTIST = 'soaa'
+    SORT_ORDER_COMPOSER = 'soco'
 
 BLACKLIST: List[str] = [
     MP4_MAPPING.OWNER_NAME.value,

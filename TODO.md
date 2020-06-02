@@ -10,7 +10,6 @@
   - move metadata downloads to ~/.apit/metadata-cache/?
 - add a ~/.apit/config file to omit cli flags?
 - add apit execution logging to ~/.apit/logs/?
-- allow setting AtomicParsley location using a cli option
 - allow setting cli flag to optionally overwrite original itunes files (-> don't skip them)?
 - add flag to add a new artwork instead of removing all before adding
 - new command: download lyrics
