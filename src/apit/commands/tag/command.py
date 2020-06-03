@@ -89,8 +89,8 @@ def to_pre_action_options(options) -> Mapping[str, Union[List[Song], bool]]:
                 import tempfile
                 artwork_cache_path = Path(tempfile.gettempdir())
             artwork_content, image_type = download_artwork(upscaled_url)
-            artwork_cache_file = generate_artwork_filename(artwork_cache_path, first_song, image_type)
-            save_artwork_to_cache(artwork_content, artwork_cache_file)
+            artwork_path = generate_artwork_filename(artwork_cache_path, first_song, image_type)
+            save_artwork_to_cache(artwork_content, artwork_path)
             logging.info('Cover cached in: %s', artwork_path)
 
     return {
