@@ -26,6 +26,8 @@ def read_metadata(file: Path) -> mutagen.mp4.MP4:
 def is_itunes_bought_file(file: Path) -> bool:
     try:
         mp4_file = read_metadata(file)
+        if not mp4_file.tags:
+            raise ApitError("No tags present")
     except ApitError:
         return False
     else:

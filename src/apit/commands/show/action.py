@@ -15,6 +15,8 @@ class ReadAction(Action):
     def apply(self) -> None:
         try:
             result = read_metadata(self.file)
+            if not result.tags:
+                raise ApitError("No tags present")
         except ApitError as e:
             self.mark_as_fail(e)
         else:

@@ -17,14 +17,15 @@ def test_read_action_after_init():
 
 
 def test_read_action_apply(monkeypatch):
-    monkeypatch.setattr('apit.commands.show.action.read_metadata', lambda *args: 'mock-metadata')
+    mp4_mock = MagicMock(tags='mock_metadata')
+    monkeypatch.setattr('apit.commands.show.action.read_metadata', lambda *args: mp4_mock)
     action = ReadAction(Path('./tests/fixtures/folder-iteration/1 first.m4a'), {})
     mock_mark_as_success = MagicMock()
     monkeypatch.setattr(action, 'mark_as_success', mock_mark_as_success)
 
     action.apply()
 
-    assert mock_mark_as_success.call_args == call('mock-metadata')
+    assert mock_mark_as_success.call_args == call(mp4_mock)
 
 
 def test_read_action_apply_error_while_reading(monkeypatch):
