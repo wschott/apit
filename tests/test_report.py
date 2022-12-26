@@ -17,28 +17,30 @@ from apit.report import (
 
 
 def test_to_colored_text_no_color():
-    assert to_colored_text('test', Color.NONE) == 'test'
+    assert to_colored_text("test", Color.NONE) == "test"
 
 
 def test_to_colored_text_color():
-    assert to_colored_text('test', Color.RED) == '\033[31mtest\033[0m'
+    assert to_colored_text("test", Color.RED) == "\033[31mtest\033[0m"
 
 
 def test_truncate_filename():
-    assert truncate_filename(Path('t.m4a'), 6) == 't.m4a'
-    assert truncate_filename(Path('te.m4a'), 6) == 'te.m4a'
-    assert truncate_filename(Path('tes.m4a'), 6) == 'tes.m…'
-    assert truncate_filename(Path('test.m4a'), 6) == 'test.…'
+    assert truncate_filename(Path("t.m4a"), 6) == "t.m4a"
+    assert truncate_filename(Path("te.m4a"), 6) == "te.m4a"
+    assert truncate_filename(Path("tes.m4a"), 6) == "tes.m…"
+    assert truncate_filename(Path("test.m4a"), 6) == "test.…"
 
 
 def test_pad_with_spaces():
-    assert pad_with_spaces('test', length=6) == 'test  '
-    assert pad_with_spaces('test', length=5) == 'test '
-    assert pad_with_spaces('test', length=4) == 'test'
-    assert pad_with_spaces('test', length=3) == 'test'
+    assert pad_with_spaces("test", length=6) == "test  "
+    assert pad_with_spaces("test", length=5) == "test "
+    assert pad_with_spaces("test", length=4) == "test"
+    assert pad_with_spaces("test", length=3) == "test"
 
 
-def test_to_color_for_result(mock_action_failed, mock_action_success, mock_action_not_executed):
+def test_to_color_for_result(
+    mock_action_failed, mock_action_success, mock_action_not_executed
+):
     assert _to_color_for_result(mock_action_failed) == Color.RED
     assert _to_color_for_result(mock_action_not_executed) == Color.YELLOW
     assert _to_color_for_result(mock_action_success) == Color.GREEN

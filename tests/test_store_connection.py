@@ -39,81 +39,91 @@ def test_generate_lookup_url_by_url_using_valid_random_url():
 
 def test_generate_lookup_url_by_url_using_invalid_url():
     with pytest.raises(ApitError):
-        generate_lookup_url_by_url('http://invalid-url.com/')
+        generate_lookup_url_by_url("http://invalid-url.com/")
     with pytest.raises(ApitError):
         generate_lookup_url_by_url(STORE_URL_INVALID)
 
 
 def test_generate_lookup_url_by_str():
-    assert generate_lookup_url_by_str('US,12345') == LOOKUP_URL
-    assert generate_lookup_url_by_str('us.12345') == LOOKUP_URL
+    assert generate_lookup_url_by_str("US,12345") == LOOKUP_URL
+    assert generate_lookup_url_by_str("us.12345") == LOOKUP_URL
 
 
 def test_generate_lookup_url_by_str_invalid():
     with pytest.raises(ApitError):
-        generate_lookup_url_by_str(',12345')
+        generate_lookup_url_by_str(",12345")
 
 
 def test_generate_lookup_url_by_str_using_locale(monkeypatch):
-    monkeypatch.setattr('locale.getdefaultlocale', lambda: ('ab_XY', 'uft8'))
-    assert generate_lookup_url_by_str('12345') == LOOKUP_URL_NON_US
+    monkeypatch.setattr("locale.getdefaultlocale", lambda: ("ab_XY", "uft8"))
+    assert generate_lookup_url_by_str("12345") == LOOKUP_URL_NON_US
 
 
 def test_generate_lookup_url_by_str_using_invalid_locale(monkeypatch):
-    monkeypatch.setattr('locale.getdefaultlocale', lambda: ('XY', 'uft8'))
-    with pytest.raises(ApitError, match='Impossible to determine system country code'):
-        generate_lookup_url_by_str('12345')
+    monkeypatch.setattr("locale.getdefaultlocale", lambda: ("XY", "uft8"))
+    with pytest.raises(ApitError, match="Impossible to determine system country code"):
+        generate_lookup_url_by_str("12345")
 
 
 def test_download_metadata():
-    response_attrs = {'read.return_value': b'{"resultCount":12, "results": [{}]}'}
+    response_attrs = {"read.return_value": b'{"resultCount":12, "results": [{}]}'}
     mock = MagicMock()
     mock.__enter__.return_value = MagicMock(**response_attrs)
 
-    with patch('urllib.request.urlopen', return_value=mock):
+    with patch("urllib.request.urlopen", return_value=mock):
         json = download_metadata(LOOKUP_URL)
 
     assert '{"resultCount":12, "results": [{}]}' == json
 
 
 def test_download_metadata_with_url_error():
-    with patch('urllib.request.urlopen', side_effect=urllib.error.URLError('test-msg')):
-        with pytest.raises(ApitError, match='due to error: <urlopen error test-msg>'):
+    with patch("urllib.request.urlopen", side_effect=urllib.error.URLError("test-msg")):
+        with pytest.raises(ApitError, match="due to error: <urlopen error test-msg>"):
             download_metadata(LOOKUP_URL)
-    with patch('urllib.request.urlopen', side_effect=urllib.error.HTTPError(url=None, code=500, msg='test-msg', hdrs=None, fp=None)):
-        with pytest.raises(ApitError, match='due to error: HTTP Error 500: test-msg'):
+    with patch(
+        "urllib.request.urlopen",
+        side_effect=urllib.error.HTTPError(
+            url=None, code=500, msg="test-msg", hdrs=None, fp=None
+        ),
+    ):
+        with pytest.raises(ApitError, match="due to error: HTTP Error 500: test-msg"):
             download_metadata(LOOKUP_URL)
 
 
 def test_download_artwork():
     response_attrs = {
-        'read.return_value': b'artwork-content',
-        'info.return_value': '',
-        'getheader.return_value': 'image/jpeg',
+        "read.return_value": b"artwork-content",
+        "info.return_value": "",
+        "getheader.return_value": "image/jpeg",
     }
     mock = MagicMock()
     mock.__enter__.return_value = MagicMock(**response_attrs)
 
-    with patch('urllib.request.urlopen', return_value=mock):
+    with patch("urllib.request.urlopen", return_value=mock):
         artwork = download_artwork(ARTWORK_URL)
 
-    assert b'artwork-content', MIME_TYPE.JPEG == artwork
+    assert b"artwork-content", MIME_TYPE.JPEG == artwork
 
 
 def test_download_artwork_with_url_error():
-    with patch('urllib.request.urlopen', side_effect=urllib.error.URLError('test-msg')):
-        with pytest.raises(ApitError, match='due to error: <urlopen error test-msg>'):
+    with patch("urllib.request.urlopen", side_effect=urllib.error.URLError("test-msg")):
+        with pytest.raises(ApitError, match="due to error: <urlopen error test-msg>"):
             download_artwork(ARTWORK_URL)
-    with patch('urllib.request.urlopen', side_effect=urllib.error.HTTPError(url=None, code=500, msg='test-msg', hdrs=None, fp=None)):
-        with pytest.raises(ApitError, match='due to error: HTTP Error 500: test-msg'):
+    with patch(
+        "urllib.request.urlopen",
+        side_effect=urllib.error.HTTPError(
+            url=None, code=500, msg="test-msg", hdrs=None, fp=None
+        ),
+    ):
+        with pytest.raises(ApitError, match="due to error: HTTP Error 500: test-msg"):
             download_artwork(ARTWORK_URL)
 
 
 def test_to_mime_type():
-    assert _to_mime_type('image/jpeg') == MIME_TYPE.JPEG
-    assert _to_mime_type('image/png') == MIME_TYPE.PNG
+    assert _to_mime_type("image/jpeg") == MIME_TYPE.JPEG
+    assert _to_mime_type("image/png") == MIME_TYPE.PNG
 
 
 def test_to_mime_type_for_unknown_type():
-    with pytest.raises(ApitError, match='Unknown artwork content type: test-type'):
-        _to_mime_type('test-type')
+    with pytest.raises(ApitError, match="Unknown artwork content type: test-type"):
+        _to_mime_type("test-type")
