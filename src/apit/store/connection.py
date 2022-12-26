@@ -4,11 +4,10 @@ import urllib.error
 import urllib.request
 
 from apit.error import ApitError
+from apit.file_handling import MIME_TYPE
 
 # format (as of 2020-05): https://music.apple.com/us/album/album-name/123456789
 # old format: http://itunes.apple.com/us/album/album-name/id123456789
-from apit.file_handling import MIME_TYPE
-
 REGEX_GROUP_COUNTRY_CODE = r'(?P<country_code>[a-z]{2})'
 REGEX_GROUP_ID = r'(?P<id>\d+)'
 
