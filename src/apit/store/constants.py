@@ -4,8 +4,8 @@
 # https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/
 # https://godoc.org/trimmer.io/go-xmp/models/itunes
 
-from enum import Enum
 from collections.abc import Mapping
+from enum import Enum
 
 from apit.error import ApitError
 

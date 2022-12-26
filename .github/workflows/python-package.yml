@@ -38,7 +38,7 @@ jobs:
         tox -e py
     - name: Run integration tests
       run: |
-        tox -eintegration
+        tox -e integration
     - name: Report results
       run: |
         tox -e report
