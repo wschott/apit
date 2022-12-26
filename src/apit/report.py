@@ -278,8 +278,8 @@ def print_tags(mp4_file: mutagen.mp4.MP4) -> None:
             print_specific_tag(tag, tags_to_print.get(tag, None))
 
 
-def accumulate_values_to_print(mp4_file):
-    tags_to_print: Dict[str, Any] = {}
+def accumulate_values_to_print(mp4_file: mutagen.mp4.MP4) -> dict[str, Any]:
+    tags_to_print: dict[str, Any] = {}
     for tag, tag_value in mp4_file.tags.items():
         value_to_print = ''
         if isinstance(tag_value, list):
