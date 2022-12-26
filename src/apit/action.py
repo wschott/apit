@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any
 
 
 class Action:
@@ -11,8 +11,8 @@ class Action:
         logging.info(f'{self} options: {options}')
 
         self._executed: bool = False
-        self._success: Optional[bool] = None
-        self._result: Optional[Any] = None
+        self._success: bool | None = None
+        self._result: Any | None = None
 
     def __str__(self) -> str:
         return f'<{self.__class__.__name__} {self.file.name!r}>'
@@ -51,21 +51,21 @@ class Action:
         raise NotImplementedError
 
 
-def any_action_needs_confirmation(actions: List[Action]) -> bool:
+def any_action_needs_confirmation(actions: list[Action]) -> bool:
     return any(action.needs_confirmation for action in actions)
 
 
-def all_actions_successful(actions: List[Action]) -> bool:
+def all_actions_successful(actions: list[Action]) -> bool:
     return all(action.successful for action in actions)
 
 
-def filter_successes(actions: List[Action]) -> List[Action]:
+def filter_successes(actions: list[Action]) -> list[Action]:
     return [action for action in actions if action.executed and action.successful]
 
 
-def filter_errors(actions: List[Action]) -> List[Action]:
+def filter_errors(actions: list[Action]) -> list[Action]:
     return [action for action in actions if action.executed and not action.successful]
 
 
-def filter_not_actionable(actions: List[Action]) -> List[Action]:
+def filter_not_actionable(actions: list[Action]) -> list[Action]:
     return [action for action in actions if not action.actionable]

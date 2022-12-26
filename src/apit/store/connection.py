@@ -2,7 +2,6 @@ import logging
 import re
 import urllib.error
 import urllib.request
-from typing import Tuple
 
 from apit.error import ApitError
 
@@ -74,7 +73,7 @@ def download_metadata(url: str) -> str:
         raise ApitError('Connection to Apple Music/iTunes Store failed due to error: %s' % str(e))
 
 
-def download_artwork(url: str) -> Tuple[bytes, MIME_TYPE]:
+def download_artwork(url: str) -> tuple[bytes, MIME_TYPE]:
     try:
         with urllib.request.urlopen(url) as response:
             content_type = response.getheader('Content-Type')

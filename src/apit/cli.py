@@ -1,13 +1,12 @@
 import sys
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
-from typing import List
 
 from apit.commands import AVAILABLE_COMMANDS
 from apit.error import ApitError
 from apit.main import main
 
 
-def parse_args(args: List[str]):
+def parse_args(args: list[str]):
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter, description="""
 %(prog)s allows batch tagging .m4a file metadata tags using data from Apple Music/iTunes Store.
 

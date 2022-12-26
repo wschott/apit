@@ -2,7 +2,6 @@ import os
 import re
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional, Tuple, Union
 
 from apit.error import ApitError
 from apit.metadata import Song
@@ -21,7 +20,7 @@ MIME_TPYE_TO_EXTENSION_MAP = {
 }
 
 
-def collect_files(path_string: str, filter_ext: Optional[Union[List[str], str]] = None) -> List[Path]:
+def collect_files(path_string: str, filter_ext: list[str] | str | None = None) -> list[Path]:
     path = Path(path_string).expanduser()
 
     if not path.exists():
@@ -43,7 +42,7 @@ def collect_files(path_string: str, filter_ext: Optional[Union[List[str], str]] 
     return [f for f in sorted_files if f.suffix in filter_ext]
 
 
-def extract_disc_and_track_number(path: Path) -> Optional[Tuple[int, int]]:
+def extract_disc_and_track_number(path: Path) -> tuple[int, int] | None:
     match = REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME.match(path.name)
 
     if not match:
@@ -66,11 +65,11 @@ def generate_artwork_filename(cache_path: Path, song: Song, image_type: MIME_TYP
     return cache_path / f'{filename_prefix}.{suffix}'
 
 
-def _generate_filename_prefix(song):
+def _generate_filename_prefix(song: Song) -> str:
     filename_parts = [
         song.album_artist,
         song.album_name,
         song.collection_id,
     ]
-    filename: List[str] = [re.sub(r'\W+', '_', str(f)) for f in filename_parts]
+    filename: list[str] = [re.sub(r'\W+', '_', str(f)) for f in filename_parts]
     return "-".join(filename)

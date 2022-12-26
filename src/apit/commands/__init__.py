@@ -1,4 +1,5 @@
-from typing import Mapping, Type
+from collections.abc import Mapping
+from typing import Type
 
 from apit.command import Command
 from apit.commands.show.command import ShowCommand

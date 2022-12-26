@@ -1,6 +1,5 @@
 from collections import namedtuple
 from pathlib import Path
-from typing import List
 
 import pytest
 
@@ -121,7 +120,7 @@ def test_album() -> Album:
 
 
 @pytest.fixture
-def test_songs() -> List[Song]:
+def test_songs() -> list[Song]:
     return [
         dummy_song(),
     ]

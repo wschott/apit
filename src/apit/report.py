@@ -1,6 +1,7 @@
+from collections.abc import Mapping
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Mapping
+from typing import Any
 
 import mutagen.mp4
 
@@ -203,7 +204,7 @@ def _to_color_for_result(action: Action) -> Color:
     return Color.GREEN
 
 
-def print_actions_preview(actions: List[Action]) -> None:
+def print_actions_preview(actions: list[Action]) -> None:
     print('Preview:')
     print(separator())
     for action in actions:
@@ -211,7 +212,7 @@ def print_actions_preview(actions: List[Action]) -> None:
     print()
 
 
-def print_report(actions: List[Action]) -> None:
+def print_report(actions: list[Action]) -> None:
     successes = filter_successes(actions)
     if successes:
         print('\nProcess results:')
@@ -297,7 +298,7 @@ def accumulate_values_to_print(mp4_file):
     return tags_to_print
 
 
-def print_specific_tag(key: str, value):
+def print_specific_tag(key: str, value) -> None:
     if not value:
         return
 
@@ -311,7 +312,7 @@ def print_specific_tag(key: str, value):
         print(get_tag_with_human_readable_description(key), value)
 
 
-def get_tag_with_human_readable_description(key):
+def get_tag_with_human_readable_description(key) -> str:
     if is_known_mp4_mapping(key):
         new_key = MP4_MAPPING(key)
     else:
@@ -332,7 +333,7 @@ def is_known_mp4_mapping(key: str) -> bool:
         return True
 
 
-def print_summary(actions: List[Action]) -> None:
+def print_summary(actions: list[Action]) -> None:
     print('\nSummary:')
     print(separator())
     for action in actions:

@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 
 from apit.action import (
     Action,
@@ -14,8 +13,8 @@ from .action import ReadAction
 
 
 class ShowCommand(Command):
-    def execute(self, files: List[Path], options):
-        actions: List[Action] = [ReadAction(file, {}) for file in files]
+    def execute(self, files: list[Path], options):
+        actions: list[Action] = [ReadAction(file, {}) for file in files]
 
         if any_action_needs_confirmation(actions):
             print_actions_preview(actions)

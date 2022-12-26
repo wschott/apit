@@ -5,7 +5,7 @@
 # https://godoc.org/trimmer.io/go-xmp/models/itunes
 
 from enum import Enum
-from typing import List, Mapping
+from collections.abc import Mapping
 
 from apit.error import ApitError
 
@@ -165,7 +165,7 @@ class MP4_MAPPING(Enum):
     SORT_ORDER_ALBUM_ARTIST = 'soaa'
     SORT_ORDER_COMPOSER = 'soco'
 
-BLACKLIST: List[str] = [
+BLACKLIST: list[str] = [
     MP4_MAPPING.OWNER_NAME.value,
     MP4_MAPPING.USER_MAIL.value,
 ]

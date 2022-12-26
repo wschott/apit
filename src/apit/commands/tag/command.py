@@ -1,6 +1,6 @@
 import logging
+from collections.abc import Mapping
 from pathlib import Path
-from typing import List, Mapping, Optional, Union
 
 from apit.action import (
     Action,
@@ -32,10 +32,10 @@ from .action import TagAction
 
 
 class TagCommand(Command):
-    def execute(self, files: List[Path], options):
+    def execute(self, files: list[Path], options):
         pre_action_options = to_pre_action_options(options)
 
-        actions: List[Action] = [TagAction(file, to_action_options(file, pre_action_options)) for file in files]
+        actions: list[Action] = [TagAction(file, to_action_options(file, pre_action_options)) for file in files]
 
         if any_action_needs_confirmation(actions):
             print_actions_preview(actions)
@@ -49,7 +49,7 @@ class TagCommand(Command):
         return 0 if all_actions_successful(actions) else 1
 
 
-def to_pre_action_options(options) -> Mapping[str, Union[List[Song], bool]]:
+def to_pre_action_options(options) -> Mapping[str, list[Song] | bool]:
     source: str = options.source
 
     if not source:
@@ -100,10 +100,10 @@ def to_pre_action_options(options) -> Mapping[str, Union[List[Song], bool]]:
     }
 
 
-def to_action_options(file: Path, options) -> Mapping[str, Union[Optional[Song], bool, Optional[int], Optional[Path]]]:
+def to_action_options(file: Path, options) -> Mapping[str, Song | bool | int | Path | None]:
     disc_and_track = extract_disc_and_track_number(file)
-    disc: Optional[int] = None
-    track: Optional[int] = None
+    disc: int | None = None
+    track: int | None = None
     if disc_and_track is not None:
         disc, track = disc_and_track
 
@@ -121,7 +121,7 @@ def upscale_artwork_url(song, size):
     return song.artwork_url.replace('100x100', f'{size}x{size}')
 
 
-def get_cached_artwork_path_if_exists(song, options) -> Optional[Path]:
+def get_cached_artwork_path_if_exists(song, options) -> Path | None:
     jpeg_path = generate_artwork_filename(options.cache_path, song, MIME_TYPE.JPEG)
     png_path = generate_artwork_filename(options.cache_path, song, MIME_TYPE.PNG)
     if jpeg_path.exists():

@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, List
+from typing import Any
 
 from apit.error import ApitError
 from apit.metadata import Album, Song
@@ -12,7 +12,7 @@ from apit.store.constants import (
 )
 
 
-def extract_songs(metadata_json: str) -> List[Song]:
+def extract_songs(metadata_json: str) -> list[Song]:
     try:
         itunes_data = json.loads(metadata_json)
     except json.JSONDecodeError:
@@ -24,18 +24,18 @@ def extract_songs(metadata_json: str) -> List[Song]:
     return _find_songs(itunes_data['results'], _find_album(itunes_data['results']))
 
 
-def _find_album(music_data: List[Dict[str, Any]]) -> Album:
+def _find_album(music_data: list[dict[str, Any]]) -> Album:
     for item in music_data:
         if COLLECTION_TYPE_KEY in item and item[COLLECTION_TYPE_KEY] == VALID_COLLECTION_TYPE_FOR_ALBUM:
             return to_album(item)
     raise ApitError('No album found in metadata')
 
 
-def _find_songs(music_data: List[Dict[str, Any]], album: Album) -> List[Song]:
+def _find_songs(music_data: list[dict[str, Any]], album: Album) -> list[Song]:
     return [to_song(album, item) for item in music_data if KIND_KEY in item and item[KIND_KEY] == VALID_KIND_VALUES_FOR_SONG]
 
 
-def to_album(item: Dict[str, Any]) -> Album:
+def to_album(item: dict[str, Any]) -> Album:
     return Album(
         album_artist=extract_by_key(STORE_KEY.ALBUM_ARTIST, item),
         copyright=extract_by_key(STORE_KEY.COPYRIGHT, item),
@@ -43,7 +43,7 @@ def to_album(item: Dict[str, Any]) -> Album:
     )
 
 
-def to_song(album: Album, item: Dict[str, Any]) -> Song:
+def to_song(album: Album, item: dict[str, Any]) -> Song:
     try:
         _ = extract_by_key(STORE_KEY.COLLECTION_ARTIST, item)
     except ApitError:
@@ -72,7 +72,7 @@ def to_song(album: Album, item: Dict[str, Any]) -> Song:
     )
 
 
-def extract_by_key(key: STORE_KEY, item: Dict[str, Any]) -> Any:
+def extract_by_key(key: STORE_KEY, item: dict[str, Any]) -> Any:
     if not isinstance(key, STORE_KEY):
         raise ApitError('Unknown metadata key: %s' % key)
     if key.value not in item:

@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Optional
 
 import mutagen
 import mutagen.mp4
@@ -34,7 +33,7 @@ def is_itunes_bought_file(file: Path) -> bool:
         return any(map(lambda item: item in mp4_file.tags, BLACKLIST))
 
 
-def update_metadata(file: Path, song: Song, cover_path: Optional[Path] = None) -> mutagen.mp4.MP4:
+def update_metadata(file: Path, song: Song, cover_path: Path | None = None) -> mutagen.mp4.MP4:
     mp4_file = read_metadata(file)
 
     if cover_path:
@@ -60,7 +59,7 @@ def _read_artwork_content(artwork_path: Path) -> mutagen.mp4.MP4Cover:
     raise ApitError('Unknown artwork image type')
 
 
-def _modify_mp4_file(mp4_file: mutagen.mp4.MP4, song: Song, artwork: mutagen.mp4.MP4Cover = None) -> mutagen.mp4.MP4:
+def _modify_mp4_file(mp4_file: mutagen.mp4.MP4, song: Song, artwork: mutagen.mp4.MP4Cover | None = None) -> mutagen.mp4.MP4:
     mp4_file[MP4_MAPPING.ARTIST.value] = song.artist
     mp4_file[MP4_MAPPING.TITLE.value] = song.title
     mp4_file[MP4_MAPPING.ALBUM_NAME.value] = song.album_name
