@@ -21,7 +21,7 @@ class ShowCommand(Command):
             ask_user_for_confirmation()
 
         for action in actions:
-            print('Executing:', action)
+            print("Executing:", action)
             action.apply()
 
         print_report(actions)

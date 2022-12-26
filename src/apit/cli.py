@@ -7,7 +7,9 @@ from apit.main import main
 
 
 def parse_args(args: list[str]):
-    parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter, description="""
+    parser = ArgumentParser(
+        formatter_class=RawDescriptionHelpFormatter,
+        description="""
 %(prog)s allows batch tagging .m4a file metadata tags using data from Apple Music/iTunes Store.
 
 Filename format requirements
@@ -42,44 +44,56 @@ Example:
   - https://music.apple.com/us/album/album-name/123456789
   - http://itunes.apple.com/us/album/album-name/id123456789
   - http://test-domain.com/us/test-name/42/123456789?i=09876
-""")
+""",
+    )
 
     parser.add_argument(
-        '-v', dest='verbose_level',
-        action='count',
-        help='increase verbosity of reporting (-vv prints debug messages)'
+        "-v",
+        dest="verbose_level",
+        action="count",
+        help="increase verbosity of reporting (-vv prints debug messages)",
     )
     parser.add_argument(
-        '-b', '--backup', dest='has_backup_flag',
-        action='store_true', default=False,
-        help='[tag] create backup files before updating metadata'
+        "-b",
+        "--backup",
+        dest="has_backup_flag",
+        action="store_true",
+        default=False,
+        help="[tag] create backup files before updating metadata",
     )
     parser.add_argument(
-        '-c', '--cache', dest='has_search_result_cache_flag',
-        action='store_true',
-        help='[tag] save the downloaded metadata to disk'
+        "-c",
+        "--cache",
+        dest="has_search_result_cache_flag",
+        action="store_true",
+        help="[tag] save the downloaded metadata to disk",
     )
     parser.add_argument(
-        '-a', '--artwork', dest='has_embed_artwork_flag',
-        action='store_true',
-        help='[tag] download artwork to disk and save in files'
+        "-a",
+        "--artwork",
+        dest="has_embed_artwork_flag",
+        action="store_true",
+        help="[tag] download artwork to disk and save in files",
     )
     parser.add_argument(
-        '--artwork-size', dest='artwork_size', metavar='SIZE',
-        type=int, default=600,
-        help='[tag] set artwork size for download (default: %(default)s)'
+        "--artwork-size",
+        dest="artwork_size",
+        metavar="SIZE",
+        type=int,
+        default=600,
+        help="[tag] set artwork size for download (default: %(default)s)",
     )
     parser.add_argument(
-        'command', choices=AVAILABLE_COMMANDS,
-        help='available commands: "show" or "tag" metadata'
+        "command",
+        choices=AVAILABLE_COMMANDS,
+        help='available commands: "show" or "tag" metadata',
     )
+    parser.add_argument("path", metavar="PATH", help="path containing m4a files")
     parser.add_argument(
-        'path', metavar='PATH',
-        help='path containing m4a files'
-    )
-    parser.add_argument(
-        'source', metavar='SOURCE', nargs='?',
-        help='[tag] optional url (to be downloaded) or file (already downloaded) containing Apple Music/iTunes Store data or album ID (with optional country code)'
+        "source",
+        metavar="SOURCE",
+        nargs="?",
+        help="[tag] optional url (to be downloaded) or file (already downloaded) containing Apple Music/iTunes Store data or album ID (with optional country code)",
     )
 
     return parser.parse_args(args)

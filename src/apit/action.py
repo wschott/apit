@@ -8,14 +8,14 @@ class Action:
         self.file = file
         self.options = options
 
-        logging.info(f'{self} options: {options}')
+        logging.info(f"{self} options: {options}")
 
         self._executed: bool = False
         self._success: bool | None = None
         self._result: Any | None = None
 
     def __str__(self) -> str:
-        return f'<{self.__class__.__name__} {self.file.name!r}>'
+        return f"<{self.__class__.__name__} {self.file.name!r}>"
 
     @property
     def executed(self) -> bool:

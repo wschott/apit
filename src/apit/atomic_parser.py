@@ -33,7 +33,9 @@ def is_itunes_bought_file(file: Path) -> bool:
         return any(map(lambda item: item in mp4_file.tags, BLACKLIST))
 
 
-def update_metadata(file: Path, song: Song, cover_path: Path | None = None) -> mutagen.mp4.MP4:
+def update_metadata(
+    file: Path, song: Song, cover_path: Path | None = None
+) -> mutagen.mp4.MP4:
     mp4_file = read_metadata(file)
 
     if cover_path:
@@ -52,14 +54,20 @@ def update_metadata(file: Path, song: Song, cover_path: Path | None = None) -> m
 
 def _read_artwork_content(artwork_path: Path) -> mutagen.mp4.MP4Cover:
     artwork_content = artwork_path.read_bytes()
-    if artwork_path.suffix == '.jpg':
-        return mutagen.mp4.MP4Cover(artwork_content, imageformat=mutagen.mp4.MP4Cover.FORMAT_JPEG)
-    elif artwork_path.suffix == '.png':
-        return mutagen.mp4.MP4Cover(artwork_content, imageformat=mutagen.mp4.MP4Cover.FORMAT_PNG)
-    raise ApitError('Unknown artwork image type')
+    if artwork_path.suffix == ".jpg":
+        return mutagen.mp4.MP4Cover(
+            artwork_content, imageformat=mutagen.mp4.MP4Cover.FORMAT_JPEG
+        )
+    elif artwork_path.suffix == ".png":
+        return mutagen.mp4.MP4Cover(
+            artwork_content, imageformat=mutagen.mp4.MP4Cover.FORMAT_PNG
+        )
+    raise ApitError("Unknown artwork image type")
 
 
-def _modify_mp4_file(mp4_file: mutagen.mp4.MP4, song: Song, artwork: mutagen.mp4.MP4Cover | None = None) -> mutagen.mp4.MP4:
+def _modify_mp4_file(
+    mp4_file: mutagen.mp4.MP4, song: Song, artwork: mutagen.mp4.MP4Cover | None = None
+) -> mutagen.mp4.MP4:
     mp4_file[MP4_MAPPING.ARTIST.value] = song.artist
     mp4_file[MP4_MAPPING.TITLE.value] = song.title
     mp4_file[MP4_MAPPING.ALBUM_NAME.value] = song.album_name
@@ -68,7 +76,9 @@ def _modify_mp4_file(mp4_file: mutagen.mp4.MP4, song: Song, artwork: mutagen.mp4
     mp4_file[MP4_MAPPING.DISC_NUMBER.value] = [(song.disc_number, song.disc_total)]
     mp4_file[MP4_MAPPING.TRACK_NUMBER.value] = [(song.track_number, song.track_total)]
     mp4_file[MP4_MAPPING.RATING.value] = [RATING_MAPPING[to_rating(song.rating)]]
-    mp4_file[MP4_MAPPING.MEDIA_TYPE.value] = [ITEM_KIND_MAPPING[to_item_kind(song.media_kind)]]
+    mp4_file[MP4_MAPPING.MEDIA_TYPE.value] = [
+        ITEM_KIND_MAPPING[to_item_kind(song.media_kind)]
+    ]
     mp4_file[MP4_MAPPING.ALBUM_ARTIST.value] = song.album_artist
     mp4_file[MP4_MAPPING.COPYRIGHT.value] = song.copyright
     mp4_file[MP4_MAPPING.COMPILATION.value] = song.compilation

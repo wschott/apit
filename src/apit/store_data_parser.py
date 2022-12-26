@@ -16,23 +16,34 @@ def extract_songs(metadata_json: str) -> list[Song]:
     try:
         itunes_data = json.loads(metadata_json)
     except json.JSONDecodeError:
-        raise ApitError('Apple Music/iTunes Store metadata results format error')
+        raise ApitError("Apple Music/iTunes Store metadata results format error")
 
-    if 'results' not in itunes_data or 'resultCount' not in itunes_data or itunes_data['resultCount'] == 0:
-        raise ApitError('Apple Music/iTunes Store metadata results empty')
+    if (
+        "results" not in itunes_data
+        or "resultCount" not in itunes_data
+        or itunes_data["resultCount"] == 0
+    ):
+        raise ApitError("Apple Music/iTunes Store metadata results empty")
 
-    return _find_songs(itunes_data['results'], _find_album(itunes_data['results']))
+    return _find_songs(itunes_data["results"], _find_album(itunes_data["results"]))
 
 
 def _find_album(music_data: list[dict[str, Any]]) -> Album:
     for item in music_data:
-        if COLLECTION_TYPE_KEY in item and item[COLLECTION_TYPE_KEY] == VALID_COLLECTION_TYPE_FOR_ALBUM:
+        if (
+            COLLECTION_TYPE_KEY in item
+            and item[COLLECTION_TYPE_KEY] == VALID_COLLECTION_TYPE_FOR_ALBUM
+        ):
             return to_album(item)
-    raise ApitError('No album found in metadata')
+    raise ApitError("No album found in metadata")
 
 
 def _find_songs(music_data: list[dict[str, Any]], album: Album) -> list[Song]:
-    return [to_song(album, item) for item in music_data if KIND_KEY in item and item[KIND_KEY] == VALID_KIND_VALUES_FOR_SONG]
+    return [
+        to_song(album, item)
+        for item in music_data
+        if KIND_KEY in item and item[KIND_KEY] == VALID_KIND_VALUES_FOR_SONG
+    ]
 
 
 def to_album(item: dict[str, Any]) -> Album:
@@ -74,7 +85,7 @@ def to_song(album: Album, item: dict[str, Any]) -> Song:
 
 def extract_by_key(key: STORE_KEY, item: dict[str, Any]) -> Any:
     if not isinstance(key, STORE_KEY):
-        raise ApitError('Unknown metadata key: %s' % key)
+        raise ApitError("Unknown metadata key: %s" % key)
     if key.value not in item:
-        raise ApitError('Metadata key not found in metadata: %s' % key.value)
+        raise ApitError("Metadata key not found in metadata: %s" % key.value)
     return item[key.value]

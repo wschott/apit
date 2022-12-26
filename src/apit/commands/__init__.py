@@ -7,8 +7,8 @@ from apit.commands.tag.command import TagCommand
 from apit.error import ApitError
 
 AVAILABLE_COMMANDS: Mapping[str, Type[Command]] = {
-    'show': ShowCommand,
-    'tag': TagCommand,
+    "show": ShowCommand,
+    "tag": TagCommand,
 }
 
 

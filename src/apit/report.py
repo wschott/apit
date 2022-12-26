@@ -25,68 +25,68 @@ from apit.store.constants import (
     STORE_RATING,
 )
 
-PREFIX = '\033[3%dm'
-SUFFIX = '\033[0m'
+PREFIX = "\033[3%dm"
+SUFFIX = "\033[0m"
 
 FILENAME_TRUNCATION_LIMIT = 60
-ELLIPSIS = '…'
+ELLIPSIS = "…"
 SEPARATOR_LENGTH = 80
 
-TABLE_LINE_FORMAT = '[%s] %s  →  %s'
-STR_SELECTED = '✕'
-STR_NOT_SELECTED = ' '
-STR_SUCCESS = '✓'
-STR_FAIL = '✘'
+TABLE_LINE_FORMAT = "[%s] %s  →  %s"
+STR_SELECTED = "✕"
+STR_NOT_SELECTED = " "
+STR_SUCCESS = "✓"
+STR_FAIL = "✘"
 
 
 MP4_MAPPING_TO_HUMAN_READABLE: Mapping[MP4_MAPPING, str] = {
-    MP4_MAPPING.TITLE: 'Title',
-    MP4_MAPPING.ARTIST: 'Artist',
-    MP4_MAPPING.TRACK_NUMBER: 'Track #/Total',
-    MP4_MAPPING.DISC_NUMBER: 'Disc #/Total',
-    MP4_MAPPING.GENRE: 'Genre',
-    MP4_MAPPING.RELEASE_DATE: 'Date',
-    MP4_MAPPING.ALBUM_NAME: 'Album',
-    MP4_MAPPING.ALBUM_ARTIST: 'Album Artist',
-    MP4_MAPPING.COMPOSER: 'Composer',
-    MP4_MAPPING.COPYRIGHT: 'Copyright',
-    MP4_MAPPING.COMPILATION: 'Compilation?',
-    MP4_MAPPING.GAPLESS: 'Gapless?',
-    MP4_MAPPING.RATING: 'Rating',
-    MP4_MAPPING.MEDIA_TYPE: 'Media Type',
-    MP4_MAPPING.CONTENT_ID: 'Content ID',
-    MP4_MAPPING.PLAYLIST_ID: 'Playlist ID',
-    MP4_MAPPING.ARTIST_ID: 'Artist ID',
-    MP4_MAPPING.GENRE_ID: 'Genre ID',
-    MP4_MAPPING.COMPOSER_ID: 'Composer ID',
-    MP4_MAPPING.ISRC_ID: 'ISRC',
-    MP4_MAPPING.GROUPING: 'Grouping',
-    MP4_MAPPING.COMMENT: 'Comment',
-    MP4_MAPPING.SORT_ORDER_TITLE: 'Sort Title',
-    MP4_MAPPING.SORT_ORDER_ARTIST: 'Sort Artist',
-    MP4_MAPPING.SORT_ORDER_ALBUM: 'Sort Album',
-    MP4_MAPPING.SORT_ORDER_ALBUM_ARTIST: 'Sort Album Artist',
-    MP4_MAPPING.ARTWORK: 'Artwork',
-    MP4_MAPPING.BPM: 'BPM',
-    MP4_MAPPING.TOOL: 'Tool',
-    MP4_MAPPING.LYRICS: 'Lyrics',
-    MP4_MAPPING.OWNER_NAME: 'Owner',
-    MP4_MAPPING.USER_MAIL: 'Email',
-    MP4_MAPPING.PURCHASE_DATE: 'Purchase Date',
-    MP4_MAPPING.STOREFRONT_ID: 'Storefront ID',
+    MP4_MAPPING.TITLE: "Title",
+    MP4_MAPPING.ARTIST: "Artist",
+    MP4_MAPPING.TRACK_NUMBER: "Track #/Total",
+    MP4_MAPPING.DISC_NUMBER: "Disc #/Total",
+    MP4_MAPPING.GENRE: "Genre",
+    MP4_MAPPING.RELEASE_DATE: "Date",
+    MP4_MAPPING.ALBUM_NAME: "Album",
+    MP4_MAPPING.ALBUM_ARTIST: "Album Artist",
+    MP4_MAPPING.COMPOSER: "Composer",
+    MP4_MAPPING.COPYRIGHT: "Copyright",
+    MP4_MAPPING.COMPILATION: "Compilation?",
+    MP4_MAPPING.GAPLESS: "Gapless?",
+    MP4_MAPPING.RATING: "Rating",
+    MP4_MAPPING.MEDIA_TYPE: "Media Type",
+    MP4_MAPPING.CONTENT_ID: "Content ID",
+    MP4_MAPPING.PLAYLIST_ID: "Playlist ID",
+    MP4_MAPPING.ARTIST_ID: "Artist ID",
+    MP4_MAPPING.GENRE_ID: "Genre ID",
+    MP4_MAPPING.COMPOSER_ID: "Composer ID",
+    MP4_MAPPING.ISRC_ID: "ISRC",
+    MP4_MAPPING.GROUPING: "Grouping",
+    MP4_MAPPING.COMMENT: "Comment",
+    MP4_MAPPING.SORT_ORDER_TITLE: "Sort Title",
+    MP4_MAPPING.SORT_ORDER_ARTIST: "Sort Artist",
+    MP4_MAPPING.SORT_ORDER_ALBUM: "Sort Album",
+    MP4_MAPPING.SORT_ORDER_ALBUM_ARTIST: "Sort Album Artist",
+    MP4_MAPPING.ARTWORK: "Artwork",
+    MP4_MAPPING.BPM: "BPM",
+    MP4_MAPPING.TOOL: "Tool",
+    MP4_MAPPING.LYRICS: "Lyrics",
+    MP4_MAPPING.OWNER_NAME: "Owner",
+    MP4_MAPPING.USER_MAIL: "Email",
+    MP4_MAPPING.PURCHASE_DATE: "Purchase Date",
+    MP4_MAPPING.STOREFRONT_ID: "Storefront ID",
 }
 
 
 RATING_TO_HUMAN_READABLE: Mapping[int, str] = {
-    4: '<explicit (old value)>',  # TODO
-    RATING_MAPPING[STORE_RATING.CLEAN]: '<clean>',
-    RATING_MAPPING[STORE_RATING.EXPLICIT]: '<explicit>',
-    RATING_MAPPING[STORE_RATING.NONE]: '<inoffensive>',
+    4: "<explicit (old value)>",  # TODO
+    RATING_MAPPING[STORE_RATING.CLEAN]: "<clean>",
+    RATING_MAPPING[STORE_RATING.EXPLICIT]: "<explicit>",
+    RATING_MAPPING[STORE_RATING.NONE]: "<inoffensive>",
 }
 
 
 MEDIA_TYPE_TO_HUMAN_READABLE: Mapping[int, str] = {
-    ITEM_KIND_MAPPING[STORE_KIND.SONG]: '<normal>',
+    ITEM_KIND_MAPPING[STORE_KIND.SONG]: "<normal>",
 }
 
 
@@ -147,29 +147,29 @@ class Color(Enum):
 def to_colored_text(text: str, color: Color) -> str:
     if color == Color.NONE:
         return text
-    return f'{PREFIX % color.value}{text}{SUFFIX}'
+    return f"{PREFIX % color.value}{text}{SUFFIX}"
 
 
 def truncate_filename(path: Path, length: int = FILENAME_TRUNCATION_LIMIT) -> str:
     if len(path.name) <= length:
         return path.name
 
-    return path.name[:(length - len(ELLIPSIS))] + ELLIPSIS
+    return path.name[: (length - len(ELLIPSIS))] + ELLIPSIS
 
 
 def pad_with_spaces(string: str, length: int = FILENAME_TRUNCATION_LIMIT) -> str:
-    return string.ljust(length, ' ')
+    return string.ljust(length, " ")
 
 
 def separator() -> str:
-    return '-' * SEPARATOR_LENGTH
+    return "-" * SEPARATOR_LENGTH
 
 
 def preview_line(action: Action) -> str:
     text = TABLE_LINE_FORMAT % (
         _is_selected(action),
         pad_with_spaces(truncate_filename(action.file)),
-        to_action_reporter(action).preview_msg
+        to_action_reporter(action).preview_msg,
     )
     return to_colored_text(text=text, color=_to_color_for_preview(action))
 
@@ -178,7 +178,7 @@ def result_line(action: Action) -> str:
     text = TABLE_LINE_FORMAT % (
         _is_successful(action),
         pad_with_spaces(truncate_filename(action.file)),
-        to_action_reporter(action).status_msg
+        to_action_reporter(action).status_msg,
     )
     return to_colored_text(text=text, color=_to_color_for_result(action))
 
@@ -206,7 +206,7 @@ def _to_color_for_result(action: Action) -> Color:
 
 
 def print_actions_preview(actions: list[Action]) -> None:
-    print('Preview:')
+    print("Preview:")
     print(separator())
     for action in actions:
         print(preview_line(action))
@@ -216,13 +216,13 @@ def print_actions_preview(actions: list[Action]) -> None:
 def print_report(actions: list[Action]) -> None:
     successes = filter_successes(actions)
     if successes:
-        print('\nProcess results:')
+        print("\nProcess results:")
         for action in successes:
             print_processing_result(action)
 
     errors = filter_errors(actions)
     if errors:
-        print('\nErrors during processing:')
+        print("\nErrors during processing:")
         for action in errors:
             print_processing_result(action)
 
@@ -245,57 +245,66 @@ def print_processing_result(action: Action) -> None:
 def print_tags(mp4_file: mutagen.mp4.MP4) -> None:
     tags_to_print = accumulate_values_to_print(mp4_file)
 
-    print('Track:')
-    print('------')
+    print("Track:")
+    print("------")
     for tag in ORDER_INFO_TRACK:
         print_specific_tag(tag, tags_to_print.get(tag, None))
     print()
-    print('Album:')
-    print('------')
+    print("Album:")
+    print("------")
     for tag in ORDER_INFO_ALBUM:
         print_specific_tag(tag, tags_to_print.get(tag, None))
     print()
-    print('IDs:')
-    print('----')
+    print("IDs:")
+    print("----")
     for tag in ORDER_INFO_IDS:
         print_specific_tag(tag, tags_to_print.get(tag, None))
     print()
-    print('Misc:')
-    print('-----')
+    print("Misc:")
+    print("-----")
     for tag in ORDER_INFO_MISC:
         print_specific_tag(tag, tags_to_print.get(tag, None))
     print()
-    print('User:')
-    print('-----')
+    print("User:")
+    print("-----")
     for tag in ORDER_INFO_USER:
         print_specific_tag(tag, tags_to_print.get(tag, None))
     print()
-    print('Other:')
-    print('-----')
+    print("Other:")
+    print("-----")
     for k_v in sorted(tags_to_print.items()):
         tag, value = k_v
-        if tag not in (ORDER_INFO_TRACK + ORDER_INFO_ALBUM + ORDER_INFO_IDS + ORDER_INFO_MISC + ORDER_INFO_USER):
+        if tag not in (
+            ORDER_INFO_TRACK
+            + ORDER_INFO_ALBUM
+            + ORDER_INFO_IDS
+            + ORDER_INFO_MISC
+            + ORDER_INFO_USER
+        ):
             print_specific_tag(tag, tags_to_print.get(tag, None))
 
 
 def accumulate_values_to_print(mp4_file: mutagen.mp4.MP4) -> dict[str, Any]:
     tags_to_print: dict[str, Any] = {}
     for tag, tag_value in mp4_file.tags.items():
-        value_to_print = ''
+        value_to_print = ""
         if isinstance(tag_value, list):
             for tag_list_value in tag_value:
                 if tag == MP4_MAPPING.ARTWORK.value:
-                    value_to_print += '<present>'
-                elif tag in [MP4_MAPPING.TRACK_NUMBER.value, MP4_MAPPING.DISC_NUMBER.value]:
-                    track = tag_list_value[0] or '<none>'
-                    disc = tag_list_value[1] or '<none>'
-                    value_to_print += f'{track}/{disc}'
+                    value_to_print += "<present>"
+                elif tag in [
+                    MP4_MAPPING.TRACK_NUMBER.value,
+                    MP4_MAPPING.DISC_NUMBER.value,
+                ]:
+                    track = tag_list_value[0] or "<none>"
+                    disc = tag_list_value[1] or "<none>"
+                    value_to_print += f"{track}/{disc}"
                 else:
                     value_to_print += str(tag_list_value)
         else:
             value_to_print += str(tag_value)
 
-        tags_to_print[tag] = tags_to_print.get(tag, '') + value_to_print
+        tags_to_print[tag] = tags_to_print.get(tag, "") + value_to_print
     return tags_to_print
 
 
@@ -304,11 +313,20 @@ def print_specific_tag(key: str, value) -> None:
         return
 
     if key == MP4_MAPPING.RATING.value:
-        print(get_tag_with_human_readable_description(key), RATING_TO_HUMAN_READABLE[int(value)])
+        print(
+            get_tag_with_human_readable_description(key),
+            RATING_TO_HUMAN_READABLE[int(value)],
+        )
     elif key == MP4_MAPPING.MEDIA_TYPE.value:
-        print(get_tag_with_human_readable_description(key), MEDIA_TYPE_TO_HUMAN_READABLE[int(value)])
+        print(
+            get_tag_with_human_readable_description(key),
+            MEDIA_TYPE_TO_HUMAN_READABLE[int(value)],
+        )
     elif key == MP4_MAPPING.LYRICS.value:
-        print(get_tag_with_human_readable_description(key), '\n' + value.replace('\r', '\n'))
+        print(
+            get_tag_with_human_readable_description(key),
+            "\n" + value.replace("\r", "\n"),
+        )
     else:
         print(get_tag_with_human_readable_description(key), value)
 
@@ -320,9 +338,13 @@ def get_tag_with_human_readable_description(key) -> str:
         new_key = key
 
     if new_key in MP4_MAPPING_TO_HUMAN_READABLE:
-        return f'{key} | ' + pad_with_spaces(MP4_MAPPING_TO_HUMAN_READABLE.get(new_key, key), 13) + ' |'
+        return (
+            f"{key} | "
+            + pad_with_spaces(MP4_MAPPING_TO_HUMAN_READABLE.get(new_key, key), 13)
+            + " |"
+        )
     else:
-        return pad_with_spaces(key, 13) + ' |'
+        return pad_with_spaces(key, 13) + " |"
 
 
 def is_known_mp4_mapping(key: str) -> bool:
@@ -335,7 +357,7 @@ def is_known_mp4_mapping(key: str) -> bool:
 
 
 def print_summary(actions: list[Action]) -> None:
-    print('\nSummary:')
+    print("\nSummary:")
     print(separator())
     for action in actions:
         print(result_line(action))
@@ -344,11 +366,11 @@ def print_summary(actions: list[Action]) -> None:
 def print_summary_line(successes: int, errors: int, skipped: int) -> None:
     summary = []
     if successes:
-        summary.append(to_colored_text(f'{successes} processed', Color.GREEN))
+        summary.append(to_colored_text(f"{successes} processed", Color.GREEN))
     if errors:
-        summary.append(to_colored_text(f'{errors} failed', Color.RED))
+        summary.append(to_colored_text(f"{errors} failed", Color.RED))
     if skipped:
-        summary.append(to_colored_text(f'{skipped} skipped', Color.YELLOW))
+        summary.append(to_colored_text(f"{skipped} skipped", Color.YELLOW))
 
     bar_color = Color.GREEN
     if errors:
@@ -357,7 +379,12 @@ def print_summary_line(successes: int, errors: int, skipped: int) -> None:
         bar_color = Color.YELLOW
 
     summary_text = f" {', '.join(summary)} "
-    print('\n' + to_colored_text('=' * 30, bar_color) + summary_text + to_colored_text('=' * 30, bar_color))
+    print(
+        "\n"
+        + to_colored_text("=" * 30, bar_color)
+        + summary_text
+        + to_colored_text("=" * 30, bar_color)
+    )
 
 
 def to_action_reporter(action: Action) -> ActionReporter:
@@ -365,4 +392,4 @@ def to_action_reporter(action: Action) -> ActionReporter:
         return ReadActionReporter(action)
     elif isinstance(action, TagAction):
         return TagActionReporter(action)
-    raise ApitError('Unknown action')
+    raise ApitError("Unknown action")

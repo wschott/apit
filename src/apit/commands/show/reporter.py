@@ -9,16 +9,16 @@ class ReadActionReporter(ActionReporter):
 
     @property
     def not_actionable_msg(self) -> str:
-        return ''
+        return ""
 
     @property
     def preview_msg(self) -> str:
-        return ''
+        return ""
 
     @property
     def status_msg(self) -> str:
         if not self.action.successful:
-            return '[error]'
+            return "[error]"
         if self.action.successful:
-            return 'successful'
-        raise ApitError('Invalid state')  # TODO refactor
+            return "successful"
+        raise ApitError("Invalid state")  # TODO refactor

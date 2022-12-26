@@ -13,12 +13,12 @@ from apit.logger import ColoredFormatter
 def main(options) -> int:
     configure_logging(options.verbose_level)
 
-    logging.info('CLI options: %s', options)
+    logging.info("CLI options: %s", options)
 
     files = collect_files(options.path, FILE_FILTER)
     if len(files) == 0:
-        raise ApitError('No matching files found')
-    logging.info('Input path: %s', options.path)
+        raise ApitError("No matching files found")
+    logging.info("Input path: %s", options.path)
 
     options.cache_path = Path(CACHE_PATH).expanduser()
 
@@ -28,7 +28,7 @@ def main(options) -> int:
 
 def configure_logging(verbose_level: int) -> None:
     console_handler = logging.StreamHandler()
-    console_handler.setFormatter(ColoredFormatter('%(levelname)s: %(message)s'))
+    console_handler.setFormatter(ColoredFormatter("%(levelname)s: %(message)s"))
 
     VERBOSITY_TO_LOG_LEVEL_MAPPING = {
         1: logging.INFO,

@@ -9,10 +9,10 @@ from enum import Enum
 
 from apit.error import ApitError
 
-COLLECTION_TYPE_KEY = 'collectionType'
-VALID_COLLECTION_TYPE_FOR_ALBUM = 'Album'
-KIND_KEY = 'kind'
-VALID_KIND_VALUES_FOR_SONG = 'song'
+COLLECTION_TYPE_KEY = "collectionType"
+VALID_COLLECTION_TYPE_FOR_ALBUM = "Album"
+KIND_KEY = "kind"
+VALID_KIND_VALUES_FOR_SONG = "song"
 
 
 class STORE_KEY(Enum):
@@ -60,12 +60,12 @@ def to_rating(rating_str: str) -> STORE_RATING:
     try:
         return STORE_RATING(rating_str)
     except ValueError as e:
-        raise ApitError('[Error] Unknown rating: %s' % e)
+        raise ApitError("[Error] Unknown rating: %s" % e)
 
 
 class STORE_KIND(Enum):
-    ALBUM = 'album'
-    SONG  = 'song'
+    ALBUM = "album"
+    SONG = "song"
 
 
 ITEM_KIND_MAPPING: Mapping[STORE_KIND, int] = {
@@ -78,7 +78,7 @@ def to_item_kind(kind_str: str) -> STORE_KIND:
     try:
         return STORE_KIND(kind_str)
     except ValueError as e:
-        raise ApitError('[Error] Unknown item kind: %s' % e)
+        raise ApitError("[Error] Unknown item kind: %s" % e)
 
 
 # https://affiliate.itunes.apple.com/resources/documentation/genre-mapping/

@@ -35,14 +35,17 @@ class TagCommand(Command):
     def execute(self, files: list[Path], options):
         pre_action_options = to_pre_action_options(options)
 
-        actions: list[Action] = [TagAction(file, to_action_options(file, pre_action_options)) for file in files]
+        actions: list[Action] = [
+            TagAction(file, to_action_options(file, pre_action_options))
+            for file in files
+        ]
 
         if any_action_needs_confirmation(actions):
             print_actions_preview(actions)
             ask_user_for_confirmation()
 
         for action in actions:
-            print('Executing:', action)
+            print("Executing:", action)
             action.apply()
 
         print_report(actions)
@@ -54,8 +57,8 @@ def to_pre_action_options(options) -> Mapping[str, list[Song] | bool | Path | No
 
     if not source:
         source = ask_user_for_input(
-            question='Input Apple Music/iTunes Store URL (starts with https://music.apple.com/...): ',
-            abortion='Incompatible Apple Music/iTunes Store URL provided'
+            question="Input Apple Music/iTunes Store URL (starts with https://music.apple.com/...): ",
+            abortion="Incompatible Apple Music/iTunes Store URL provided",
         )
 
     metadata_json = get_metadata_json(source)
@@ -67,40 +70,45 @@ def to_pre_action_options(options) -> Mapping[str, list[Song] | bool | Path | No
     if options.has_search_result_cache_flag and is_url(source):
         # TODO find better location for this code
         if not len(songs):
-            raise ApitError('Failed to generate a cache filename due to missing song')
+            raise ApitError("Failed to generate a cache filename due to missing song")
         metadata_cache_file = generate_cache_filename(options.cache_path, first_song)
         save_metadata_to_cache(metadata_json, metadata_cache_file)
-        logging.info('Downloaded metadata cached in: %s', metadata_cache_file)
+        logging.info("Downloaded metadata cached in: %s", metadata_cache_file)
 
     artwork_path = None
     if options.has_embed_artwork_flag:
         artwork_path = get_cached_artwork_path_if_exists(first_song, options)
 
         if artwork_path:
-            logging.info('Use cached cover: %s', artwork_path)
+            logging.info("Use cached cover: %s", artwork_path)
         else:
             size = options.artwork_size
             upscaled_url = upscale_artwork_url(first_song, size)
-            logging.info('Use cover link (with size %d): %s', size, upscaled_url)
-            logging.info('Download cover (with size %d) from: %s', size, upscaled_url)
+            logging.info("Use cover link (with size %d): %s", size, upscaled_url)
+            logging.info("Download cover (with size %d) from: %s", size, upscaled_url)
             if options.has_search_result_cache_flag:
                 artwork_cache_path = options.cache_path
             else:
                 import tempfile
+
                 artwork_cache_path = Path(tempfile.gettempdir())
             artwork_content, image_type = download_artwork(upscaled_url)
-            artwork_path = generate_artwork_filename(artwork_cache_path, first_song, image_type)
+            artwork_path = generate_artwork_filename(
+                artwork_cache_path, first_song, image_type
+            )
             save_artwork_to_cache(artwork_content, artwork_path)
-            logging.info('Cover cached in: %s', artwork_path)
+            logging.info("Cover cached in: %s", artwork_path)
 
     return {
-        'songs': songs,
-        'should_backup': options.has_backup_flag,
-        'cover_path': artwork_path,
+        "songs": songs,
+        "should_backup": options.has_backup_flag,
+        "cover_path": artwork_path,
     }
 
 
-def to_action_options(file: Path, options) -> Mapping[str, Song | bool | int | Path | None]:
+def to_action_options(
+    file: Path, options
+) -> Mapping[str, Song | bool | int | Path | None]:
     disc_and_track = extract_disc_and_track_number(file)
     disc: int | None = None
     track: int | None = None
@@ -108,17 +116,17 @@ def to_action_options(file: Path, options) -> Mapping[str, Song | bool | int | P
         disc, track = disc_and_track
 
     return {
-        'song': find_song(options['songs'], disc=disc, track=track),
-        'disc': disc,
-        'track': track,
-        'is_original': is_itunes_bought_file(file),
-        'should_backup': options['should_backup'],
-        'cover_path': options['cover_path'],
+        "song": find_song(options["songs"], disc=disc, track=track),
+        "disc": disc,
+        "track": track,
+        "is_original": is_itunes_bought_file(file),
+        "should_backup": options["should_backup"],
+        "cover_path": options["cover_path"],
     }
 
 
 def upscale_artwork_url(song, size):
-    return song.artwork_url.replace('100x100', f'{size}x{size}')
+    return song.artwork_url.replace("100x100", f"{size}x{size}")
 
 
 def get_cached_artwork_path_if_exists(song, options) -> Path | None:
@@ -132,25 +140,25 @@ def get_cached_artwork_path_if_exists(song, options) -> Path | None:
 
 
 def is_url(source: str) -> bool:
-    return source.startswith('http')
+    return source.startswith("http")
 
 
 def get_metadata_json(source: str) -> str:
-    logging.info('Input source: %s', source)
+    logging.info("Input source: %s", source)
     if Path(source).exists():
-        logging.info('Use downloaded metadata file: %s', source)
+        logging.info("Use downloaded metadata file: %s", source)
         try:
             return Path(source).read_text()
         except Exception:
-            raise ApitError('Error while reading metadata file: %s' % Path(source))
+            raise ApitError("Error while reading metadata file: %s" % Path(source))
     elif is_url(source):
-        logging.info('Use URL to download metadata: %s', source)
+        logging.info("Use URL to download metadata: %s", source)
         query_url = generate_lookup_url_by_url(source)
-        logging.info('Query URL: %s', query_url)
+        logging.info("Query URL: %s", query_url)
         return download_metadata(query_url)
     elif isinstance(source, str):
-        logging.info('Use URL composition to download metadata: %s', source)
+        logging.info("Use URL composition to download metadata: %s", source)
         query_url = generate_lookup_url_by_str(source)
-        logging.info('Query URL: %s', query_url)
+        logging.info("Query URL: %s", query_url)
         return download_metadata(query_url)
     raise ApitError(f"Invalid input source: {source}")

@@ -1,2 +1,2 @@
-FILE_FILTER = '.m4a'
-CACHE_PATH = '~/.apit'
+FILE_FILTER = ".m4a"
+CACHE_PATH = "~/.apit"
