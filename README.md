@@ -1,6 +1,6 @@
 # apit
 
-[![Build Status](https://travis-ci.org/wschott/apit.svg?branch=master)](https://travis-ci.org/wschott/apit)
+[![Build Status](https://github.com/wschott/apit/actions/workflows/python-package.yml/badge.svg)](https://github.com/wschott/apit/actions/workflows/python-package.yml)
 
 **RUN THIS AT YOUR OWN RISK! MAKE A BACKUP BEFORE RUNNING THIS!**
 
