@@ -57,6 +57,8 @@ def _generate_metadata_lookup_url(album_id: str, country_code: str) -> str:
 def determine_system_country_code() -> str:
     import locale
     system_language, _ = locale.getdefaultlocale()
+    if not system_language:
+        raise ApitError('Impossible to determine system country code. Use another possibility as metadata input source')
     country_match = LANGUAGE_COUNTRY_REGEX.match(system_language)
     if not country_match:
         raise ApitError('Impossible to determine system country code. Use another possibility as metadata input source')

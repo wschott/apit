@@ -49,7 +49,7 @@ class TagCommand(Command):
         return 0 if all_actions_successful(actions) else 1
 
 
-def to_pre_action_options(options) -> Mapping[str, list[Song] | bool]:
+def to_pre_action_options(options) -> Mapping[str, list[Song] | bool | Path | None]:
     source: str = options.source
 
     if not source:

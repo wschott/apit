@@ -22,7 +22,7 @@ class Action:
         return self._executed
 
     @property
-    def successful(self) -> bool:
+    def successful(self) -> bool | None:
         return self._success
 
     @property
