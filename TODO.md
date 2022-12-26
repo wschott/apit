@@ -31,4 +31,3 @@
 - configure mypy: https://mypy.readthedocs.io/en/stable/config_file.html#config-file
 - Python 3.7+:
   - subprocess.run args: https://docs.python.org/3.7/library/subprocess.html#subprocess.run
-  - use @dataclass for Album and Song? https://www.python.org/dev/peps/pep-0557/
