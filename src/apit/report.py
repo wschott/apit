@@ -15,6 +15,7 @@ from apit.commands.show.action import ReadAction
 from apit.commands.show.reporter import ReadActionReporter
 from apit.commands.tag.action import TagAction
 from apit.commands.tag.reporter import TagActionReporter
+from apit.error import ApitError
 from apit.report_action import ActionReporter
 from apit.store.constants import (
     ITEM_KIND_MAPPING,
@@ -364,3 +365,4 @@ def to_action_reporter(action: Action) -> ActionReporter:
         return ReadActionReporter(action)
     elif isinstance(action, TagAction):
         return TagActionReporter(action)
+    raise ApitError('Unknown action')
