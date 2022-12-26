@@ -24,7 +24,7 @@ def test_download_metadata_using_real_itunes_data():
     assert data['results'][0]['collectionType'] == 'Album'
     assert data['results'][0]['artistName'] == 'Kanye West'
     assert data['results'][0]['collectionName'] == 'My Beautiful Dark Twisted Fantasy'
-    assert data['results'][0]['copyright'] == '℗ 2010 Roc-A-Fella Records, LLC'
+    assert data['results'][0]['copyright'] == '℗ 2010 UMG Recordings, Inc.'
 
     # test some song data
     assert data['results'][1]['kind'] == 'song'
@@ -43,7 +43,7 @@ def test_downloaded_metadata_json_is_saved_using_unicode_chars(tmp_path):
     data_read = cache_file.read_text()
     assert data_read == json_str
     data = json.loads(data_read)
-    assert data['results'][0]['copyright'] == '℗ 2010 Roc-A-Fella Records, LLC'
+    assert data['results'][0]['copyright'] == '℗ 2010 UMG Recordings, Inc.'
 
 
 @pytest.mark.integration
