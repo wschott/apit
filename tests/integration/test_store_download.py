@@ -12,7 +12,6 @@ REAL_ARTWORK_URL = 'https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/88/92/4
 
 @pytest.mark.integration
 def test_download_metadata_using_real_itunes_data():
-
     json_str = download_metadata(REAL_LOOKUP_URL)
 
     data = json.loads(json_str)
@@ -56,4 +55,4 @@ def test_downloaded_artwork(tmp_path):
     data_read = cache_file.read_bytes()
     assert data_read == artwork_content
     assert b'JFIF' in data_read
-    assert 'JPEG image data' in subprocess.run(['file', cache_file], universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
+    assert 'JPEG image data' in subprocess.run(['file', cache_file], text=True, capture_output=True).stdout

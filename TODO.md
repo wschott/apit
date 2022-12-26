@@ -29,5 +29,3 @@
 - use and configure flake8?
 - setup dev mode for VS code (e.g. w/ pip install flake8 ...)
 - configure mypy: https://mypy.readthedocs.io/en/stable/config_file.html#config-file
-- Python 3.7+:
-  - subprocess.run args: https://docs.python.org/3.7/library/subprocess.html#subprocess.run
