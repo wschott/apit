@@ -27,6 +27,18 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install -e ".[dev]"
-    - name: Run tox (lint, type check, tests, ...)
+    - name: Lint
       run: |
-        tox
+        tox -e lint
+    - name: Typecheck
+      run: |
+        tox -e typecheck
+    - name: Run tests
+      run: |
+        tox -e py
+    - name: Run integration tests
+      run: |
+        tox -eintegration
+    - name: Report results
+      run: |
+        tox -e report
