@@ -1,3 +1,4 @@
+# flake8: noqa: E221
 import urllib.error
 from unittest.mock import MagicMock, patch
 
