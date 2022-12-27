@@ -29,7 +29,7 @@ from apit.user_input import ask_user_for_input
 
 
 class TagCommand(Command):
-    def execute(self, files: list[Path], options):
+    def execute(self, files: list[Path], options) -> int:
         pre_action_options = to_pre_action_options(options)
 
         actions: list[Action] = [
@@ -122,11 +122,11 @@ def to_action_options(
     }
 
 
-def upscale_artwork_url(song, size):
+def upscale_artwork_url(song: Song, size: int) -> str:
     return song.artwork_url.replace("100x100", f"{size}x{size}")
 
 
-def get_cached_artwork_path_if_exists(song, options) -> Path | None:
+def get_cached_artwork_path_if_exists(song: Song, options) -> Path | None:
     jpeg_path = generate_artwork_filename(options.cache_path, song, MIME_TYPE.JPEG)
     png_path = generate_artwork_filename(options.cache_path, song, MIME_TYPE.PNG)
     if jpeg_path.exists():

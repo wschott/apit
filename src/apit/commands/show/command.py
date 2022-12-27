@@ -11,7 +11,7 @@ from apit.user_input import ask_user_for_confirmation
 
 
 class ShowCommand(Command):
-    def execute(self, files: list[Path], options):
+    def execute(self, files: list[Path], options) -> int:
         actions: list[Action] = [ReadAction(file, {}) for file in files]
 
         if any_action_needs_confirmation(actions):

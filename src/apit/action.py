@@ -2,9 +2,11 @@ import logging
 from pathlib import Path
 from typing import Any
 
+from apit.error import ApitError
+
 
 class Action:
-    def __init__(self, file: Path, options):
+    def __init__(self, file: Path, options) -> None:
         self.file = file
         self.options = options
 
@@ -26,15 +28,15 @@ class Action:
         return self._success
 
     @property
-    def result(self):
+    def result(self) -> Any | None:
         return self._result
 
-    def mark_as_success(self, result) -> None:
+    def mark_as_success(self, result: Any) -> None:
         self._executed = True
         self._success = True
         self._result = result
 
-    def mark_as_fail(self, result) -> None:
+    def mark_as_fail(self, result: ApitError) -> None:
         self._executed = True
         self._success = False
         self._result = result
