@@ -1,6 +1,8 @@
 from collections import namedtuple
 
-from apit.metadata import Album, Song, find_song
+from apit.metadata import Album
+from apit.metadata import find_song
+from apit.metadata import Song
 
 MockSong = namedtuple("MockSong", ["disc_number", "track_number"])
 

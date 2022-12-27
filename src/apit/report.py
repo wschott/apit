@@ -5,25 +5,21 @@ from typing import Any
 
 import mutagen.mp4
 
-from apit.action import (
-    Action,
-    filter_errors,
-    filter_not_actionable,
-    filter_successes,
-)
+from apit.action import Action
+from apit.action import filter_errors
+from apit.action import filter_not_actionable
+from apit.action import filter_successes
 from apit.commands.show.action import ReadAction
 from apit.commands.show.reporter import ReadActionReporter
 from apit.commands.tag.action import TagAction
 from apit.commands.tag.reporter import TagActionReporter
 from apit.error import ApitError
 from apit.report_action import ActionReporter
-from apit.store.constants import (
-    ITEM_KIND_MAPPING,
-    MP4_MAPPING,
-    RATING_MAPPING,
-    STORE_KIND,
-    STORE_RATING,
-)
+from apit.store.constants import ITEM_KIND_MAPPING
+from apit.store.constants import MP4_MAPPING
+from apit.store.constants import RATING_MAPPING
+from apit.store.constants import STORE_KIND
+from apit.store.constants import STORE_RATING
 
 PREFIX = "\033[3%dm"
 SUFFIX = "\033[0m"

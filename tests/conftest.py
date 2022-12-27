@@ -3,8 +3,10 @@ from pathlib import Path
 
 import pytest
 
-from apit.metadata import Album, Song
-from apit.store_data_parser import to_album, to_song
+from apit.metadata import Album
+from apit.metadata import Song
+from apit.store_data_parser import to_album
+from apit.store_data_parser import to_song
 
 MockAction = namedtuple(
     "MockAction", ["needs_confirmation", "executed", "successful", "actionable"]

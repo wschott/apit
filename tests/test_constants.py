@@ -1,12 +1,10 @@
 import pytest
 
 from apit.error import ApitError
-from apit.store.constants import (
-    STORE_KIND,
-    STORE_RATING,
-    to_item_kind,
-    to_rating,
-)
+from apit.store.constants import STORE_KIND
+from apit.store.constants import STORE_RATING
+from apit.store.constants import to_item_kind
+from apit.store.constants import to_rating
 
 
 def test_to_rating():

@@ -1,6 +1,7 @@
 import logging
 
-from apit.report import Color, to_colored_text
+from apit.report import Color
+from apit.report import to_colored_text
 
 LEVEL_TO_COLOR_MAP = {
     logging.DEBUG: Color.MAGENTA,

@@ -3,11 +3,9 @@ import re
 import urllib.error
 import urllib.request
 
-from apit.error import (
-    ApitError,
-    ApitStoreConnectionError,
-    ApitSystemCountryCodeDeterminationError,
-)
+from apit.error import ApitError
+from apit.error import ApitStoreConnectionError
+from apit.error import ApitSystemCountryCodeDeterminationError
 from apit.file_handling import MIME_TYPE
 
 # format (as of 2020-05): https://music.apple.com/us/album/album-name/123456789

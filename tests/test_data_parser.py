@@ -3,19 +3,15 @@ import pytest
 from apit.error import ApitError
 from apit.metadata import find_song
 from apit.store.constants import STORE_KEY
-from apit.store_data_parser import (
-    _find_album,
-    _find_songs,
-    extract_by_key,
-    extract_songs,
-    to_album,
-    to_song,
-)
-from tests.conftest import (
-    assert_dummy_test_album,
-    assert_dummy_test_song,
-    dummy_album,
-)
+from apit.store_data_parser import _find_album
+from apit.store_data_parser import _find_songs
+from apit.store_data_parser import extract_by_key
+from apit.store_data_parser import extract_songs
+from apit.store_data_parser import to_album
+from apit.store_data_parser import to_song
+from tests.conftest import assert_dummy_test_album
+from tests.conftest import assert_dummy_test_song
+from tests.conftest import dummy_album
 
 
 def test_extract_songs(test_metadata):

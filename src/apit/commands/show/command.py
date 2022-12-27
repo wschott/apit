@@ -1,15 +1,13 @@
 from pathlib import Path
 
-from apit.action import (
-    Action,
-    all_actions_successful,
-    any_action_needs_confirmation,
-)
-from apit.command import Command
-from apit.report import print_actions_preview, print_report
-from apit.user_input import ask_user_for_confirmation
-
 from .action import ReadAction
+from apit.action import Action
+from apit.action import all_actions_successful
+from apit.action import any_action_needs_confirmation
+from apit.command import Command
+from apit.report import print_actions_preview
+from apit.report import print_report
+from apit.user_input import ask_user_for_confirmation
 
 
 class ShowCommand(Command):

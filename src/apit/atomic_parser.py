@@ -1,18 +1,15 @@
 from pathlib import Path
 
-import mutagen
 import mutagen.mp4
 
 from apit.error import ApitError
 from apit.metadata import Song
-from apit.store.constants import (
-    BLACKLIST,
-    ITEM_KIND_MAPPING,
-    MP4_MAPPING,
-    RATING_MAPPING,
-    to_item_kind,
-    to_rating,
-)
+from apit.store.constants import BLACKLIST
+from apit.store.constants import ITEM_KIND_MAPPING
+from apit.store.constants import MP4_MAPPING
+from apit.store.constants import RATING_MAPPING
+from apit.store.constants import to_item_kind
+from apit.store.constants import to_rating
 
 
 def read_metadata(file: Path) -> mutagen.mp4.MP4:

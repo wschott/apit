@@ -1,19 +1,17 @@
 from pathlib import Path
 
-from apit.report import (
-    STR_FAIL,
-    STR_NOT_SELECTED,
-    STR_SELECTED,
-    STR_SUCCESS,
-    Color,
-    _is_selected,
-    _is_successful,
-    _to_color_for_preview,
-    _to_color_for_result,
-    pad_with_spaces,
-    to_colored_text,
-    truncate_filename,
-)
+from apit.report import _is_selected
+from apit.report import _is_successful
+from apit.report import _to_color_for_preview
+from apit.report import _to_color_for_result
+from apit.report import Color
+from apit.report import pad_with_spaces
+from apit.report import STR_FAIL
+from apit.report import STR_NOT_SELECTED
+from apit.report import STR_SELECTED
+from apit.report import STR_SUCCESS
+from apit.report import to_colored_text
+from apit.report import truncate_filename
 
 
 def test_to_colored_text_no_color():

@@ -2,14 +2,12 @@ from pathlib import Path
 
 import pytest
 
-from apit.action import (
-    Action,
-    all_actions_successful,
-    any_action_needs_confirmation,
-    filter_errors,
-    filter_not_actionable,
-    filter_successes,
-)
+from apit.action import Action
+from apit.action import all_actions_successful
+from apit.action import any_action_needs_confirmation
+from apit.action import filter_errors
+from apit.action import filter_not_actionable
+from apit.action import filter_successes
 
 
 def test_any_action_needs_confirmation(

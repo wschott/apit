@@ -4,7 +4,8 @@ from unittest.mock import MagicMock
 import mutagen.mp4
 import pytest
 
-from apit.atomic_parser import is_itunes_bought_file, read_metadata
+from apit.atomic_parser import is_itunes_bought_file
+from apit.atomic_parser import read_metadata
 from apit.error import ApitError
 
 

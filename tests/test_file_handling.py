@@ -3,14 +3,12 @@ from pathlib import Path
 import pytest
 
 from apit.error import ApitError
-from apit.file_handling import (
-    MIME_TYPE,
-    _generate_filename_prefix,
-    collect_files,
-    extract_disc_and_track_number,
-    generate_artwork_filename,
-    generate_cache_filename,
-)
+from apit.file_handling import _generate_filename_prefix
+from apit.file_handling import collect_files
+from apit.file_handling import extract_disc_and_track_number
+from apit.file_handling import generate_artwork_filename
+from apit.file_handling import generate_cache_filename
+from apit.file_handling import MIME_TYPE
 
 
 # TODO create temporary files for testing?

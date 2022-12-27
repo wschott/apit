@@ -3,7 +3,8 @@ from pathlib import Path
 
 from apit.command import Command
 from apit.commands import determine_command_type
-from apit.defaults import CACHE_PATH, FILE_FILTER
+from apit.defaults import CACHE_PATH
+from apit.defaults import FILE_FILTER
 from apit.error import ApitError
 from apit.file_handling import collect_files
 from apit.logger import ColoredFormatter

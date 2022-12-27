@@ -1,14 +1,13 @@
 from pathlib import Path
-from unittest.mock import MagicMock, call
+from unittest.mock import call
+from unittest.mock import MagicMock
 
 import mutagen
 import pytest
 
-from apit.atomic_parser import (
-    _modify_mp4_file,
-    _read_artwork_content,
-    update_metadata,
-)
+from apit.atomic_parser import _modify_mp4_file
+from apit.atomic_parser import _read_artwork_content
+from apit.atomic_parser import update_metadata
 from apit.error import ApitError
 from apit.metadata import Song
 from apit.store.constants import MP4_MAPPING

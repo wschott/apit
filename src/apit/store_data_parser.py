@@ -2,14 +2,13 @@ import json
 from typing import Any
 
 from apit.error import ApitError
-from apit.metadata import Album, Song
-from apit.store.constants import (
-    COLLECTION_TYPE_KEY,
-    KIND_KEY,
-    STORE_KEY,
-    VALID_COLLECTION_TYPE_FOR_ALBUM,
-    VALID_KIND_VALUES_FOR_SONG,
-)
+from apit.metadata import Album
+from apit.metadata import Song
+from apit.store.constants import COLLECTION_TYPE_KEY
+from apit.store.constants import KIND_KEY
+from apit.store.constants import STORE_KEY
+from apit.store.constants import VALID_COLLECTION_TYPE_FOR_ALBUM
+from apit.store.constants import VALID_KIND_VALUES_FOR_SONG
 
 
 def extract_songs(metadata_json: str) -> list[Song]:

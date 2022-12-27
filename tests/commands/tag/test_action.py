@@ -1,5 +1,6 @@
 from pathlib import Path
-from unittest.mock import MagicMock, call
+from unittest.mock import call
+from unittest.mock import MagicMock
 
 from apit.commands.tag.action import TagAction
 from apit.error import ApitError

@@ -1,5 +1,6 @@
 import sys
-from argparse import ArgumentParser, RawDescriptionHelpFormatter
+from argparse import ArgumentParser
+from argparse import RawDescriptionHelpFormatter
 
 from apit.commands import AVAILABLE_COMMANDS
 from apit.error import ApitError

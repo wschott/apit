@@ -2,33 +2,30 @@ import logging
 from collections.abc import Mapping
 from pathlib import Path
 
-from apit.action import (
-    Action,
-    all_actions_successful,
-    any_action_needs_confirmation,
-)
+from .action import TagAction
+from apit.action import Action
+from apit.action import all_actions_successful
+from apit.action import any_action_needs_confirmation
 from apit.atomic_parser import is_itunes_bought_file
-from apit.cache import save_artwork_to_cache, save_metadata_to_cache
+from apit.cache import save_artwork_to_cache
+from apit.cache import save_metadata_to_cache
 from apit.command import Command
 from apit.error import ApitError
-from apit.file_handling import (
-    MIME_TYPE,
-    extract_disc_and_track_number,
-    generate_artwork_filename,
-    generate_cache_filename,
-)
-from apit.metadata import Song, find_song
-from apit.report import print_actions_preview, print_report
-from apit.store.connection import (
-    download_artwork,
-    download_metadata,
-    generate_lookup_url_by_str,
-    generate_lookup_url_by_url,
-)
+from apit.file_handling import extract_disc_and_track_number
+from apit.file_handling import generate_artwork_filename
+from apit.file_handling import generate_cache_filename
+from apit.file_handling import MIME_TYPE
+from apit.metadata import find_song
+from apit.metadata import Song
+from apit.report import print_actions_preview
+from apit.report import print_report
+from apit.store.connection import download_artwork
+from apit.store.connection import download_metadata
+from apit.store.connection import generate_lookup_url_by_str
+from apit.store.connection import generate_lookup_url_by_url
 from apit.store_data_parser import extract_songs
-from apit.user_input import ask_user_for_confirmation, ask_user_for_input
-
-from .action import TagAction
+from apit.user_input import ask_user_for_confirmation
+from apit.user_input import ask_user_for_input
 
 
 class TagCommand(Command):

@@ -1,22 +1,19 @@
 # flake8: noqa: E221
 import urllib.error
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
+from unittest.mock import patch
 
 import pytest
 
-from apit.error import (
-    ApitError,
-    ApitStoreConnectionError,
-    ApitSystemCountryCodeDeterminationError,
-)
+from apit.error import ApitError
+from apit.error import ApitStoreConnectionError
+from apit.error import ApitSystemCountryCodeDeterminationError
 from apit.file_handling import MIME_TYPE
-from apit.store.connection import (
-    _to_mime_type,
-    download_artwork,
-    download_metadata,
-    generate_lookup_url_by_str,
-    generate_lookup_url_by_url,
-)
+from apit.store.connection import _to_mime_type
+from apit.store.connection import download_artwork
+from apit.store.connection import download_metadata
+from apit.store.connection import generate_lookup_url_by_str
+from apit.store.connection import generate_lookup_url_by_url
 
 # fmt: off
 STORE_URL           = 'https://music.apple.com/us/album/test-album/12345'
