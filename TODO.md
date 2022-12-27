@@ -28,4 +28,3 @@
 - simplify loops (and other constructs) using FP
 - setup dev mode for VS code (e.g. w/ pip install flake8 ...)
 - configure mypy: https://mypy.readthedocs.io/en/stable/config_file.html#config-file
-- update setup.cfg regarding replaced isort
