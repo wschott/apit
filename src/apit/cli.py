@@ -44,7 +44,7 @@ Example:
   - https://music.apple.com/us/album/album-name/123456789
   - http://itunes.apple.com/us/album/album-name/id123456789
   - http://test-domain.com/us/test-name/42/123456789?i=09876
-""",
+""",  # noqa: B950
     )
 
     parser.add_argument(
@@ -93,7 +93,7 @@ Example:
         "source",
         metavar="SOURCE",
         nargs="?",
-        help="[tag] optional url (to be downloaded) or file (already downloaded) containing Apple Music/iTunes Store data or album ID (with optional country code)",
+        help="[tag] optional url (to be downloaded) or file (already downloaded) containing Apple Music/iTunes Store data or album ID (with optional country code)",  # noqa: B950
     )
 
     return parser.parse_args(args)

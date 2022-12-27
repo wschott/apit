@@ -16,6 +16,7 @@ VALID_KIND_VALUES_FOR_SONG = "song"
 
 
 class STORE_KEY(Enum):
+    # fmt: off
     # song values
     ARTIST          = 'artistName'
     TITLE           = 'trackCensoredName'  # alternatively: 'trackName' without stars '*'
@@ -37,13 +38,14 @@ class STORE_KEY(Enum):
     ALBUM_ARTIST    = 'artistName'
     COPYRIGHT       = 'copyright'
     ARTWORK_URL     = 'artworkUrl100'
+    # fmt: on
 
 
 class STORE_RATING(Enum):
-    CLEAN    = 'cleaned'
-    EXPLICIT = 'explicit'
-    NONE     = 'notExplicit'
-    #EXPLICIT_OLD = 'explicit'
+    CLEAN = "cleaned"
+    EXPLICIT = "explicit"
+    NONE = "notExplicit"
+    # EXPLICIT_OLD = 'explicit'
 
 
 RATING_MAPPING: Mapping[STORE_RATING, int] = {
@@ -51,8 +53,7 @@ RATING_MAPPING: Mapping[STORE_RATING, int] = {
     STORE_RATING.CLEAN: 2,
     STORE_RATING.EXPLICIT: 1,
     STORE_RATING.NONE: 0,
-
-    #STORE_RATING.EXPLICIT_OLD: 4,  # TODO
+    # STORE_RATING.EXPLICIT_OLD: 4,  # TODO
 }
 
 
@@ -124,6 +125,7 @@ def to_item_kind(kind_str: str) -> STORE_KIND:
 
 # Atom meanings: see https://github.com/quodlibet/mutagen/blob/master/mutagen/mp4/__init__.py
 class MP4_MAPPING(Enum):
+    # fmt: off
     TITLE           = '\xa9nam'
     ALBUM_NAME      = '\xa9alb'
     ARTIST          = '\xa9ART'
@@ -164,6 +166,8 @@ class MP4_MAPPING(Enum):
     SORT_ORDER_ALBUM = 'soal'
     SORT_ORDER_ALBUM_ARTIST = 'soaa'
     SORT_ORDER_COMPOSER = 'soco'
+    # fmt: on
+
 
 BLACKLIST: list[str] = [
     MP4_MAPPING.OWNER_NAME.value,

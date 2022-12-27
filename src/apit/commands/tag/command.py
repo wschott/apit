@@ -57,7 +57,7 @@ def to_pre_action_options(options) -> Mapping[str, list[Song] | bool | Path | No
 
     if not source:
         source = ask_user_for_input(
-            question="Input Apple Music/iTunes Store URL (starts with https://music.apple.com/...): ",
+            question="Input Apple Music/iTunes Store URL (starts with https://music.apple.com/...): ",  # noqa: B950
             abortion="Incompatible Apple Music/iTunes Store URL provided",
         )
 

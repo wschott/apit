@@ -38,7 +38,6 @@ STR_NOT_SELECTED = " "
 STR_SUCCESS = "✓"
 STR_FAIL = "✘"
 
-
 MP4_MAPPING_TO_HUMAN_READABLE: Mapping[MP4_MAPPING, str] = {
     MP4_MAPPING.TITLE: "Title",
     MP4_MAPPING.ARTIST: "Artist",
@@ -76,7 +75,6 @@ MP4_MAPPING_TO_HUMAN_READABLE: Mapping[MP4_MAPPING, str] = {
     MP4_MAPPING.STOREFRONT_ID: "Storefront ID",
 }
 
-
 RATING_TO_HUMAN_READABLE: Mapping[int, str] = {
     4: "<explicit (old value)>",  # TODO
     RATING_MAPPING[STORE_RATING.CLEAN]: "<clean>",
@@ -84,11 +82,9 @@ RATING_TO_HUMAN_READABLE: Mapping[int, str] = {
     RATING_MAPPING[STORE_RATING.NONE]: "<inoffensive>",
 }
 
-
 MEDIA_TYPE_TO_HUMAN_READABLE: Mapping[int, str] = {
     ITEM_KIND_MAPPING[STORE_KIND.SONG]: "<normal>",
 }
-
 
 ORDER_INFO_TRACK = [
     MP4_MAPPING.TITLE.value,
