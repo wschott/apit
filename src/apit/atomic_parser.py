@@ -30,7 +30,7 @@ def is_itunes_bought_file(file: Path) -> bool:
     except ApitError:
         return False
     else:
-        return any(map(lambda item: item in mp4_file.tags, BLACKLIST))
+        return any(item in mp4_file.tags for item in BLACKLIST)
 
 
 def update_metadata(
