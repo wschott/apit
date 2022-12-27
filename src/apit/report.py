@@ -281,6 +281,9 @@ def print_tags(mp4_file: mutagen.mp4.MP4) -> None:
 
 
 def accumulate_values_to_print(mp4_file: mutagen.mp4.MP4) -> dict[str, Any]:
+    if not mp4_file.tags:
+        raise ApitError("No tags present")
+
     tags_to_print: dict[str, Any] = {}
     for tag, tag_value in mp4_file.tags.items():
         value_to_print = ""

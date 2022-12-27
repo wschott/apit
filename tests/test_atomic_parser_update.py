@@ -15,7 +15,7 @@ from apit.store.constants import MP4_MAPPING
 
 
 def test_modify_mp4_file(test_song: Song):
-    mock_mp4_file = {}
+    mock_mp4_file = _mocked_mp4_file()
     updated_mock_mp4_file = _modify_mp4_file(mock_mp4_file, test_song)
 
     assert updated_mock_mp4_file[MP4_MAPPING.ARTIST.value] == test_song.artist
@@ -43,12 +43,11 @@ def test_modify_mp4_file(test_song: Song):
 
 
 def test_modify_mp4_file_with_cover(test_song: Song):
-    mock_mp4_file = {}
-    updated_mock_mp4_file = _modify_mp4_file(
-        mock_mp4_file, test_song, artwork="artwork-value"
-    )
+    artwork = MagicMock()
+    mock_mp4_file = _mocked_mp4_file()
+    updated_mock_mp4_file = _modify_mp4_file(mock_mp4_file, test_song, artwork)
 
-    assert updated_mock_mp4_file[MP4_MAPPING.ARTWORK.value] == ["artwork-value"]
+    assert updated_mock_mp4_file[MP4_MAPPING.ARTWORK.value] == [artwork]
     assert updated_mock_mp4_file[MP4_MAPPING.ARTIST.value] == test_song.artist
 
 
@@ -63,7 +62,7 @@ def test_metadata_updating(monkeypatch, test_song: Song):
 
 
 def test_metadata_updating_with_artwork(monkeypatch, test_song: Song):
-    cover_path = "cover.jpg"
+    cover_path = Path("cover.jpg")
     mock_mp4_file = MagicMock()
     monkeypatch.setattr("apit.atomic_parser.read_metadata", lambda *args: mock_mp4_file)
     mock_read_artwork_content = MagicMock()
@@ -132,3 +131,11 @@ def test_read_artwork_content_with_png(monkeypatch):
 def test_read_artwork_content_with_unsupported_filetype():
     with pytest.raises(ApitError, match="Unknown artwork image type"):
         _read_artwork_content(MagicMock(suffix=".uns"))
+
+
+def _mocked_mp4_file() -> MagicMock:
+    mocked_dict = MagicMock()
+    real_dict: dict = {}
+    mocked_dict.__setitem__.side_effect = real_dict.__setitem__
+    mocked_dict.__getitem__.side_effect = real_dict.__getitem__
+    return mocked_dict
