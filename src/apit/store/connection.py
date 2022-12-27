@@ -3,7 +3,11 @@ import re
 import urllib.error
 import urllib.request
 
-from apit.error import ApitError
+from apit.error import (
+    ApitError,
+    ApitStoreConnectionError,
+    ApitSystemCountryCodeDeterminationError,
+)
 from apit.file_handling import MIME_TYPE
 
 # format (as of 2020-05): https://music.apple.com/us/album/album-name/123456789
@@ -63,14 +67,10 @@ def determine_system_country_code() -> str:
 
     system_language, _ = locale.getdefaultlocale()
     if not system_language:
-        raise ApitError(
-            "Impossible to determine system country code. Use another possibility as metadata input source"
-        )
+        raise ApitSystemCountryCodeDeterminationError()
     country_match = LANGUAGE_COUNTRY_REGEX.match(system_language)
     if not country_match:
-        raise ApitError(
-            "Impossible to determine system country code. Use another possibility as metadata input source"
-        )
+        raise ApitSystemCountryCodeDeterminationError()
     return country_match.groupdict()["country_code"]
 
 
@@ -80,9 +80,7 @@ def download_metadata(url: str) -> str:
             data_read = response.read()
             return data_read.decode("utf-8")
     except urllib.error.URLError as e:
-        raise ApitError(
-            "Connection to Apple Music/iTunes Store failed due to error: %s" % str(e)
-        )
+        raise ApitStoreConnectionError(str(e))
 
 
 def download_artwork(url: str) -> tuple[bytes, MIME_TYPE]:
@@ -92,9 +90,7 @@ def download_artwork(url: str) -> tuple[bytes, MIME_TYPE]:
             logging.info("Headers: %s", response.info())
             return response.read(), _to_mime_type(content_type)
     except urllib.error.URLError as e:
-        raise ApitError(
-            "Connection to Apple Music/iTunes Store failed due to error: %s" % str(e)
-        )
+        raise ApitStoreConnectionError(str(e))
 
 
 def _to_mime_type(content_type: str) -> MIME_TYPE:

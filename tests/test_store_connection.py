@@ -4,7 +4,11 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from apit.error import ApitError
+from apit.error import (
+    ApitError,
+    ApitStoreConnectionError,
+    ApitSystemCountryCodeDeterminationError,
+)
 from apit.file_handling import MIME_TYPE
 from apit.store.connection import (
     _to_mime_type,
@@ -63,7 +67,7 @@ def test_generate_lookup_url_by_str_using_locale(monkeypatch):
 
 def test_generate_lookup_url_by_str_using_invalid_locale(monkeypatch):
     monkeypatch.setattr("locale.getdefaultlocale", lambda: ("XY", "uft8"))
-    with pytest.raises(ApitError, match="Impossible to determine system country code"):
+    with pytest.raises(ApitSystemCountryCodeDeterminationError):
         generate_lookup_url_by_str("12345")
 
 
@@ -80,7 +84,7 @@ def test_download_metadata():
 
 def test_download_metadata_with_url_error():
     with patch("urllib.request.urlopen", side_effect=urllib.error.URLError("test-msg")):
-        with pytest.raises(ApitError, match="due to error: <urlopen error test-msg>"):
+        with pytest.raises(ApitStoreConnectionError, match="<urlopen error test-msg>"):
             download_metadata(LOOKUP_URL)
     with patch(
         "urllib.request.urlopen",
@@ -88,7 +92,7 @@ def test_download_metadata_with_url_error():
             url=None, code=500, msg="test-msg", hdrs=None, fp=None
         ),
     ):
-        with pytest.raises(ApitError, match="due to error: HTTP Error 500: test-msg"):
+        with pytest.raises(ApitStoreConnectionError, match="HTTP Error 500: test-msg"):
             download_metadata(LOOKUP_URL)
 
 
@@ -109,7 +113,7 @@ def test_download_artwork():
 
 def test_download_artwork_with_url_error():
     with patch("urllib.request.urlopen", side_effect=urllib.error.URLError("test-msg")):
-        with pytest.raises(ApitError, match="due to error: <urlopen error test-msg>"):
+        with pytest.raises(ApitStoreConnectionError, match="<urlopen error test-msg>"):
             download_artwork(ARTWORK_URL)
     with patch(
         "urllib.request.urlopen",
@@ -117,7 +121,7 @@ def test_download_artwork_with_url_error():
             url=None, code=500, msg="test-msg", hdrs=None, fp=None
         ),
     ):
-        with pytest.raises(ApitError, match="due to error: HTTP Error 500: test-msg"):
+        with pytest.raises(ApitStoreConnectionError, match="HTTP Error 500: test-msg"):
             download_artwork(ARTWORK_URL)
 
 
