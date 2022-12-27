@@ -1,6 +1,5 @@
 import logging
 from pathlib import Path
-from typing import Type
 
 from apit.command import Command
 from apit.commands import determine_command_type
@@ -22,7 +21,7 @@ def main(options) -> int:
 
     options.cache_path = Path(CACHE_PATH).expanduser()
 
-    CommandType: Type[Command] = determine_command_type(options.command)
+    CommandType: type[Command] = determine_command_type(options.command)
     return CommandType().execute(files, options)
 
 
