@@ -136,9 +136,12 @@ Tox is used to run for example tests in an isolated environment. Show all possib
 
     $ tox -a
 
-Running a specific tox command will install its necessary dependencies in separate virtualenvs (e.g. [coverage](https://coverage.readthedocs.io/), [mypy](http://mypy-lang.org), [bandit](https://github.com/PyCQA/bandit)).
+Running a specific tox command will install its necessary dependencies in separate virtualenvs.
 
-Code style is ensured using a pre-commit hook (using: [black](https://github.com/psf/black), [isort](https://github.com/timothycrosley/isort), [flake8](https://flake8.pycqa.org/)).
+Code style is ensured using a pre-commit hook:
+
+    $ pre-commit install
+
 
 ## Building
 
