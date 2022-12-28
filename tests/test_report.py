@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from apit.report import _is_selected
 from apit.report import _is_successful
 from apit.report import _to_color_for_preview
@@ -23,10 +21,10 @@ def test_to_colored_text_color():
 
 
 def test_truncate_filename():
-    assert truncate_filename(Path("t.m4a"), 6) == "t.m4a"
-    assert truncate_filename(Path("te.m4a"), 6) == "te.m4a"
-    assert truncate_filename(Path("tes.m4a"), 6) == "tes.m…"
-    assert truncate_filename(Path("test.m4a"), 6) == "test.…"
+    assert truncate_filename("t.m4a", 6) == "t.m4a"
+    assert truncate_filename("te.m4a", 6) == "te.m4a"
+    assert truncate_filename("tes.m4a", 6) == "tes.m…"
+    assert truncate_filename("test.m4a", 6) == "test.…"
 
 
 def test_pad_with_spaces():

@@ -1,6 +1,5 @@
 from collections.abc import Mapping
 from enum import Enum
-from pathlib import Path
 from typing import Any
 
 import mutagen.mp4
@@ -20,6 +19,7 @@ from apit.store.constants import MP4_MAPPING
 from apit.store.constants import RATING_MAPPING
 from apit.store.constants import STORE_KIND
 from apit.store.constants import STORE_RATING
+from apit.string_utils import normalize_unicode
 
 PREFIX = "\033[3%dm"
 SUFFIX = "\033[0m"
@@ -142,11 +142,11 @@ def to_colored_text(text: str, color: Color) -> str:
     return f"{PREFIX % color.value}{text}{SUFFIX}"
 
 
-def truncate_filename(path: Path, length: int = FILENAME_TRUNCATION_LIMIT) -> str:
-    if len(path.name) <= length:
-        return path.name
+def truncate_filename(filename: str, length: int = FILENAME_TRUNCATION_LIMIT) -> str:
+    if len(filename) <= length:
+        return filename
 
-    return path.name[: (length - len(ELLIPSIS))] + ELLIPSIS
+    return filename[: (length - len(ELLIPSIS))] + ELLIPSIS
 
 
 def pad_with_spaces(string: str, length: int = FILENAME_TRUNCATION_LIMIT) -> str:
@@ -160,7 +160,7 @@ def separator() -> str:
 def preview_line(action: Action) -> str:
     text = TABLE_LINE_FORMAT % (
         _is_selected(action),
-        pad_with_spaces(truncate_filename(action.file)),
+        pad_with_spaces(truncate_filename(normalize_unicode(action.file.name))),
         to_action_reporter(action).preview_msg,
     )
     return to_colored_text(text=text, color=_to_color_for_preview(action))
@@ -169,7 +169,7 @@ def preview_line(action: Action) -> str:
 def result_line(action: Action) -> str:
     text = TABLE_LINE_FORMAT % (
         _is_successful(action),
-        pad_with_spaces(truncate_filename(action.file)),
+        pad_with_spaces(truncate_filename(normalize_unicode(action.file.name))),
         to_action_reporter(action).status_msg,
     )
     return to_colored_text(text=text, color=_to_color_for_result(action))
