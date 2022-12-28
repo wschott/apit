@@ -1,13 +1,16 @@
 import sys
 from argparse import ArgumentParser
+from argparse import Namespace
 from argparse import RawDescriptionHelpFormatter
 
+from apit.command_result import CommandResult
 from apit.commands import AVAILABLE_COMMANDS
 from apit.error import ApitError
+from apit.exit_code import ExitCode
 from apit.main import main
 
 
-def parse_args(args: list[str]):
+def parse_args(args: list[str]) -> Namespace:
     parser = ArgumentParser(
         formatter_class=RawDescriptionHelpFormatter,
         description="""
@@ -100,10 +103,17 @@ Example:
     return parser.parse_args(args)
 
 
+def _to_exit_code(command_result: CommandResult) -> ExitCode:
+    return {
+        CommandResult.SUCCESS: ExitCode.OK,
+        CommandResult.FAIL: ExitCode.ERROR,
+    }.get(command_result, ExitCode.ERROR)
+
+
 def cli() -> None:
     try:
         options = parse_args(sys.argv[1:])
-        sys.exit(main(options))
+        sys.exit(_to_exit_code(main(options)))
     except ApitError as e:
         print(e, file=sys.stderr)
-        sys.exit(2)
+        sys.exit(ExitCode.USAGE_ERROR)

@@ -1,6 +1,6 @@
 from apit.action import Action
-from apit.atomic_parser import read_metadata
 from apit.error import ApitError
+from apit.tagging.read import read_metadata
 
 
 class ReadAction(Action):

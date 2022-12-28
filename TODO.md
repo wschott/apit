@@ -13,14 +13,12 @@
 - allow setting cli flag to optionally overwrite original itunes files (-> don't skip them)?
 - add flag to add a new artwork instead of removing all before adding
 - new command: download lyrics
+- add mp3 support
 
 
 # Development
 
 - refactor test data/fixture setup
-- reasearch alternative tagging tools
-  - mutagen (has mp3 support)
-  - ...
 - add more tests
 - pass args to functions for better testability
 - https://docs.pytest.org/en/latest/monkeypatch.html

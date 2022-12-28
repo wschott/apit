@@ -81,3 +81,8 @@ def _generate_filename_prefix(song: Song) -> str:
     ]
     filename: list[str] = [re.sub(r"\W+", "_", str(f)) for f in filename_parts]
     return "-".join(filename)
+
+
+def ensure_folder_exists(file_path: Path) -> None:
+    if not file_path.parent.exists():
+        os.makedirs(file_path.parent)

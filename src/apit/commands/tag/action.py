@@ -1,9 +1,9 @@
 import shutil
 
 from apit.action import Action
-from apit.atomic_parser import update_metadata
 from apit.error import ApitError
 from apit.metadata import Song
+from apit.tagging.update import update_metadata
 
 
 class TagAction(Action):

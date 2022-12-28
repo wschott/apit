@@ -4,9 +4,9 @@ from unittest.mock import MagicMock
 import mutagen.mp4
 import pytest
 
-from apit.atomic_parser import is_itunes_bought_file
-from apit.atomic_parser import read_metadata
 from apit.error import ApitError
+from apit.tagging.read import is_itunes_bought_file
+from apit.tagging.read import read_metadata
 
 
 def test_is_itunes_bought_file_for_itunes_file(monkeypatch):
@@ -50,7 +50,7 @@ def test_is_itunes_bought_file_error(monkeypatch):
     def _raise(*args):
         raise ApitError
 
-    monkeypatch.setattr("apit.atomic_parser.read_metadata", _raise)
+    monkeypatch.setattr("apit.tagging.read.read_metadata", _raise)
     assert not is_itunes_bought_file(Path("tests/fixtures/1 itunes file.m4a"))
 
 

@@ -6,10 +6,10 @@ from .action import TagAction
 from apit.action import Action
 from apit.action import all_actions_successful
 from apit.action import any_action_needs_confirmation
-from apit.atomic_parser import is_itunes_bought_file
 from apit.cache import save_artwork_to_cache
 from apit.cache import save_metadata_to_cache
 from apit.command import Command
+from apit.command_result import CommandResult
 from apit.error import ApitError
 from apit.file_handling import extract_disc_and_track_number
 from apit.file_handling import generate_artwork_filename
@@ -24,12 +24,13 @@ from apit.store.connection import download_metadata
 from apit.store.connection import generate_lookup_url_by_str
 from apit.store.connection import generate_lookup_url_by_url
 from apit.store_data_parser import extract_songs
+from apit.tagging.read import is_itunes_bought_file
 from apit.user_input import ask_user_for_confirmation
 from apit.user_input import ask_user_for_input
 
 
 class TagCommand(Command):
-    def execute(self, files: list[Path], options) -> int:
+    def execute(self, files: list[Path], options) -> CommandResult:
         pre_action_options = to_pre_action_options(options)
 
         actions: list[Action] = [
@@ -46,7 +47,11 @@ class TagCommand(Command):
             action.apply()
 
         print_report(actions)
-        return 0 if all_actions_successful(actions) else 1
+        return (
+            CommandResult.SUCCESS
+            if all_actions_successful(actions)
+            else CommandResult.FAIL
+        )
 
 
 def to_pre_action_options(options) -> Mapping[str, list[Song] | bool | Path | None]:
@@ -66,7 +71,7 @@ def to_pre_action_options(options) -> Mapping[str, list[Song] | bool | Path | No
 
     if options.has_search_result_cache_flag and is_url(source):
         # TODO find better location for this code
-        if not len(songs):
+        if not songs:
             raise ApitError("Failed to generate a cache filename due to missing song")
         metadata_cache_file = generate_cache_filename(options.cache_path, first_song)
         save_metadata_to_cache(metadata_json, metadata_cache_file)

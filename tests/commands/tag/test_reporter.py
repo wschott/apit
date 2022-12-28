@@ -2,6 +2,7 @@ from pathlib import Path
 
 from apit.commands.tag.action import TagAction
 from apit.commands.tag.reporter import TagActionReporter
+from apit.error import ApitError
 from apit.metadata import Song
 
 
@@ -112,7 +113,7 @@ def test_status_msg_tag_not_successful(test_song: Song):
             "is_original": False,
         },
     )
-    action.mark_as_fail("test-error")
+    action.mark_as_fail(ApitError("test-error"))
 
     reporter = TagActionReporter(action)
 

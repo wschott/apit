@@ -5,13 +5,14 @@ from apit.action import Action
 from apit.action import all_actions_successful
 from apit.action import any_action_needs_confirmation
 from apit.command import Command
+from apit.command_result import CommandResult
 from apit.report import print_actions_preview
 from apit.report import print_report
 from apit.user_input import ask_user_for_confirmation
 
 
 class ShowCommand(Command):
-    def execute(self, files: list[Path], options) -> int:
+    def execute(self, files: list[Path], options) -> CommandResult:
         actions: list[Action] = [ReadAction(file, {}) for file in files]
 
         if any_action_needs_confirmation(actions):
@@ -23,4 +24,8 @@ class ShowCommand(Command):
             action.apply()
 
         print_report(actions)
-        return 0 if all_actions_successful(actions) else 1
+        return (
+            CommandResult.SUCCESS
+            if all_actions_successful(actions)
+            else CommandResult.FAIL
+        )

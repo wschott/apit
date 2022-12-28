@@ -93,7 +93,6 @@ def download_artwork(url: str) -> tuple[bytes, MIME_TYPE]:
 
 def _to_mime_type(content_type: str) -> MIME_TYPE:
     try:
-        image_type = MIME_TYPE(content_type)
+        return MIME_TYPE(content_type)
     except ValueError:
-        raise ApitError("Unknown artwork content type: %s" % content_type)
-    return image_type
+        raise ApitError(f"Unknown artwork content type: {content_type}")
