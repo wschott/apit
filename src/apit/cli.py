@@ -2,6 +2,7 @@ import sys
 from argparse import ArgumentParser
 from argparse import Namespace
 from argparse import RawDescriptionHelpFormatter
+from collections.abc import Sequence
 
 from apit.command_result import CommandResult
 from apit.commands import AVAILABLE_COMMANDS
@@ -10,7 +11,7 @@ from apit.exit_code import ExitCode
 from apit.main import main
 
 
-def parse_args(args: list[str]) -> Namespace:
+def parse_args(args: Sequence[str]) -> Namespace:
     parser = ArgumentParser(
         formatter_class=RawDescriptionHelpFormatter,
         description="""

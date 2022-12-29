@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -53,21 +54,21 @@ class Action:
         raise NotImplementedError
 
 
-def any_action_needs_confirmation(actions: list[Action]) -> bool:
+def any_action_needs_confirmation(actions: Sequence[Action]) -> bool:
     return any(action.needs_confirmation for action in actions)
 
 
-def all_actions_successful(actions: list[Action]) -> bool:
+def all_actions_successful(actions: Sequence[Action]) -> bool:
     return all(action.successful for action in actions)
 
 
-def filter_successes(actions: list[Action]) -> list[Action]:
+def filter_successes(actions: Sequence[Action]) -> list[Action]:
     return [action for action in actions if action.executed and action.successful]
 
 
-def filter_errors(actions: list[Action]) -> list[Action]:
+def filter_errors(actions: Sequence[Action]) -> list[Action]:
     return [action for action in actions if action.executed and not action.successful]
 
 
-def filter_not_actionable(actions: list[Action]) -> list[Action]:
+def filter_not_actionable(actions: Sequence[Action]) -> list[Action]:
     return [action for action in actions if not action.actionable]

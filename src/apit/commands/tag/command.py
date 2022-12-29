@@ -1,9 +1,9 @@
 import logging
 from collections.abc import Mapping
+from collections.abc import Sequence
 from pathlib import Path
 
 from .action import TagAction
-from apit.action import Action
 from apit.action import all_actions_successful
 from apit.action import any_action_needs_confirmation
 from apit.cache import save_artwork_to_cache
@@ -30,10 +30,10 @@ from apit.user_input import ask_user_for_input
 
 
 class TagCommand(Command):
-    def execute(self, files: list[Path], options) -> CommandResult:
+    def execute(self, files: Sequence[Path], options) -> CommandResult:
         pre_action_options = to_pre_action_options(options)
 
-        actions: list[Action] = [
+        actions: Sequence[TagAction] = [
             TagAction(file, to_action_options(file, pre_action_options))
             for file in files
         ]
