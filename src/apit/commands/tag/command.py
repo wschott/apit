@@ -4,6 +4,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from .action import TagAction
+from .command_reporter import print_actions_preview
 from apit.action import all_actions_successful
 from apit.action import any_action_needs_confirmation
 from apit.cache import save_artwork_to_cache
@@ -17,7 +18,6 @@ from apit.file_handling import generate_cache_filename
 from apit.file_handling import MIME_TYPE
 from apit.metadata import find_song
 from apit.metadata import Song
-from apit.report import print_actions_preview
 from apit.report import print_report
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
