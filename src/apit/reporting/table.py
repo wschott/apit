@@ -14,8 +14,9 @@ def legend_table(rows: Sequence[Sequence[str]]) -> str:
 
 def tag_preview_table(header: Sequence[str], rows: Sequence[Sequence[str]]) -> str:
     table = _to_table(header, rows)
-    table.maxwidth = 100
+    table.maxwidth = 126
     table.columns.alignment[0] = BeautifulTable.ALIGN_CENTER
+    table.columns.alignment[1] = BeautifulTable.ALIGN_CENTER
     return str(table)
 
 

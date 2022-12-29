@@ -23,16 +23,17 @@ def print_actions_preview(actions: Sequence[TagAction]) -> None:
                     to_colored_text("red", Color.RED),
                     "file not actionable (metadata not found)",
                 ],
+                [to_colored_text("green", Color.GREEN), "filename matches metadata"],
                 [
                     to_colored_text("yellow", Color.YELLOW),
-                    "metadata found -> verify match",
+                    "filename doesn't match metadata -> verify match",
                 ],
             ]
         )
     )
     print()
 
-    header: list[str] = ["Metadata\nFound?", "\nFile Name", "\nSong Name"]
+    header: list[str] = ["Metadata\nFound?", "Matching\nFilename?", "\nFile", "\nSong"]
     rows = [_to_row(action) for action in actions]
     print(tag_preview_table(header, rows))
     print()
@@ -42,6 +43,7 @@ def _to_row(action: TagAction) -> list[str]:
     color = _to_color_for_preview(action)
     return [
         _is_selected(action),
+        _has_matching_filenames(action),
         to_colored_text(text=action.file.name, color=color),
         to_colored_text(text=to_action_reporter(action).preview_msg, color=color),
     ]
@@ -50,8 +52,14 @@ def _to_row(action: TagAction) -> list[str]:
 def _to_color_for_preview(action: TagAction) -> Color:
     if not action.actionable:
         return Color.RED
+    if action.is_filename_identical_to_song:
+        return Color.GREEN
     return Color.YELLOW
 
 
 def _is_selected(action: TagAction) -> str:
     return STR_SELECTED if action.actionable else STR_NOT_SELECTED
+
+
+def _has_matching_filenames(action: TagAction) -> str:
+    return STR_SELECTED if action.is_filename_identical_to_song else STR_NOT_SELECTED

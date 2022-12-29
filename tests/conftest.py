@@ -12,6 +12,17 @@ MockAction = namedtuple(
     "MockAction", ["needs_confirmation", "executed", "successful", "actionable"]
 )
 
+MockTagAction = namedtuple(
+    "MockTagAction",
+    [
+        "needs_confirmation",
+        "executed",
+        "successful",
+        "actionable",
+        "is_filename_identical_to_song",
+    ],
+)
+
 
 @pytest.fixture()
 def song_metadata_as_json_obj():
@@ -113,6 +124,16 @@ def mock_action_actionable():
 @pytest.fixture
 def mock_action_not_actionable():
     return MockAction(None, None, None, False)
+
+
+@pytest.fixture
+def mock_action_is_filename_identical_to_song():
+    return MockTagAction(None, None, None, True, True)
+
+
+@pytest.fixture
+def mock_action_actionable_not_is_filename_identical_to_song():
+    return MockTagAction(None, None, None, True, False)
 
 
 @pytest.fixture

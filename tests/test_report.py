@@ -42,9 +42,19 @@ def test_to_color_for_result(
     assert _to_color_for_result(mock_action_success) == Color.GREEN
 
 
-def test_to_color_for_preview(mock_action_actionable, mock_action_not_actionable):
+def test_to_color_for_preview(
+    mock_action_is_filename_identical_to_song,
+    mock_action_actionable_not_is_filename_identical_to_song,
+    mock_action_not_actionable,
+):
     assert _to_color_for_preview(mock_action_not_actionable) == Color.RED
-    assert _to_color_for_preview(mock_action_actionable) == Color.YELLOW
+    assert (
+        _to_color_for_preview(mock_action_is_filename_identical_to_song) == Color.GREEN
+    )
+    assert (
+        _to_color_for_preview(mock_action_actionable_not_is_filename_identical_to_song)
+        == Color.YELLOW
+    )
 
 
 def test_is_successful(mock_action_failed, mock_action_success):

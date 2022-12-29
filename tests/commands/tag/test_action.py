@@ -80,6 +80,35 @@ def test_tag_action_metadata_not_matched(monkeypatch):
     assert action.song is None
 
 
+def test_tag_action_is_filename_identical_to_song(monkeypatch, test_song: Song):
+    action = TagAction(
+        Path(
+            "./tests/fixtures/folder-iteration/2-3 Track (feat. Other & $Artist) [Bonus Track].m4a"  # noqa: B950
+        ),
+        {},
+    )
+
+    monkeypatch.setitem(action.options, "song", test_song)
+    monkeypatch.setitem(action.options, "disc", test_song.disc_number)
+    monkeypatch.setitem(action.options, "track", test_song.track_number)
+    monkeypatch.setitem(action.options, "is_original", False)
+
+    assert action.is_filename_identical_to_song
+
+
+def test_tag_action_not_is_filename_identical_to_song(monkeypatch, test_song: Song):
+    action = TagAction(
+        Path("./tests/fixtures/folder-iteration/1 any unknown song name.m4a"), {}
+    )
+
+    monkeypatch.setitem(action.options, "song", test_song)
+    monkeypatch.setitem(action.options, "disc", test_song.disc_number)
+    monkeypatch.setitem(action.options, "track", test_song.track_number)
+    monkeypatch.setitem(action.options, "is_original", False)
+
+    assert not action.is_filename_identical_to_song
+
+
 def test_tag_action_actionable(monkeypatch, test_song):
     action = TagAction(Path("./tests/fixtures/folder-iteration/1 first.m4a"), {})
 

@@ -1,8 +1,10 @@
 import shutil
+from pathlib import Path
 
 from apit.action import Action
 from apit.error import ApitError
 from apit.metadata import Song
+from apit.string_utils import compare_normalized_caseless
 from apit.tagging.update import update_metadata
 
 
@@ -26,6 +28,16 @@ class TagAction(Action):
     @property
     def metadata_matched(self) -> bool:
         return self.options["song"] is not None
+
+    @property
+    def is_filename_identical_to_song(self) -> bool:
+        if not self.actionable:
+            return False
+        actual_file_filename = Path(self.file).with_suffix("").name
+        action_resulting_filename = f"{self.song.track_number_padded} {self.song.title}"
+        return compare_normalized_caseless(
+            actual_file_filename, action_resulting_filename
+        )
 
     @property
     def song(self) -> Song:
