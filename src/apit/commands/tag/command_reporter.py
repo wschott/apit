@@ -1,12 +1,11 @@
 from collections.abc import Sequence
 
 from .action import TagAction
-from apit.report import to_action_reporter
+from .reporter import TagActionReporter
 from apit.reporting.color import Color
 from apit.reporting.color import to_colored_text
 from apit.reporting.table import legend_table
 from apit.reporting.table import tag_preview_table
-
 
 STR_SELECTED = "✕"
 STR_NOT_SELECTED = " "
@@ -45,7 +44,7 @@ def _to_row(action: TagAction) -> list[str]:
         _is_selected(action),
         _has_matching_filenames(action),
         to_colored_text(text=action.file.name, color=color),
-        to_colored_text(text=to_action_reporter(action).preview_msg, color=color),
+        to_colored_text(text=TagActionReporter(action).preview_msg, color=color),
     ]
 
 
