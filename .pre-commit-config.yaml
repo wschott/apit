@@ -43,3 +43,4 @@ repos:
       - id: mypy
         additional_dependencies:
           - mutagen
+          - beautifultable

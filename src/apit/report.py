@@ -16,6 +16,8 @@ from apit.error import ApitError
 from apit.report_action import ActionReporter
 from apit.reporting.color import Color
 from apit.reporting.color import to_colored_text
+from apit.reporting.table import legend_table
+from apit.reporting.table import tag_preview_table
 from apit.store.constants import ITEM_KIND_MAPPING
 from apit.store.constants import MP4_MAPPING
 from apit.store.constants import RATING_MAPPING
@@ -138,15 +140,6 @@ def separator() -> str:
     return "-" * SEPARATOR_LENGTH
 
 
-def preview_line(action: Action) -> str:
-    text = TABLE_LINE_FORMAT % (
-        _is_selected(action),
-        pad_with_spaces(truncate_filename(normalize_unicode(action.file.name))),
-        to_action_reporter(action).preview_msg,
-    )
-    return to_colored_text(text=text, color=_to_color_for_preview(action))
-
-
 def result_line(action: Action) -> str:
     text = TABLE_LINE_FORMAT % (
         _is_successful(action),
@@ -180,10 +173,37 @@ def _to_color_for_result(action: Action) -> Color:
 
 def print_actions_preview(actions: Sequence[Action]) -> None:
     print("Preview:")
-    print(separator())
-    for action in actions:
-        print(preview_line(action))
     print()
+
+    print(
+        legend_table(
+            [
+                [
+                    to_colored_text("red", Color.RED),
+                    "file not actionable (metadata not found)",
+                ],
+                [
+                    to_colored_text("yellow", Color.YELLOW),
+                    "metadata found -> verify match",
+                ],
+            ]
+        )
+    )
+    print()
+
+    header: list[str] = ["Metadata\nFound?", "\nFile Name", "\nSong Name"]
+    rows = [to_row(action) for action in actions]
+    print(tag_preview_table(header, rows))
+    print()
+
+
+def to_row(action: Action) -> list[str]:
+    color = _to_color_for_preview(action)
+    return [
+        _is_selected(action),
+        to_colored_text(text=action.file.name, color=color),
+        to_colored_text(text=to_action_reporter(action).preview_msg, color=color),
+    ]
 
 
 def print_report(actions: Sequence[Action]) -> None:
