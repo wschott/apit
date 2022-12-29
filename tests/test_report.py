@@ -43,8 +43,8 @@ def test_to_color_for_result(
 
 
 def test_to_color_for_preview(mock_action_actionable, mock_action_not_actionable):
-    assert _to_color_for_preview(mock_action_not_actionable) == Color.YELLOW
-    assert _to_color_for_preview(mock_action_actionable) == Color.NONE
+    assert _to_color_for_preview(mock_action_not_actionable) == Color.RED
+    assert _to_color_for_preview(mock_action_actionable) == Color.YELLOW
 
 
 def test_is_successful(mock_action_failed, mock_action_success):

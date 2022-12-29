@@ -166,8 +166,8 @@ def _is_selected(action: Action) -> str:
 
 def _to_color_for_preview(action: Action) -> Color:
     if not action.actionable:
-        return Color.YELLOW
-    return Color.NONE
+        return Color.RED
+    return Color.YELLOW
 
 
 def _to_color_for_result(action: Action) -> Color:
