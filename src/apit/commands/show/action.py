@@ -5,7 +5,7 @@ from apit.tagging.read import read_metadata
 
 class ReadAction(Action):
     @property
-    def needs_confirmation(self) -> bool:
+    def needs_confirmation(self) -> bool:  # TODO delete? not used anyway
         return False
 
     @property

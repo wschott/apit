@@ -3,21 +3,14 @@ from pathlib import Path
 
 from .action import ReadAction
 from apit.action import all_actions_successful
-from apit.action import any_action_needs_confirmation
 from apit.command import Command
 from apit.command_result import CommandResult
-from apit.report import print_actions_preview
 from apit.report import print_report
-from apit.user_input import ask_user_for_confirmation
 
 
 class ShowCommand(Command):
     def execute(self, files: Sequence[Path], options) -> CommandResult:
         actions: Sequence[ReadAction] = [ReadAction(file, {}) for file in files]
-
-        if any_action_needs_confirmation(actions):
-            print_actions_preview(actions)
-            ask_user_for_confirmation()
 
         for action in actions:
             print("Executing:", action)
