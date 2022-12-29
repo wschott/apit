@@ -1,5 +1,4 @@
 from collections.abc import Mapping
-from enum import Enum
 from typing import Any
 
 import mutagen.mp4
@@ -14,18 +13,17 @@ from apit.commands.tag.action import TagAction
 from apit.commands.tag.reporter import TagActionReporter
 from apit.error import ApitError
 from apit.report_action import ActionReporter
+from apit.reporting.color import Color
+from apit.reporting.color import to_colored_text
 from apit.store.constants import ITEM_KIND_MAPPING
 from apit.store.constants import MP4_MAPPING
 from apit.store.constants import RATING_MAPPING
 from apit.store.constants import STORE_KIND
 from apit.store.constants import STORE_RATING
 from apit.string_utils import normalize_unicode
-
-PREFIX = "\033[3%dm"
-SUFFIX = "\033[0m"
+from apit.string_utils import truncate_text
 
 FILENAME_TRUNCATION_LIMIT = 60
-ELLIPSIS = "…"
 SEPARATOR_LENGTH = 80
 
 TABLE_LINE_FORMAT = "[%s] %s  →  %s"
@@ -127,26 +125,8 @@ ORDER_INFO_USER = [
 ]
 
 
-class Color(Enum):
-    NONE = -1
-    RED = 1
-    GREEN = 2
-    YELLOW = 3
-    BLUE = 4
-    MAGENTA = 5
-
-
-def to_colored_text(text: str, color: Color) -> str:
-    if color == Color.NONE:
-        return text
-    return f"{PREFIX % color.value}{text}{SUFFIX}"
-
-
-def truncate_filename(filename: str, length: int = FILENAME_TRUNCATION_LIMIT) -> str:
-    if len(filename) <= length:
-        return filename
-
-    return filename[: (length - len(ELLIPSIS))] + ELLIPSIS
+def truncate_filename(text: str, length: int = FILENAME_TRUNCATION_LIMIT) -> str:
+    return truncate_text(text, length)
 
 
 def pad_with_spaces(string: str, length: int = FILENAME_TRUNCATION_LIMIT) -> str:

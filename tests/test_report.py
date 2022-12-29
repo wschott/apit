@@ -2,14 +2,14 @@ from apit.report import _is_selected
 from apit.report import _is_successful
 from apit.report import _to_color_for_preview
 from apit.report import _to_color_for_result
-from apit.report import Color
 from apit.report import pad_with_spaces
 from apit.report import STR_FAIL
 from apit.report import STR_NOT_SELECTED
 from apit.report import STR_SELECTED
 from apit.report import STR_SUCCESS
-from apit.report import to_colored_text
 from apit.report import truncate_filename
+from apit.reporting.color import Color
+from apit.reporting.color import to_colored_text
 
 
 def test_to_colored_text_no_color():
