@@ -22,6 +22,7 @@ from apit.store.constants import RATING_MAPPING
 from apit.store.constants import STORE_KIND
 from apit.store.constants import STORE_RATING
 from apit.string_utils import normalize_unicode
+from apit.string_utils import pad_with_spaces
 from apit.string_utils import truncate_text
 
 FILENAME_TRUNCATION_LIMIT = 60
@@ -128,10 +129,6 @@ def truncate_filename(text: str, length: int = FILENAME_TRUNCATION_LIMIT) -> str
     return truncate_text(text, length)
 
 
-def pad_with_spaces(string: str, length: int = FILENAME_TRUNCATION_LIMIT) -> str:
-    return string.ljust(length, " ")
-
-
 def separator() -> str:
     return "-" * SEPARATOR_LENGTH
 
@@ -139,7 +136,10 @@ def separator() -> str:
 def result_line(action: Action) -> str:
     text = TABLE_LINE_FORMAT % (
         _is_successful(action),
-        pad_with_spaces(truncate_filename(normalize_unicode(action.file.name))),
+        pad_with_spaces(
+            truncate_filename(normalize_unicode(action.file.name)),
+            FILENAME_TRUNCATION_LIMIT,
+        ),
         to_action_reporter(action).status_msg,
     )
     return to_colored_text(text=text, color=_to_color_for_result(action))

@@ -19,3 +19,7 @@ def compare_normalized_caseless(string1: str, string2: str) -> bool:
     return normalize_unicode(
         normalize_unicode(string1).casefold()
     ) == normalize_unicode(normalize_unicode(string2).casefold())
+
+
+def pad_with_spaces(string: str, length: int) -> str:
+    return string.ljust(length, " ")
