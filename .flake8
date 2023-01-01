@@ -1,0 +1,6 @@
+# flake8 does not support pyproject.toml: https://github.com/PyCQA/flake8/issues/234
+
+[flake8]
+max-line-length = 88
+extend-select = B950
+extend-ignore = E203, E501

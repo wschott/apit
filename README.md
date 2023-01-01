@@ -129,7 +129,7 @@ To see more information what happens you can put `-v` into your command. Using `
 
 Install apit in an editable mode:
 
-    $ pip install -e ".[dev]"
+    $ pip install --editable ".[dev]"
 
 This will install [tox](https://tox.readthedocs.io/) and other development tools.
 Tox is used to run for example tests in an isolated environment. Show all possible actions using:
