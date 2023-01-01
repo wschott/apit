@@ -1,4 +1,4 @@
-from collections.abc import Sequence
+from collections.abc import Iterable
 
 from .action import TagAction
 from .reporter import TagActionReporter
@@ -11,7 +11,7 @@ STR_SELECTED = "✕"
 STR_NOT_SELECTED = " "
 
 
-def print_actions_preview(actions: Sequence[TagAction]) -> None:
+def print_actions_preview(actions: Iterable[TagAction]) -> None:
     print("Preview:")
     print()
 

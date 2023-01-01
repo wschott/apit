@@ -1,5 +1,5 @@
+from collections.abc import Iterable
 from collections.abc import Mapping
-from collections.abc import Sequence
 from typing import Any
 
 import mutagen.mp4
@@ -157,7 +157,7 @@ def _to_color_for_result(action: Action) -> Color:
     return Color.GREEN
 
 
-def print_report(actions: Sequence[Action]) -> None:
+def print_report(actions: Iterable[Action]) -> None:
     successes = filter_successes(actions)
     if successes:
         print("\nProcess results:")
@@ -303,7 +303,7 @@ def is_known_mp4_mapping(key: str) -> bool:
         return True
 
 
-def print_summary(actions: Sequence[Action]) -> None:
+def print_summary(actions: Iterable[Action]) -> None:
     print("\nSummary:")
     print(separator())
     for action in actions:

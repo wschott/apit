@@ -1,9 +1,9 @@
-from collections.abc import Sequence
+from collections.abc import Iterable
 
 from beautifultable import BeautifulTable
 
 
-def legend_table(rows: Sequence[Sequence[str]]) -> str:
+def legend_table(rows: Iterable[Iterable[str]]) -> str:
     table = BeautifulTable(default_alignment=BeautifulTable.ALIGN_LEFT)
     table.set_style(BeautifulTable.STYLE_NONE)
     table.columns.separator = "→"
@@ -12,7 +12,7 @@ def legend_table(rows: Sequence[Sequence[str]]) -> str:
     return str(table)
 
 
-def tag_preview_table(header: Sequence[str], rows: Sequence[Sequence[str]]) -> str:
+def tag_preview_table(header: Iterable[str], rows: Iterable[Iterable[str]]) -> str:
     table = _to_table(header, rows)
     table.maxwidth = 126
     table.columns.alignment[0] = BeautifulTable.ALIGN_CENTER
@@ -20,7 +20,7 @@ def tag_preview_table(header: Sequence[str], rows: Sequence[Sequence[str]]) -> s
     return str(table)
 
 
-def _to_table(header: Sequence[str], rows: Sequence[Sequence[str]]) -> BeautifulTable:
+def _to_table(header: Iterable[str], rows: Iterable[Iterable[str]]) -> BeautifulTable:
     table = BeautifulTable(default_alignment=BeautifulTable.ALIGN_LEFT)
     table.set_style(BeautifulTable.STYLE_COMPACT)
     table.columns.header = header

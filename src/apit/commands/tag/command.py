@@ -1,6 +1,6 @@
 import logging
+from collections.abc import Iterable
 from collections.abc import Mapping
-from collections.abc import Sequence
 from pathlib import Path
 
 from .action import TagAction
@@ -30,10 +30,10 @@ from apit.user_input import ask_user_for_input
 
 
 class TagCommand(Command):
-    def execute(self, files: Sequence[Path], options) -> CommandResult:
+    def execute(self, files: Iterable[Path], options) -> CommandResult:
         pre_action_options = to_pre_action_options(options)
 
-        actions: Sequence[TagAction] = [
+        actions: list[TagAction] = [
             TagAction(file, to_action_options(file, pre_action_options))
             for file in files
         ]

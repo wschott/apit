@@ -1,4 +1,4 @@
-from collections.abc import Sequence
+from collections.abc import Iterable
 from pathlib import Path
 
 from .action import ReadAction
@@ -9,8 +9,8 @@ from apit.report import print_report
 
 
 class ShowCommand(Command):
-    def execute(self, files: Sequence[Path], options) -> CommandResult:
-        actions: Sequence[ReadAction] = [ReadAction(file, {}) for file in files]
+    def execute(self, files: Iterable[Path], options) -> CommandResult:
+        actions: list[ReadAction] = [ReadAction(file, {}) for file in files]
 
         for action in actions:
             print("Executing:", action)

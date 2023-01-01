@@ -1,6 +1,6 @@
 import os
 import re
-from collections.abc import Sequence
+from collections.abc import Iterable
 from enum import Enum
 from pathlib import Path
 
@@ -24,7 +24,7 @@ MIME_TPYE_TO_EXTENSION_MAP = {
 
 
 def collect_files(
-    path_string: str, filter_ext: Sequence[str] | str | None = None
+    path_string: str, filter_ext: Iterable[str] | str | None = None
 ) -> list[Path]:
     path = Path(path_string).expanduser()
 
