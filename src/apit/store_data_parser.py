@@ -18,11 +18,7 @@ def extract_songs(metadata_json: str) -> list[Song]:
     except json.JSONDecodeError:
         raise ApitError("Apple Music/iTunes Store metadata results format error")
 
-    if (
-        "results" not in itunes_data
-        or "resultCount" not in itunes_data
-        or itunes_data["resultCount"] == 0
-    ):
+    if "results" not in itunes_data or not itunes_data["results"]:
         raise ApitError("Apple Music/iTunes Store metadata results empty")
 
     return _find_songs(itunes_data["results"], _find_album(itunes_data["results"]))
