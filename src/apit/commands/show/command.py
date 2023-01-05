@@ -16,7 +16,10 @@ class ShowCommand(Command):
             print("Executing:", action)
             action.apply()
 
-        print_report(actions)
+        print_report(
+            actions,
+            verbose=options.verbose_level is not None and options.verbose_level > 0,
+        )
         return (
             CommandResult.SUCCESS
             if all_actions_successful(actions)
