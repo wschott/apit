@@ -7,12 +7,10 @@ import pytest
 
 from apit.error import ApitError
 from apit.error import ApitStoreConnectionError
-from apit.error import ApitSystemCountryCodeDeterminationError
 from apit.file_handling import MIME_TYPE
 from apit.store.connection import _to_mime_type
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
-from apit.store.connection import generate_lookup_url_by_str
 from apit.store.connection import generate_lookup_url_by_url
 
 # fmt: off
@@ -45,27 +43,8 @@ def test_generate_lookup_url_by_url_using_invalid_url():
         generate_lookup_url_by_url("http://invalid-url.com/")
     with pytest.raises(ApitError):
         generate_lookup_url_by_url(STORE_URL_INVALID)
-
-
-def test_generate_lookup_url_by_str():
-    assert generate_lookup_url_by_str("US,12345") == LOOKUP_URL
-    assert generate_lookup_url_by_str("us.12345") == LOOKUP_URL
-
-
-def test_generate_lookup_url_by_str_invalid():
     with pytest.raises(ApitError):
-        generate_lookup_url_by_str(",12345")
-
-
-def test_generate_lookup_url_by_str_using_locale(monkeypatch):
-    monkeypatch.setattr("locale.getdefaultlocale", lambda: ("ab_XY", "uft8"))
-    assert generate_lookup_url_by_str("12345") == LOOKUP_URL_NON_US
-
-
-def test_generate_lookup_url_by_str_using_invalid_locale(monkeypatch):
-    monkeypatch.setattr("locale.getdefaultlocale", lambda: ("XY", "uft8"))
-    with pytest.raises(ApitSystemCountryCodeDeterminationError):
-        generate_lookup_url_by_str("12345")
+        generate_lookup_url_by_url("US,12345")
 
 
 def test_download_metadata():

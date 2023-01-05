@@ -21,10 +21,10 @@ from apit.metadata import Song
 from apit.report import print_report
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
-from apit.store.connection import generate_lookup_url_by_str
 from apit.store.connection import generate_lookup_url_by_url
 from apit.store_data_parser import extract_songs
 from apit.tagging.read import is_itunes_bought_file
+from apit.url_utils import is_url
 from apit.user_input import ask_user_for_confirmation
 from apit.user_input import ask_user_for_input
 
@@ -144,10 +144,6 @@ def get_cached_artwork_path_if_exists(song: Song, options) -> Path | None:
     return None
 
 
-def is_url(source: str) -> bool:
-    return source.startswith("http")
-
-
 def get_metadata_json(source: str) -> str:
     logging.info("Input source: %s", source)
     if Path(source).exists():
@@ -159,11 +155,6 @@ def get_metadata_json(source: str) -> str:
     elif is_url(source):
         logging.info("Use URL to download metadata: %s", source)
         query_url = generate_lookup_url_by_url(source)
-        logging.info("Query URL: %s", query_url)
-        return download_metadata(query_url)
-    elif isinstance(source, str):
-        logging.info("Use URL composition to download metadata: %s", source)
-        query_url = generate_lookup_url_by_str(source)
         logging.info("Query URL: %s", query_url)
         return download_metadata(query_url)
     raise ApitError(f"Invalid input source: {source}")

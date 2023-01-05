@@ -78,9 +78,6 @@ You can provide the source using a command line option instead of entering/pasti
 
 - either using an **url** (depending on your OS you maybe have to quote the url)
 - or using an **already downloaded metadata file** (i.e. no further download will happen)
-- or using an **ID**
-   - with an optional country code: any non-digit character is required as a separator
-   - without a country code: your system's locale will be used
 
 Example using an url:
 
@@ -89,11 +86,6 @@ Example using an url:
 Example using an existing metadata file:
 
     $ apit tag ~/Music/Music/Media/Artist/Album/ ~/.apit/Artist-Album-123456789.json
-
-Example using an ID:
-
-    $ apit tag ~/Music/Music/Media/Artist/Album/ us,123456789 # separator character is a comma (",")
-    $ apit tag ~/Music/Music/Media/Artist/Album/ 123456789    # uses your system's locale for store determination
 
 ## Artwork
 
