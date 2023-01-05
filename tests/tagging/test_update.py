@@ -17,28 +17,24 @@ def test_modify_mp4_file(test_song: Song):
     mock_mp4_file = _mocked_mp4_file()
     updated_mock_mp4_file = _modify_mp4_file(mock_mp4_file, test_song)
 
-    assert updated_mock_mp4_file[MP4_MAPPING.ARTIST.value] == test_song.artist
-    assert updated_mock_mp4_file[MP4_MAPPING.TITLE.value] == test_song.title
-    assert updated_mock_mp4_file[MP4_MAPPING.ALBUM_NAME.value] == test_song.album_name
-    assert updated_mock_mp4_file[MP4_MAPPING.GENRE.value] == test_song.genre
-    assert (
-        updated_mock_mp4_file[MP4_MAPPING.RELEASE_DATE.value] == test_song.release_date
-    )
-    assert updated_mock_mp4_file[MP4_MAPPING.DISC_NUMBER.value] == [
+    assert updated_mock_mp4_file[MP4_MAPPING.ARTIST] == test_song.artist
+    assert updated_mock_mp4_file[MP4_MAPPING.TITLE] == test_song.title
+    assert updated_mock_mp4_file[MP4_MAPPING.ALBUM_NAME] == test_song.album_name
+    assert updated_mock_mp4_file[MP4_MAPPING.GENRE] == test_song.genre
+    assert updated_mock_mp4_file[MP4_MAPPING.RELEASE_DATE] == test_song.release_date
+    assert updated_mock_mp4_file[MP4_MAPPING.DISC_NUMBER] == [
         (test_song.disc_number, test_song.disc_total)
     ]
-    assert updated_mock_mp4_file[MP4_MAPPING.TRACK_NUMBER.value] == [
+    assert updated_mock_mp4_file[MP4_MAPPING.TRACK_NUMBER] == [
         (test_song.track_number, test_song.track_total)
     ]
-    assert updated_mock_mp4_file[MP4_MAPPING.RATING.value] == [1]
-    assert updated_mock_mp4_file[MP4_MAPPING.MEDIA_TYPE.value] == [1]
-    assert (
-        updated_mock_mp4_file[MP4_MAPPING.ALBUM_ARTIST.value] == test_song.album_artist
-    )
-    assert updated_mock_mp4_file[MP4_MAPPING.COPYRIGHT.value] == test_song.copyright
-    assert updated_mock_mp4_file[MP4_MAPPING.COMPILATION.value] == test_song.compilation
-    assert updated_mock_mp4_file[MP4_MAPPING.CONTENT_ID.value] == [test_song.content_id]
-    assert MP4_MAPPING.ARTWORK.value not in updated_mock_mp4_file
+    assert updated_mock_mp4_file[MP4_MAPPING.RATING] == [1]
+    assert updated_mock_mp4_file[MP4_MAPPING.MEDIA_TYPE] == [1]
+    assert updated_mock_mp4_file[MP4_MAPPING.ALBUM_ARTIST] == test_song.album_artist
+    assert updated_mock_mp4_file[MP4_MAPPING.COPYRIGHT] == test_song.copyright
+    assert updated_mock_mp4_file[MP4_MAPPING.COMPILATION] == test_song.compilation
+    assert updated_mock_mp4_file[MP4_MAPPING.CONTENT_ID] == [test_song.content_id]
+    assert MP4_MAPPING.ARTWORK not in updated_mock_mp4_file
 
 
 def test_modify_mp4_file_with_cover(test_song: Song):
@@ -46,8 +42,8 @@ def test_modify_mp4_file_with_cover(test_song: Song):
     mock_mp4_file = _mocked_mp4_file()
     updated_mock_mp4_file = _modify_mp4_file(mock_mp4_file, test_song, artwork)
 
-    assert updated_mock_mp4_file[MP4_MAPPING.ARTWORK.value] == [artwork]
-    assert updated_mock_mp4_file[MP4_MAPPING.ARTIST.value] == test_song.artist
+    assert updated_mock_mp4_file[MP4_MAPPING.ARTWORK] == [artwork]
+    assert updated_mock_mp4_file[MP4_MAPPING.ARTIST] == test_song.artist
 
 
 def test_metadata_updating(monkeypatch, test_song: Song):

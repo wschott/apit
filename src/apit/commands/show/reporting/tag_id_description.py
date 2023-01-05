@@ -24,24 +24,24 @@ class TagIdDescriptionValue:
 
     def value(self, verbose: bool) -> str:
         if self.tag_id in [
-            MP4_MAPPING.COMPILATION.value,
-            MP4_MAPPING.GAPLESS.value,
+            MP4_MAPPING.COMPILATION,
+            MP4_MAPPING.GAPLESS,
         ]:  # no list
             return "<yes>" if self._unprocessed_value else "<no>"
-        elif self.tag_id == MP4_MAPPING.RATING.value:  # list
+        elif self.tag_id == MP4_MAPPING.RATING:  # list
             return RATING_TO_HUMAN_READABLE[int(self._unprocessed_value[0])]
-        elif self.tag_id == MP4_MAPPING.MEDIA_TYPE.value:  # list
+        elif self.tag_id == MP4_MAPPING.MEDIA_TYPE:  # list
             return MEDIA_TYPE_TO_HUMAN_READABLE[self._unprocessed_value[0]]
-        elif self.tag_id == MP4_MAPPING.LYRICS.value:  # list
+        elif self.tag_id == MP4_MAPPING.LYRICS:  # list
             lyrics = self._unprocessed_value[0]
             if verbose:
                 return lyrics.replace("\r", os.linesep)
             return "<present>"
-        elif self.tag_id == MP4_MAPPING.ARTWORK.value:  # list
+        elif self.tag_id == MP4_MAPPING.ARTWORK:  # list
             return f"<{len(self._unprocessed_value)} present>"
         elif self.tag_id in [  # list w/ one tuple
-            MP4_MAPPING.TRACK_NUMBER.value,
-            MP4_MAPPING.DISC_NUMBER.value,
+            MP4_MAPPING.TRACK_NUMBER,
+            MP4_MAPPING.DISC_NUMBER,
         ]:
             item = self._unprocessed_value[0][0] or "<none>"
             total_items = self._unprocessed_value[0][1] or "<none>"

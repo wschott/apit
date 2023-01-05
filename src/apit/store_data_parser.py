@@ -86,6 +86,6 @@ def to_song(album: Album, item: dict[str, Any]) -> Song:
 def extract_by_key(key: STORE_KEY, item: dict[str, Any]) -> Any:
     if not isinstance(key, STORE_KEY):
         raise ApitError(f"Unknown metadata key: {key}")
-    if key.value not in item:
-        raise ApitError("Metadata key not found in metadata: %s" % key.value)
-    return item[key.value]
+    if key not in item:
+        raise ApitError("Metadata key not found in metadata: %s" % key)
+    return item[key]

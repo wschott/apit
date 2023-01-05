@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from enum import Enum
 
 from apit.error import ApitError
+from apit.str_enum import StrEnum
 
 COLLECTION_TYPE_KEY = "collectionType"
 VALID_COLLECTION_TYPE_FOR_ALBUM = "Album"
@@ -13,7 +14,7 @@ KIND_KEY = "kind"
 VALID_KIND_VALUES_FOR_SONG = "song"
 
 
-class STORE_KEY(Enum):
+class STORE_KEY(StrEnum):
     # fmt: off
     # song values
     ARTIST          = 'artistName'
@@ -122,7 +123,7 @@ def to_item_kind(kind_str: str) -> STORE_KIND:
 # }
 
 # Atom meanings: see https://github.com/quodlibet/mutagen/blob/master/mutagen/mp4/__init__.py
-class MP4_MAPPING(Enum):
+class MP4_MAPPING(StrEnum):
     # fmt: off
     TITLE           = '\xa9nam'
     ALBUM_NAME      = '\xa9alb'
@@ -168,6 +169,6 @@ class MP4_MAPPING(Enum):
 
 
 BLACKLIST: list[str] = [
-    MP4_MAPPING.OWNER_NAME.value,
-    MP4_MAPPING.USER_MAIL.value,
+    MP4_MAPPING.OWNER_NAME,
+    MP4_MAPPING.USER_MAIL,
 ]
