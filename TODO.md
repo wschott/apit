@@ -14,6 +14,7 @@
 - add flag to add a new artwork instead of removing all before adding
 - new command: download lyrics
 - add mp3 support
+- search store results and match against local files
 
 
 # Development
