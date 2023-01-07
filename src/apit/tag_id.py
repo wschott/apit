@@ -1,0 +1,2 @@
+class TagId(str):
+    pass

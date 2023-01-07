@@ -6,6 +6,7 @@ from apit.commands.show.reporting.readable_names import RATING_TO_READABLE_NAME
 from apit.commands.show.reporting.readable_names import ReadableTagName
 from apit.commands.show.reporting.tag_id_description import TagIdDescriptionValue
 from apit.store.constants import MP4_MAPPING
+from apit.tag_id import TagId
 
 
 MP4_MAPPING_TO_READABLE_TAG_NAME: Mapping[MP4_MAPPING, ReadableTagName] = {
@@ -48,7 +49,7 @@ MP4_MAPPING_TO_READABLE_TAG_NAME: Mapping[MP4_MAPPING, ReadableTagName] = {
 
 
 class Mp4Tag(TagIdDescriptionValue):
-    def _get_human_readable_description(self, tag_id: str) -> str | None:
+    def _get_human_readable_description(self, tag_id: TagId) -> str | None:
         try:
             mapped_tag_id = MP4_MAPPING(tag_id)
             return MP4_MAPPING_TO_READABLE_TAG_NAME.get(mapped_tag_id, None)

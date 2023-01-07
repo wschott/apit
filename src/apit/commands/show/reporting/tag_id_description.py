@@ -2,14 +2,16 @@ from abc import ABC
 from abc import abstractmethod
 from typing import Any
 
+from apit.tag_id import TagId
+
 
 class TagIdDescriptionValue(ABC):
-    def __init__(self, tag_id: str, value: Any) -> None:
-        self.tag_id: str = tag_id
+    def __init__(self, tag_id: TagId, value: Any) -> None:
+        self.tag_id: TagId = tag_id
         self._unprocessed_value: Any = value
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, str):
+        if isinstance(other, TagId):
             return self.tag_id == other
         return False
 
@@ -19,7 +21,7 @@ class TagIdDescriptionValue(ABC):
         return self.tag_id
 
     @abstractmethod
-    def _get_human_readable_description(self, tag_id: str) -> str | None:
+    def _get_human_readable_description(self, tag_id: TagId) -> str | None:
         return NotImplemented
 
     @abstractmethod

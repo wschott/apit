@@ -14,12 +14,13 @@ from apit.commands.show.reporting.tag_ordering import ORDERED_USER_TAGS
 from apit.list_utils import flat_map
 from apit.reporting.table import metadata_inline_table
 from apit.reporting.table import metadata_table
+from apit.tag_id import TagId
 
 
 @dataclass
 class NamedSection:
     title: str
-    tag_ids: Iterable[str]
+    tag_ids: Iterable[TagId]
 
 
 KNOWN_NAMED_SECTIONS: list[NamedSection] = [
@@ -39,7 +40,7 @@ class MetadataSection:
 
 def print_tags(mp4_tags: Iterable[tuple[str, Any]], verbose: bool) -> str:
     all_tag_value_pairs_in_file: list[TagIdDescriptionValue] = [
-        Mp4Tag(tag_id=tag, value=tag_value) for tag, tag_value in mp4_tags
+        Mp4Tag(tag_id=TagId(tag), value=tag_value) for tag, tag_value in mp4_tags
     ]
     file_tags = FileTags(all_tag_value_pairs_in_file)
     known_tag_ids = flat_map(
@@ -72,14 +73,14 @@ def to_metadata_sections(
         MetadataSection(section.title, section_tag_values)
         for section in sections
         if (
-            section_tag_values := to_named_rows(
+            section_tag_values := to_table_rows(
                 file_tags.filter(section.tag_ids), verbose
             )
         )
     ]
 
 
-def to_named_rows(
+def to_table_rows(
     tags: Iterable[TagIdDescriptionValue], verbose: bool
 ) -> list[tuple[str, str]]:
     return [(tag.description(verbose), tag.value(verbose)) for tag in tags]

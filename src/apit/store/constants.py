@@ -7,6 +7,7 @@ from enum import Enum
 
 from apit.error import ApitError
 from apit.str_enum import StrEnum
+from apit.tag_id import TagId
 
 COLLECTION_TYPE_KEY = "collectionType"
 VALID_COLLECTION_TYPE_FOR_ALBUM = "Album"
@@ -122,8 +123,13 @@ def to_item_kind(kind_str: str) -> STORE_KIND:
 #     'World': 19
 # }
 
+
+class TagIdEnum(TagId, Enum):
+    pass
+
+
 # Atom meanings: see https://github.com/quodlibet/mutagen/blob/master/mutagen/mp4/__init__.py
-class MP4_MAPPING(StrEnum):
+class MP4_MAPPING(TagIdEnum):
     # fmt: off
     TITLE           = '\xa9nam'
     ALBUM_NAME      = '\xa9alb'
