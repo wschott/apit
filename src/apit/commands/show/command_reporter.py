@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from apit.commands.show.reporting.file_tags import FileTags
+from apit.commands.show.reporting.mp4.mp4_tag import Mp4Tag
 from apit.commands.show.reporting.tag_id_description import TagIdDescriptionValue
 from apit.commands.show.reporting.tag_ordering import ORDERED_ALBUM_TAGS
 from apit.commands.show.reporting.tag_ordering import ORDERED_ID_TAGS
@@ -38,8 +39,7 @@ class MetadataSection:
 
 def print_tags(mp4_tags: Iterable[tuple[str, Any]], verbose: bool) -> str:
     all_tag_value_pairs_in_file: list[TagIdDescriptionValue] = [
-        TagIdDescriptionValue(tag_id=tag, value=tag_value)
-        for tag, tag_value in mp4_tags
+        Mp4Tag(tag_id=tag, value=tag_value) for tag, tag_value in mp4_tags
     ]
     file_tags = FileTags(all_tag_value_pairs_in_file)
     known_tag_ids = flat_map(
