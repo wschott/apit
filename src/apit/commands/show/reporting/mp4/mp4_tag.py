@@ -1,12 +1,53 @@
 import os
 from collections.abc import Mapping
 
-from apit.commands.show.reporting.readable_names import MEDIA_TYPE_TO_READABLE_NAME
-from apit.commands.show.reporting.readable_names import RATING_TO_READABLE_NAME
 from apit.commands.show.reporting.readable_names import ReadableTagName
-from apit.commands.show.reporting.tag_id_description import TagIdDescriptionValue
+from apit.commands.show.reporting.tagged_value import TaggedValue
+from apit.store.constants import ITEM_KIND_MAPPING
 from apit.store.constants import MP4_MAPPING
+from apit.store.constants import RATING_MAPPING
+from apit.store.constants import STORE_KIND
+from apit.store.constants import STORE_RATING
 from apit.tag_id import TagId
+
+
+class Mp4Tag(TaggedValue):
+    def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
+        try:
+            mapped_tag_id = MP4_MAPPING(tag_id)
+            return MP4_MAPPING_TO_READABLE_TAG_NAME.get(mapped_tag_id, None)
+        except ValueError:
+            return None
+
+    def value(self, verbose: bool) -> str:
+        if self.tag_id in [
+            MP4_MAPPING.COMPILATION,
+            MP4_MAPPING.GAPLESS,
+        ]:  # no list
+            return "<yes>" if self._unprocessed_value else "<no>"
+        elif self.tag_id == MP4_MAPPING.RATING:  # list
+            return RATING_TO_READABLE_NAME[int(self._unprocessed_value[0])]
+        elif self.tag_id == MP4_MAPPING.MEDIA_TYPE:  # list
+            return MEDIA_TYPE_TO_READABLE_NAME[self._unprocessed_value[0]]
+        elif self.tag_id == MP4_MAPPING.LYRICS:  # list
+            lyrics = self._unprocessed_value[0]
+            if verbose:
+                return lyrics.replace("\r", os.linesep)
+            return "<present>"
+        elif self.tag_id == MP4_MAPPING.ARTWORK:  # list
+            return f"<{len(self._unprocessed_value)} present>"
+        elif self.tag_id in [  # list with one tuple
+            MP4_MAPPING.TRACK_NUMBER,
+            MP4_MAPPING.DISC_NUMBER,
+        ]:
+            item = self._unprocessed_value[0][0] or "<none>"
+            total_items = self._unprocessed_value[0][1] or "<none>"
+            return f"{item}/{total_items}"
+
+        elif isinstance(self._unprocessed_value, list):  # most mp4 tags
+            return "".join([str(x) for x in self._unprocessed_value])
+        else:
+            return self._unprocessed_value
 
 
 MP4_MAPPING_TO_READABLE_TAG_NAME: Mapping[MP4_MAPPING, ReadableTagName] = {
@@ -48,40 +89,12 @@ MP4_MAPPING_TO_READABLE_TAG_NAME: Mapping[MP4_MAPPING, ReadableTagName] = {
 }
 
 
-class Mp4Tag(TagIdDescriptionValue):
-    def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
-        try:
-            mapped_tag_id = MP4_MAPPING(tag_id)
-            return MP4_MAPPING_TO_READABLE_TAG_NAME.get(mapped_tag_id, None)
-        except ValueError:
-            return None
-
-    def value(self, verbose: bool) -> str:
-        if self.tag_id in [
-            MP4_MAPPING.COMPILATION,
-            MP4_MAPPING.GAPLESS,
-        ]:  # no list
-            return "<yes>" if self._unprocessed_value else "<no>"
-        elif self.tag_id == MP4_MAPPING.RATING:  # list
-            return RATING_TO_READABLE_NAME[int(self._unprocessed_value[0])]
-        elif self.tag_id == MP4_MAPPING.MEDIA_TYPE:  # list
-            return MEDIA_TYPE_TO_READABLE_NAME[self._unprocessed_value[0]]
-        elif self.tag_id == MP4_MAPPING.LYRICS:  # list
-            lyrics = self._unprocessed_value[0]
-            if verbose:
-                return lyrics.replace("\r", os.linesep)
-            return "<present>"
-        elif self.tag_id == MP4_MAPPING.ARTWORK:  # list
-            return f"<{len(self._unprocessed_value)} present>"
-        elif self.tag_id in [  # list with one tuple
-            MP4_MAPPING.TRACK_NUMBER,
-            MP4_MAPPING.DISC_NUMBER,
-        ]:
-            item = self._unprocessed_value[0][0] or "<none>"
-            total_items = self._unprocessed_value[0][1] or "<none>"
-            return f"{item}/{total_items}"
-
-        elif isinstance(self._unprocessed_value, list):  # most mp4 tags
-            return "".join([str(x) for x in self._unprocessed_value])
-        else:
-            return self._unprocessed_value
+RATING_TO_READABLE_NAME: Mapping[int, str] = {
+    4: "<explicit (old value)>",  # TODO
+    RATING_MAPPING[STORE_RATING.CLEAN]: "<clean>",
+    RATING_MAPPING[STORE_RATING.EXPLICIT]: "<explicit>",
+    RATING_MAPPING[STORE_RATING.NONE]: "<inoffensive>",
+}
+MEDIA_TYPE_TO_READABLE_NAME: Mapping[int, str] = {
+    ITEM_KIND_MAPPING[STORE_KIND.SONG]: "<normal>",
+}

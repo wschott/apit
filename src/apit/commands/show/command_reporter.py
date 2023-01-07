@@ -9,7 +9,7 @@ from apit.commands.show.reporting.named_tag_sections import ORDER_MISC
 from apit.commands.show.reporting.named_tag_sections import ORDER_TRACK
 from apit.commands.show.reporting.named_tag_sections import ORDER_USER
 from apit.commands.show.reporting.readable_names import ReadableTagName
-from apit.commands.show.reporting.tag_id_description import TagIdDescriptionValue
+from apit.commands.show.reporting.tagged_value import TaggedValue
 from apit.list_utils import flat_map
 from apit.reporting.table import metadata_inline_table
 from apit.reporting.table import metadata_table
@@ -44,7 +44,7 @@ def print_tags(file_tags: FileTags, verbose: bool) -> str:
             to_table_rows(
                 sorted(
                     file_tags.filter_unknown(),
-                    key=lambda tag_id_desc_value: tag_id_desc_value.tag_id,
+                    key=lambda tag: tag.tag_id,
                 ),
                 verbose,
             ),
@@ -76,16 +76,14 @@ def to_metadata_sections(
     ]
 
 
-def to_table_rows(
-    tags: Iterable[TagIdDescriptionValue], verbose: bool
-) -> list[tuple[str, str]]:
+def to_table_rows(tags: Iterable[TaggedValue], verbose: bool) -> list[tuple[str, str]]:
     return [(tag.description(verbose), tag.value(verbose)) for tag in tags]
 
 
 def calculate_tag_max_len(sections: Iterable[MetadataSection]) -> int:
     extract_values: Callable[
         [MetadataSection], list[tuple[str, str]]
-    ] = lambda x: x.values
+    ] = lambda section: section.values
 
     values_of_sections: list[tuple[str, str]] = flat_map(extract_values, sections)
     return max(len(description) for description, _ in values_of_sections)

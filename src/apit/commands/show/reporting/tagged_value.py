@@ -6,7 +6,7 @@ from apit.commands.show.reporting.readable_names import ReadableTagName
 from apit.tag_id import TagId
 
 
-class TagIdDescriptionValue(ABC):
+class TaggedValue(ABC):
     def __init__(self, tag_id: TagId, value: Any) -> None:
         self.tag_id: TagId = tag_id
         self.readable_name: ReadableTagName | None = self._get_readable_name(
