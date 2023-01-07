@@ -28,6 +28,10 @@ class TaggedValue(ABC):
         else:
             return self.readable_name
 
+    @property
+    def is_known(self) -> bool:
+        return self.readable_name is not None
+
     @abstractmethod
     def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
         return NotImplemented

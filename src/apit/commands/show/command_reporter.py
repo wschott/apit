@@ -1,4 +1,3 @@
-from collections.abc import Callable
 from collections.abc import Iterable
 from dataclasses import dataclass
 
@@ -33,57 +32,49 @@ KNOWN_NAMED_SECTIONS: list[NamedSection] = [
 @dataclass
 class MetadataSection:
     title: str
-    values: list[tuple[str, str]]
+    tags: Iterable[TaggedValue]
 
 
 def print_tags(file_tags: FileTags, verbose: bool) -> str:
-    known_sections = to_metadata_sections(file_tags, KNOWN_NAMED_SECTIONS, verbose)
+    known_sections: list[MetadataSection] = [
+        MetadataSection(section.title, file_tags.filter(section.readable_tag_names))
+        for section in KNOWN_NAMED_SECTIONS
+    ]
     unknown_sections = [
         MetadataSection(
-            "Unknown",
-            to_table_rows(
-                sorted(
-                    file_tags.filter_unknown(),
-                    key=lambda tag: tag.tag_id,
-                ),
-                verbose,
-            ),
+            "Unknown", sorted(file_tags.filter_unknown(), key=lambda tag: tag.tag_id)
         )
     ]
+    return to_printable_tables(
+        filter_valid_sections(known_sections + unknown_sections), verbose
+    )
 
-    max_tag_description_length = calculate_tag_max_len(known_sections)
+
+def filter_valid_sections(sections: Iterable[MetadataSection]) -> list[MetadataSection]:
+    return [section for section in sections if section.tags]
+
+
+def to_printable_tables(
+    sections: Iterable[MetadataSection],
+    verbose: bool,
+) -> str:
+    max_tag_description_length = calculate_tag_max_len(sections, verbose)
     metadata_tables: list[str] = [
         metadata_table(
             section.title,
-            metadata_inline_table(section.values, max_tag_description_length),
+            metadata_inline_table(
+                to_table_rows(section.tags, verbose), max_tag_description_length
+            ),
         )
-        for section in (known_sections + unknown_sections)
+        for section in sections
     ]
     return "\n\n".join(metadata_tables)
-
-
-def to_metadata_sections(
-    file_tags: FileTags, sections: Iterable[NamedSection], verbose: bool
-) -> list[MetadataSection]:
-    return [
-        MetadataSection(section.title, section_tag_values)
-        for section in sections
-        if (
-            section_tag_values := to_table_rows(
-                file_tags.filter(section.readable_tag_names), verbose
-            )
-        )
-    ]
 
 
 def to_table_rows(tags: Iterable[TaggedValue], verbose: bool) -> list[tuple[str, str]]:
     return [(tag.description(verbose), tag.value(verbose)) for tag in tags]
 
 
-def calculate_tag_max_len(sections: Iterable[MetadataSection]) -> int:
-    extract_values: Callable[
-        [MetadataSection], list[tuple[str, str]]
-    ] = lambda section: section.values
-
-    values_of_sections: list[tuple[str, str]] = flat_map(extract_values, sections)
-    return max(len(description) for description, _ in values_of_sections)
+def calculate_tag_max_len(sections: Iterable[MetadataSection], verbose: bool) -> int:
+    tags: list[TaggedValue] = flat_map(lambda section: section.tags, sections)
+    return max(len(tag.description(verbose)) for tag in tags if tag.is_known)

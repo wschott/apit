@@ -9,10 +9,10 @@ class FileTags:
         self._tags: Iterable[TaggedValue] = tags
 
     def filter(self, names_to_select: Iterable[ReadableTagName]) -> list[TaggedValue]:
-        name_to_tag_map = {tag.readable_name: tag for tag in self._tags}
+        name_to_tag_map = {tag.readable_name: tag for tag in self._tags if tag.is_known}
         return [
             tag for name in names_to_select if (tag := name_to_tag_map.get(name, None))
         ]
 
     def filter_unknown(self) -> list[TaggedValue]:
-        return [tag for tag in self._tags if not tag.readable_name]
+        return [tag for tag in self._tags if not tag.is_known]
