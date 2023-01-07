@@ -49,7 +49,7 @@ MP4_MAPPING_TO_READABLE_TAG_NAME: Mapping[MP4_MAPPING, ReadableTagName] = {
 
 
 class Mp4Tag(TagIdDescriptionValue):
-    def _get_human_readable_description(self, tag_id: TagId) -> str | None:
+    def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
         try:
             mapped_tag_id = MP4_MAPPING(tag_id)
             return MP4_MAPPING_TO_READABLE_TAG_NAME.get(mapped_tag_id, None)

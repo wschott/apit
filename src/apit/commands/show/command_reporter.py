@@ -5,12 +5,13 @@ from typing import Any
 
 from apit.commands.show.reporting.file_tags import FileTags
 from apit.commands.show.reporting.mp4.mp4_tag import Mp4Tag
+from apit.commands.show.reporting.named_tag_sections import ORDER_ALBUM
+from apit.commands.show.reporting.named_tag_sections import ORDER_IDS
+from apit.commands.show.reporting.named_tag_sections import ORDER_MISC
+from apit.commands.show.reporting.named_tag_sections import ORDER_TRACK
+from apit.commands.show.reporting.named_tag_sections import ORDER_USER
+from apit.commands.show.reporting.readable_names import ReadableTagName
 from apit.commands.show.reporting.tag_id_description import TagIdDescriptionValue
-from apit.commands.show.reporting.tag_ordering import ORDERED_ALBUM_TAGS
-from apit.commands.show.reporting.tag_ordering import ORDERED_ID_TAGS
-from apit.commands.show.reporting.tag_ordering import ORDERED_MISC_TAGS
-from apit.commands.show.reporting.tag_ordering import ORDERED_TRACK_TAGS
-from apit.commands.show.reporting.tag_ordering import ORDERED_USER_TAGS
 from apit.list_utils import flat_map
 from apit.reporting.table import metadata_inline_table
 from apit.reporting.table import metadata_table
@@ -20,15 +21,15 @@ from apit.tag_id import TagId
 @dataclass
 class NamedSection:
     title: str
-    tag_ids: Iterable[TagId]
+    readable_tag_names: Iterable[ReadableTagName]
 
 
 KNOWN_NAMED_SECTIONS: list[NamedSection] = [
-    NamedSection("Track", ORDERED_TRACK_TAGS),
-    NamedSection("Album", ORDERED_ALBUM_TAGS),
-    NamedSection("IDs", ORDERED_ID_TAGS),
-    NamedSection("Misc", ORDERED_MISC_TAGS),
-    NamedSection("User", ORDERED_USER_TAGS),
+    NamedSection("Track", ORDER_TRACK),
+    NamedSection("Album", ORDER_ALBUM),
+    NamedSection("IDs", ORDER_IDS),
+    NamedSection("Misc", ORDER_MISC),
+    NamedSection("User", ORDER_USER),
 ]
 
 
@@ -43,17 +44,20 @@ def print_tags(mp4_tags: Iterable[tuple[str, Any]], verbose: bool) -> str:
         Mp4Tag(tag_id=TagId(tag), value=tag_value) for tag, tag_value in mp4_tags
     ]
     file_tags = FileTags(all_tag_value_pairs_in_file)
-    known_tag_ids = flat_map(
-        lambda known_section: known_section.tag_ids, KNOWN_NAMED_SECTIONS
-    )
-    unknown_tag_ids = file_tags.get_unknown_tag_ids(known_tag_ids)
-
-    unnamed_sections: list[NamedSection] = [
-        NamedSection("Unknown", sorted(unknown_tag_ids))
-    ]
 
     known_sections = to_metadata_sections(file_tags, KNOWN_NAMED_SECTIONS, verbose)
-    unknown_sections = to_metadata_sections(file_tags, unnamed_sections, verbose)
+    unknown_sections = [
+        MetadataSection(
+            "Unknown",
+            to_table_rows(
+                sorted(
+                    file_tags.filter_unknown(),
+                    key=lambda tag_id_desc_value: tag_id_desc_value.tag_id,
+                ),
+                verbose,
+            ),
+        )
+    ]
 
     max_tag_description_length = calculate_tag_max_len(known_sections)
     metadata_tables: list[str] = [
@@ -74,7 +78,7 @@ def to_metadata_sections(
         for section in sections
         if (
             section_tag_values := to_table_rows(
-                file_tags.filter(section.tag_ids), verbose
+                file_tags.filter(section.readable_tag_names), verbose
             )
         )
     ]
