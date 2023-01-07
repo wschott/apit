@@ -9,6 +9,8 @@ from apit.action import filter_successes
 from apit.commands.show.action import ReadAction
 from apit.commands.show.command_reporter import print_tags
 from apit.commands.show.reporter import ReadActionReporter
+from apit.commands.show.reporting.file_tags import FileTags
+from apit.commands.show.reporting.mp4.mp4_tag import Mp4Tag
 from apit.commands.tag.action import TagAction
 from apit.commands.tag.reporter import TagActionReporter
 from apit.error import ApitError
@@ -18,6 +20,7 @@ from apit.reporting.color import to_colored_text
 from apit.string_utils import normalize_unicode
 from apit.string_utils import pad_with_spaces
 from apit.string_utils import truncate_text
+from apit.tag_id import TagId
 
 FILENAME_TRUNCATION_LIMIT = 60
 SEPARATOR_LENGTH = 80
@@ -86,7 +89,11 @@ def print_processing_result(action: Action, verbose: bool) -> None:
     if action.successful and isinstance(action.result, mutagen.mp4.MP4):
         if not action.result.tags:
             raise ApitError("No tags present")
-        print(print_tags(action.result.tags.items(), verbose))
+
+        mp4_tags = [
+            Mp4Tag(TagId(tag), value) for tag, value in action.result.tags.items()
+        ]
+        print(print_tags(FileTags(mp4_tags), verbose))
         print()
     else:
         print(action.result)

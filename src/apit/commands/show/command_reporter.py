@@ -1,10 +1,8 @@
 from collections.abc import Callable
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any
 
 from apit.commands.show.reporting.file_tags import FileTags
-from apit.commands.show.reporting.mp4.mp4_tag import Mp4Tag
 from apit.commands.show.reporting.named_tag_sections import ORDER_ALBUM
 from apit.commands.show.reporting.named_tag_sections import ORDER_IDS
 from apit.commands.show.reporting.named_tag_sections import ORDER_MISC
@@ -15,7 +13,6 @@ from apit.commands.show.reporting.tag_id_description import TagIdDescriptionValu
 from apit.list_utils import flat_map
 from apit.reporting.table import metadata_inline_table
 from apit.reporting.table import metadata_table
-from apit.tag_id import TagId
 
 
 @dataclass
@@ -39,12 +36,7 @@ class MetadataSection:
     values: list[tuple[str, str]]
 
 
-def print_tags(mp4_tags: Iterable[tuple[str, Any]], verbose: bool) -> str:
-    all_tag_value_pairs_in_file: list[TagIdDescriptionValue] = [
-        Mp4Tag(tag_id=TagId(tag), value=tag_value) for tag, tag_value in mp4_tags
-    ]
-    file_tags = FileTags(all_tag_value_pairs_in_file)
-
+def print_tags(file_tags: FileTags, verbose: bool) -> str:
     known_sections = to_metadata_sections(file_tags, KNOWN_NAMED_SECTIONS, verbose)
     unknown_sections = [
         MetadataSection(
