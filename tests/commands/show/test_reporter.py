@@ -6,7 +6,7 @@ from apit.commands.show.reporter import ReadActionReporter
 
 def test_init():
     action = ReadAction(Path("dummy.m4a"), {})
-    reporter = ReadActionReporter(action)
+    reporter = ReadActionReporter(action, verbose=False)
 
     assert reporter.preview_msg == ""
     assert reporter.not_actionable_msg == ""
@@ -16,7 +16,7 @@ def test_init():
 def test_successful():
     action = ReadAction(Path("dummy.m4a"), {})
     action.mark_as_success("test-success")
-    reporter = ReadActionReporter(action)
+    reporter = ReadActionReporter(action, verbose=False)
 
     assert reporter.status_msg == "successful"
 
@@ -24,6 +24,6 @@ def test_successful():
 def test_not_successful():
     action = ReadAction(Path("dummy.m4a"), {})
     action.mark_as_fail("test-error")
-    reporter = ReadActionReporter(action)
+    reporter = ReadActionReporter(action, verbose=False)
 
     assert reporter.status_msg == "[error]"

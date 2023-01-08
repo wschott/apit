@@ -44,7 +44,9 @@ def _to_row(action: TagAction) -> list[str]:
         _is_selected(action),
         _has_matching_filenames(action),
         to_colored_text(text=action.file.name, color=color),
-        to_colored_text(text=TagActionReporter(action).preview_msg, color=color),
+        to_colored_text(
+            text=TagActionReporter(action, verbose=False).preview_msg, color=color
+        ),
     ]
 
 

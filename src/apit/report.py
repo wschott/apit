@@ -11,8 +11,6 @@ from apit.commands.show.reporter import ReadActionReporter
 from apit.commands.tag.action import TagAction
 from apit.commands.tag.reporter import TagActionReporter
 from apit.error import ApitError
-from apit.file_tags import FileTags
-from apit.metadata_reporter.metadata_reporter import to_tags_report
 from apit.report_action import ActionReporter
 from apit.string_utils import normalize_unicode
 from apit.string_utils import pad_with_spaces
@@ -41,7 +39,7 @@ def result_line(action: Action) -> str:
             truncate_filename(normalize_unicode(action.file.name)),
             FILENAME_TRUNCATION_LIMIT,
         ),
-        to_action_reporter(action).status_msg,
+        to_action_reporter(action, verbose=False).status_msg,
     )
     return to_colored_text(text=text, color=_to_color_for_result(action))
 
@@ -82,11 +80,7 @@ def print_processing_result(action: Action, verbose: bool) -> None:
     print()
     print(result_line(action))
     print()
-    if action.successful and isinstance(action.result, FileTags):
-        print(to_tags_report(action.result, verbose))
-        print()
-    else:
-        print(action.result)
+    print(to_action_reporter(action, verbose).result)
 
 
 def print_summary(actions: Iterable[Action]) -> None:
@@ -120,9 +114,9 @@ def print_summary_line(successes: int, errors: int, skipped: int) -> None:
     )
 
 
-def to_action_reporter(action: Action) -> ActionReporter:
+def to_action_reporter(action: Action, verbose: bool) -> ActionReporter:
     if isinstance(action, ReadAction):
-        return ReadActionReporter(action)
+        return ReadActionReporter(action, verbose)
     elif isinstance(action, TagAction):
-        return TagActionReporter(action)
+        return TagActionReporter(action, verbose)
     raise ApitError("Unknown action")
