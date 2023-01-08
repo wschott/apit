@@ -1,8 +1,8 @@
 import logging
 
+from apit.color import Color
+from apit.color import to_colored_text
 from apit.logger import ColoredFormatter
-from apit.reporting.color import Color
-from apit.reporting.color import to_colored_text
 
 
 def test_colored_formatter():

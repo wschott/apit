@@ -2,7 +2,7 @@ from abc import ABC
 from abc import abstractmethod
 from typing import Any
 
-from apit.commands.show.reporting.readable_names import ReadableTagName
+from apit.readable_names import ReadableTagName
 from apit.tag_id import TagId
 
 

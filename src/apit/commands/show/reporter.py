@@ -1,4 +1,4 @@
-from apit.commands.show.action import ReadAction
+from .action import ReadAction
 from apit.error import ApitError
 from apit.report_action import ActionReporter
 

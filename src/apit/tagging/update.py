@@ -2,14 +2,14 @@ from pathlib import Path
 
 import mutagen.mp4
 
+from .mp4.constants import MP4_MAPPING
+from .read import read_metadata
 from apit.error import ApitError
 from apit.metadata import Song
 from apit.store.constants import ITEM_KIND_MAPPING
 from apit.store.constants import RATING_MAPPING
 from apit.store.constants import to_item_kind
 from apit.store.constants import to_rating
-from apit.tagging.mp4.constants import MP4_MAPPING
-from apit.tagging.read import read_metadata
 
 
 def update_metadata(

@@ -1,17 +1,17 @@
 from collections.abc import Iterable
 from dataclasses import dataclass
 
-from apit.commands.show.reporting.file_tags import FileTags
-from apit.commands.show.reporting.named_tag_sections import ORDER_ALBUM
-from apit.commands.show.reporting.named_tag_sections import ORDER_IDS
-from apit.commands.show.reporting.named_tag_sections import ORDER_MISC
-from apit.commands.show.reporting.named_tag_sections import ORDER_TRACK
-from apit.commands.show.reporting.named_tag_sections import ORDER_USER
-from apit.commands.show.reporting.readable_names import ReadableTagName
-from apit.commands.show.reporting.tagged_value import TaggedValue
+from .named_tag_sections import ORDER_ALBUM
+from .named_tag_sections import ORDER_IDS
+from .named_tag_sections import ORDER_MISC
+from .named_tag_sections import ORDER_TRACK
+from .named_tag_sections import ORDER_USER
+from apit.file_tags import FileTags
 from apit.list_utils import flat_map
+from apit.readable_names import ReadableTagName
 from apit.reporting.table import metadata_inline_table
 from apit.reporting.table import metadata_table
+from apit.tagged_value import TaggedValue
 
 
 @dataclass
@@ -35,7 +35,7 @@ class MetadataSection:
     tags: Iterable[TaggedValue]
 
 
-def print_tags(file_tags: FileTags, verbose: bool) -> str:
+def to_tags_report(file_tags: FileTags, verbose: bool) -> str:
     known_sections: list[MetadataSection] = [
         MetadataSection(section.title, file_tags.filter(section.readable_tag_names))
         for section in KNOWN_NAMED_SECTIONS

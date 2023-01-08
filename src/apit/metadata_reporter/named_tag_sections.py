@@ -1,4 +1,4 @@
-from apit.commands.show.reporting.readable_names import ReadableTagName
+from apit.readable_names import ReadableTagName
 
 ORDER_TRACK = [
     ReadableTagName.TITLE,

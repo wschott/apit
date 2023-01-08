@@ -2,14 +2,14 @@ import json
 from collections.abc import Iterable
 from typing import Any
 
+from .constants import COLLECTION_TYPE_KEY
+from .constants import KIND_KEY
+from .constants import STORE_KEY
+from .constants import VALID_COLLECTION_TYPE_FOR_ALBUM
+from .constants import VALID_KIND_VALUES_FOR_SONG
 from apit.error import ApitError
 from apit.metadata import Album
 from apit.metadata import Song
-from apit.store.constants import COLLECTION_TYPE_KEY
-from apit.store.constants import KIND_KEY
-from apit.store.constants import STORE_KEY
-from apit.store.constants import VALID_COLLECTION_TYPE_FOR_ALBUM
-from apit.store.constants import VALID_KIND_VALUES_FOR_SONG
 
 
 def extract_songs(metadata_json: str) -> list[Song]:

@@ -1,3 +1,5 @@
+from apit.color import Color
+from apit.color import to_colored_text
 from apit.commands.tag.command_reporter import _is_selected
 from apit.commands.tag.command_reporter import _to_color_for_preview
 from apit.commands.tag.command_reporter import STR_NOT_SELECTED
@@ -7,8 +9,6 @@ from apit.report import _to_color_for_result
 from apit.report import STR_FAIL
 from apit.report import STR_SUCCESS
 from apit.report import truncate_filename
-from apit.reporting.color import Color
-from apit.reporting.color import to_colored_text
 
 
 def test_to_colored_text_no_color():

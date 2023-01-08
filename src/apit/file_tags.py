@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 
-from apit.commands.show.reporting.readable_names import ReadableTagName
-from apit.commands.show.reporting.tagged_value import TaggedValue
+from apit.readable_names import ReadableTagName
+from apit.tagged_value import TaggedValue
 
 
 class FileTags:

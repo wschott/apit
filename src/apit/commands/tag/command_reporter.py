@@ -2,8 +2,8 @@ from collections.abc import Iterable
 
 from .action import TagAction
 from .reporter import TagActionReporter
-from apit.reporting.color import Color
-from apit.reporting.color import to_colored_text
+from apit.color import Color
+from apit.color import to_colored_text
 from apit.reporting.table import legend_table
 from apit.reporting.table import tag_preview_table
 

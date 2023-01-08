@@ -5,8 +5,8 @@ import pytest
 
 from apit.metadata import Album
 from apit.metadata import Song
-from apit.store_data_parser import to_album
-from apit.store_data_parser import to_song
+from apit.store.data_parser import to_album
+from apit.store.data_parser import to_song
 
 
 class MockAction(NamedTuple):

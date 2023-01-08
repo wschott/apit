@@ -4,16 +4,16 @@ from apit.action import Action
 from apit.action import filter_errors
 from apit.action import filter_not_actionable
 from apit.action import filter_successes
+from apit.color import Color
+from apit.color import to_colored_text
 from apit.commands.show.action import ReadAction
-from apit.commands.show.command_reporter import print_tags
 from apit.commands.show.reporter import ReadActionReporter
-from apit.commands.show.reporting.file_tags import FileTags
 from apit.commands.tag.action import TagAction
 from apit.commands.tag.reporter import TagActionReporter
 from apit.error import ApitError
+from apit.file_tags import FileTags
+from apit.metadata_reporter.metadata_reporter import to_tags_report
 from apit.report_action import ActionReporter
-from apit.reporting.color import Color
-from apit.reporting.color import to_colored_text
 from apit.string_utils import normalize_unicode
 from apit.string_utils import pad_with_spaces
 from apit.string_utils import truncate_text
@@ -83,7 +83,7 @@ def print_processing_result(action: Action, verbose: bool) -> None:
     print(result_line(action))
     print()
     if action.successful and isinstance(action.result, FileTags):
-        print(print_tags(action.result, verbose))
+        print(to_tags_report(action.result, verbose))
         print()
     else:
         print(action.result)

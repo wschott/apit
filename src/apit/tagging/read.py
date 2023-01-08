@@ -2,12 +2,12 @@ from pathlib import Path
 
 import mutagen.mp4
 
-from apit.commands.show.reporting.file_tags import FileTags
+from .mp4.constants import MP4_MAPPING
+from .mp4.mp4_tag import Mp4Tag
 from apit.error import ApitError
 from apit.error import ApitNoTagsPresentError
+from apit.file_tags import FileTags
 from apit.tag_id import TagId
-from apit.tagging.mp4.constants import MP4_MAPPING
-from apit.tagging.mp4.mp4_tag import Mp4Tag
 
 BLACKLIST: list[str] = [
     MP4_MAPPING.OWNER_NAME,
