@@ -15,8 +15,11 @@ class TaggedValue(ABC):
         self._unprocessed_value: Any = value
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, TagId):
-            return self.tag_id == other
+        if isinstance(other, TaggedValue):
+            return (
+                self.tag_id == other.tag_id
+                and self._unprocessed_value == other._unprocessed_value
+            )
         return False
 
     def description(self, verbose: bool) -> str:

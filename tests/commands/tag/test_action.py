@@ -1,10 +1,12 @@
 from pathlib import Path
-from unittest.mock import call
 from unittest.mock import MagicMock
 
+from apit.commands.show.reporting.file_tags import FileTags
+from apit.commands.show.reporting.mp4.mp4_tag import Mp4Tag
 from apit.commands.tag.action import TagAction
 from apit.error import ApitError
 from apit.metadata import Song
+from apit.tag_id import TagId
 
 
 def test_tag_action_after_init(test_song: Song):
@@ -201,7 +203,8 @@ def test_tag_action_apply_not_actionable(monkeypatch):
 
 def test_tag_action_apply(monkeypatch, test_song: Song):
     monkeypatch.setattr(
-        "apit.commands.tag.action.update_metadata", lambda *args: "mock-result"
+        "apit.commands.tag.action.update_metadata",
+        lambda *args: MagicMock(tags={"tag_id": "tag_value"}),
     )
 
     action = TagAction(Path("./tests/fixtures/folder-iteration/1 first.m4a"), {})
@@ -213,12 +216,12 @@ def test_tag_action_apply(monkeypatch, test_song: Song):
     monkeypatch.setitem(action.options, "should_backup", False)
     monkeypatch.setitem(action.options, "cover_path", None)
 
-    mock_mark_as_success = MagicMock()
-    monkeypatch.setattr(action, "mark_as_success", mock_mark_as_success)
-
     action.apply()
 
-    assert mock_mark_as_success.call_args == call("mock-result")
+    assert action.executed
+    assert action.successful
+    assert isinstance(action.result, FileTags)
+    assert action.result._tags == [Mp4Tag(TagId("tag_id"), "tag_value")]
 
 
 def test_tag_action_apply_error(monkeypatch, test_song: Song):
@@ -237,9 +240,8 @@ def test_tag_action_apply_error(monkeypatch, test_song: Song):
     monkeypatch.setitem(action.options, "should_backup", False)
     monkeypatch.setitem(action.options, "cover_path", None)
 
-    mock_mark_as_fail = MagicMock()
-    monkeypatch.setattr(action, "mark_as_fail", mock_mark_as_fail)
-
     action.apply()
 
-    assert mock_mark_as_fail.call_args == call(error)
+    assert action.executed
+    assert not action.successful
+    assert action.result == error

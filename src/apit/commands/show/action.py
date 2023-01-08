@@ -1,6 +1,7 @@
 from apit.action import Action
 from apit.error import ApitError
 from apit.tagging.read import read_metadata
+from apit.tagging.read import to_file_tags
 
 
 class ReadAction(Action):
@@ -14,9 +15,7 @@ class ReadAction(Action):
 
     def apply(self) -> None:
         try:
-            result = read_metadata(self.file)
-            if not result.tags:
-                raise ApitError("No tags present")
+            result = to_file_tags(read_metadata(self.file))
         except ApitError as e:
             self.mark_as_fail(e)
         else:

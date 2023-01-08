@@ -1,9 +1,11 @@
 from pathlib import Path
-from unittest.mock import call
 from unittest.mock import MagicMock
 
 from apit.commands.show.action import ReadAction
+from apit.commands.show.reporting.file_tags import FileTags
+from apit.commands.show.reporting.mp4.mp4_tag import Mp4Tag
 from apit.error import ApitError
+from apit.tag_id import TagId
 
 
 def test_read_action_after_init():
@@ -16,21 +18,23 @@ def test_read_action_after_init():
     assert not action.executed
     assert not action.successful
     assert not action.needs_confirmation
+    assert not action.result
     assert action.actionable
 
 
 def test_read_action_apply(monkeypatch):
-    mp4_mock = MagicMock(tags="mock_metadata")
     monkeypatch.setattr(
-        "apit.commands.show.action.read_metadata", lambda *args: mp4_mock
+        "apit.commands.show.action.read_metadata",
+        lambda *args: MagicMock(tags={"tag_id": "tag_value"}),
     )
     action = ReadAction(Path("./tests/fixtures/folder-iteration/1 first.m4a"), {})
-    mock_mark_as_success = MagicMock()
-    monkeypatch.setattr(action, "mark_as_success", mock_mark_as_success)
 
     action.apply()
 
-    assert mock_mark_as_success.call_args == call(mp4_mock)
+    assert action.executed
+    assert action.successful
+    assert isinstance(action.result, FileTags)
+    assert action.result._tags == [Mp4Tag(TagId("tag_id"), "tag_value")]
 
 
 def test_read_action_apply_error_while_reading(monkeypatch):
@@ -41,9 +45,9 @@ def test_read_action_apply_error_while_reading(monkeypatch):
 
     monkeypatch.setattr("apit.commands.show.action.read_metadata", _raise)
     action = ReadAction(Path("./tests/fixtures/folder-iteration/1 first.m4a"), {})
-    mock_mark_as_fail = MagicMock()
-    monkeypatch.setattr(action, "mark_as_fail", mock_mark_as_fail)
 
     action.apply()
 
-    assert mock_mark_as_fail.call_args == call(error)
+    assert action.executed
+    assert not action.successful
+    assert action.result == error
