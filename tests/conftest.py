@@ -3,10 +3,14 @@ from typing import NamedTuple
 
 import pytest
 
+from apit.file_tags import FileTags
 from apit.metadata import Album
 from apit.metadata import Song
+from apit.readable_names import ReadableTagName
 from apit.store.data_parser import to_album
 from apit.store.data_parser import to_song
+from apit.tag_id import TagId
+from apit.tagged_value import TaggedValue
 
 
 class MockAction(NamedTuple):
@@ -22,6 +26,14 @@ class MockTagAction(NamedTuple):
     successful: bool
     actionable: bool
     is_filename_identical_to_song: bool
+
+
+class TestTag(TaggedValue):
+    def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
+        return None
+
+    def value(self, verbose: bool) -> str:
+        return self._unprocessed_value
 
 
 @pytest.fixture()
@@ -156,6 +168,11 @@ def test_songs() -> list[Song]:
 @pytest.fixture
 def test_song() -> Song:
     return dummy_song(disc=2, track=3)
+
+
+@pytest.fixture
+def test_file_tags() -> FileTags:
+    return FileTags([TestTag(TagId("tag_id"), "tag_value")])
 
 
 def pytest_addoption(parser):

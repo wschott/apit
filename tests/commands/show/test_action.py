@@ -1,11 +1,7 @@
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from apit.commands.show.action import ReadAction
 from apit.error import ApitError
-from apit.file_tags import FileTags
-from apit.tag_id import TagId
-from apit.tagging.mp4.mp4_tag import Mp4Tag
 
 
 def test_read_action_after_init():
@@ -22,10 +18,9 @@ def test_read_action_after_init():
     assert action.actionable
 
 
-def test_read_action_apply(monkeypatch):
+def test_read_action_apply(monkeypatch, test_file_tags):
     monkeypatch.setattr(
-        "apit.commands.show.action.read_metadata",
-        lambda *args: MagicMock(tags={"tag_id": "tag_value"}),
+        "apit.commands.show.action.read_tags", lambda *args: test_file_tags
     )
     action = ReadAction(Path("./tests/fixtures/folder-iteration/1 first.m4a"), {})
 
@@ -33,8 +28,7 @@ def test_read_action_apply(monkeypatch):
 
     assert action.executed
     assert action.successful
-    assert isinstance(action.result, FileTags)
-    assert action.result._tags == [Mp4Tag(TagId("tag_id"), "tag_value")]
+    assert action.result == test_file_tags
 
 
 def test_read_action_apply_error_while_reading(monkeypatch):
@@ -43,7 +37,7 @@ def test_read_action_apply_error_while_reading(monkeypatch):
     def _raise(*args):
         raise error
 
-    monkeypatch.setattr("apit.commands.show.action.read_metadata", _raise)
+    monkeypatch.setattr("apit.commands.show.action.read_tags", _raise)
     action = ReadAction(Path("./tests/fixtures/folder-iteration/1 first.m4a"), {})
 
     action.apply()

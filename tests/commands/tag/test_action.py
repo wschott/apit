@@ -5,8 +5,6 @@ from apit.commands.tag.action import TagAction
 from apit.error import ApitError
 from apit.file_tags import FileTags
 from apit.metadata import Song
-from apit.tag_id import TagId
-from apit.tagging.mp4.mp4_tag import Mp4Tag
 
 
 def test_tag_action_after_init(test_song: Song):
@@ -201,10 +199,10 @@ def test_tag_action_apply_not_actionable(monkeypatch):
     assert mock_mark_as_success.call_args is None
 
 
-def test_tag_action_apply(monkeypatch, test_song: Song):
+def test_tag_action_apply(monkeypatch, test_song: Song, test_file_tags: FileTags):
     monkeypatch.setattr(
-        "apit.commands.tag.action.update_metadata",
-        lambda *args: MagicMock(tags={"tag_id": "tag_value"}),
+        "apit.commands.tag.action.update_tags",
+        lambda *args: test_file_tags,
     )
 
     action = TagAction(Path("./tests/fixtures/folder-iteration/1 first.m4a"), {})
@@ -220,8 +218,7 @@ def test_tag_action_apply(monkeypatch, test_song: Song):
 
     assert action.executed
     assert action.successful
-    assert isinstance(action.result, FileTags)
-    assert action.result._tags == [Mp4Tag(TagId("tag_id"), "tag_value")]
+    assert action.result == test_file_tags
 
 
 def test_tag_action_apply_error(monkeypatch, test_song: Song):
@@ -230,7 +227,7 @@ def test_tag_action_apply_error(monkeypatch, test_song: Song):
     def _raise(*args):
         raise error
 
-    monkeypatch.setattr("apit.commands.tag.action.update_metadata", _raise)
+    monkeypatch.setattr("apit.commands.tag.action.update_tags", _raise)
 
     action = TagAction(Path("./tests/fixtures/folder-iteration/1 first.m4a"), {})
     monkeypatch.setitem(action.options, "song", test_song)

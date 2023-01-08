@@ -3,10 +3,10 @@ from pathlib import Path
 
 from apit.action import Action
 from apit.error import ApitError
+from apit.file_tags import FileTags
 from apit.metadata import Song
 from apit.string_utils import compare_normalized_caseless
-from apit.tagging.read import to_file_tags
-from apit.tagging.update import update_metadata
+from apit.tagging.update import update_tags
 
 
 class TagAction(Action):
@@ -52,8 +52,8 @@ class TagAction(Action):
             if self.options["should_backup"]:
                 self.backup_song()
 
-            result = to_file_tags(
-                update_metadata(self.file, self.song, self.options["cover_path"])
+            result: FileTags = update_tags(
+                self.file, self.song, self.options["cover_path"]
             )
         except ApitError as e:
             self.mark_as_fail(e)

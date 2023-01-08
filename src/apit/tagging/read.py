@@ -15,7 +15,11 @@ BLACKLIST: list[str] = [
 ]
 
 
-def read_metadata(file: Path) -> mutagen.mp4.MP4:
+def read_tags(file: Path) -> FileTags:
+    return to_file_tags(read_metadata_raw(file))
+
+
+def read_metadata_raw(file: Path) -> mutagen.mp4.MP4:
     try:
         return mutagen.mp4.MP4(file)
     except mutagen.MutagenError as e:
@@ -33,7 +37,7 @@ def to_file_tags(metadata_file: mutagen.mp4.MP4) -> FileTags:
 
 def is_itunes_bought_file(file: Path) -> bool:
     try:
-        mp4_file = read_metadata(file)
+        mp4_file = read_metadata_raw(file)
         if not mp4_file.tags:
             raise ApitNoTagsPresentError()
     except ApitError:
