@@ -1,4 +1,6 @@
 import logging
+from abc import ABC
+from abc import abstractmethod
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
@@ -6,7 +8,7 @@ from typing import Any
 from apit.error import ApitError
 
 
-class Action:
+class Action(ABC):
     def __init__(self, file: Path, options) -> None:
         self.file = file
         self.options = options
@@ -42,16 +44,19 @@ class Action:
         self._success = False
         self._result = result
 
+    @abstractmethod
     def apply(self) -> None:
-        raise NotImplementedError
+        pass
 
     @property
+    @abstractmethod
     def needs_confirmation(self) -> bool:
-        raise NotImplementedError
+        return NotImplemented
 
     @property
+    @abstractmethod
     def actionable(self) -> bool:
-        raise NotImplementedError
+        return NotImplemented
 
 
 def any_action_needs_confirmation(actions: Iterable[Action]) -> bool:

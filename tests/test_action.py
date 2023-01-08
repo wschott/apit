@@ -1,13 +1,27 @@
 from pathlib import Path
 
-import pytest
-
 from apit.action import Action
 from apit.action import all_actions_successful
 from apit.action import any_action_needs_confirmation
 from apit.action import filter_errors
 from apit.action import filter_not_actionable
 from apit.action import filter_successes
+
+
+class TestAction(Action):
+    def apply(self) -> None:
+        if self.options["apply-option"] == "fail":
+            self.mark_as_fail(self.options["apply-option"])
+        elif self.options["apply-option"] == "success":
+            self.mark_as_success(self.options["apply-option"])
+
+    @property
+    def actionable(self) -> bool:
+        return "apply-option" in self.options
+
+    @property
+    def needs_confirmation(self) -> bool:
+        return False
 
 
 def test_any_action_needs_confirmation(
@@ -82,35 +96,32 @@ def test_filter_not_actionable(mock_action_actionable, mock_action_not_actionabl
 
 
 def test_action_init():
-    action = Action(Path("file-path"), {"test-key": "test-value"})
+    action = TestAction(Path("file-path"), {"test-key": "test-value"})
 
     assert action.file == Path("file-path")
     assert action.options == {"test-key": "test-value"}
+
     assert not action.executed
     assert not action.successful
     assert not action.result
-
-    with pytest.raises(NotImplementedError):
-        action.apply()
-    with pytest.raises(NotImplementedError):
-        action.needs_confirmation
-    with pytest.raises(NotImplementedError):
-        action.actionable
+    assert not action.needs_confirmation
 
 
 def test_action_mark_as_success():
-    action = Action(Path("file-path"), {})
+    action = TestAction(Path("file-path"), {"apply-option": "success"})
 
-    action.mark_as_success("test-success")
+    action.apply()
+
     assert action.executed
     assert action.successful
-    assert action.result == "test-success"
+    assert action.result == "success"
 
 
 def test_action_mark_as_fail():
-    action = Action(Path("file-path"), {})
+    action = TestAction(Path("file-path"), {"apply-option": "fail"})
 
-    action.mark_as_fail("test-fail")
+    action.apply()
+
     assert action.executed
     assert not action.successful
-    assert action.result == "test-fail"
+    assert action.result == "fail"
