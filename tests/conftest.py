@@ -1,5 +1,5 @@
-from collections import namedtuple
 from pathlib import Path
+from typing import NamedTuple
 
 import pytest
 
@@ -8,20 +8,20 @@ from apit.metadata import Song
 from apit.store_data_parser import to_album
 from apit.store_data_parser import to_song
 
-MockAction = namedtuple(
-    "MockAction", ["needs_confirmation", "executed", "successful", "actionable"]
-)
 
-MockTagAction = namedtuple(
-    "MockTagAction",
-    [
-        "needs_confirmation",
-        "executed",
-        "successful",
-        "actionable",
-        "is_filename_identical_to_song",
-    ],
-)
+class MockAction(NamedTuple):
+    needs_confirmation: bool
+    executed: bool
+    successful: bool
+    actionable: bool
+
+
+class MockTagAction(NamedTuple):
+    needs_confirmation: bool
+    executed: bool
+    successful: bool
+    actionable: bool
+    is_filename_identical_to_song: bool
 
 
 @pytest.fixture()

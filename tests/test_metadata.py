@@ -1,10 +1,13 @@
-from collections import namedtuple
+from typing import NamedTuple
 
 from apit.metadata import Album
 from apit.metadata import find_song
 from apit.metadata import Song
 
-MockSong = namedtuple("MockSong", ["disc_number", "track_number"])
+
+class MockSong(NamedTuple):
+    disc_number: int
+    track_number: int
 
 
 def test_album():
