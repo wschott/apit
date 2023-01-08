@@ -2,11 +2,11 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 from apit.commands.show.reporting.file_tags import FileTags
-from apit.commands.show.reporting.mp4.mp4_tag import Mp4Tag
 from apit.commands.tag.action import TagAction
 from apit.error import ApitError
 from apit.metadata import Song
 from apit.tag_id import TagId
+from apit.tagging.mp4.mp4_tag import Mp4Tag
 
 
 def test_tag_action_after_init(test_song: Song):

@@ -7,7 +7,7 @@ import pytest
 
 from apit.error import ApitError
 from apit.metadata import Song
-from apit.store.constants import MP4_MAPPING
+from apit.tagging.mp4.constants import MP4_MAPPING
 from apit.tagging.update import _modify_mp4_file
 from apit.tagging.update import _read_artwork_content
 from apit.tagging.update import update_metadata

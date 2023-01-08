@@ -3,9 +3,9 @@ from unittest.mock import MagicMock
 
 from apit.commands.show.action import ReadAction
 from apit.commands.show.reporting.file_tags import FileTags
-from apit.commands.show.reporting.mp4.mp4_tag import Mp4Tag
 from apit.error import ApitError
 from apit.tag_id import TagId
+from apit.tagging.mp4.mp4_tag import Mp4Tag
 
 
 def test_read_action_after_init():

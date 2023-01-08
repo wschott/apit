@@ -4,11 +4,11 @@ from collections.abc import Mapping
 from apit.commands.show.reporting.readable_names import ReadableTagName
 from apit.commands.show.reporting.tagged_value import TaggedValue
 from apit.store.constants import ITEM_KIND_MAPPING
-from apit.store.constants import MP4_MAPPING
 from apit.store.constants import RATING_MAPPING
 from apit.store.constants import STORE_KIND
 from apit.store.constants import STORE_RATING
 from apit.tag_id import TagId
+from apit.tagging.mp4.constants import MP4_MAPPING
 
 
 class Mp4Tag(TaggedValue):
