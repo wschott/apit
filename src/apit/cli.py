@@ -53,6 +53,7 @@ Example:
         "-v",
         dest="verbose_level",
         action="count",
+        default=0,
         help="increase verbosity of reporting (-vv prints debug messages)",
     )
     parser.add_argument(
