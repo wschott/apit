@@ -1,11 +1,11 @@
 import sys
 from argparse import ArgumentParser
 from argparse import ArgumentTypeError
-from argparse import Namespace
 from argparse import RawDescriptionHelpFormatter
 from collections.abc import Sequence
 from pathlib import Path
 
+from apit.cli_options import CliOptions
 from apit.command_result import CommandResult
 from apit.commands import AVAILABLE_COMMANDS
 from apit.error import ApitError
@@ -13,7 +13,7 @@ from apit.exit_code import ExitCode
 from apit.main import main
 
 
-def parse_args(args: Sequence[str]) -> Namespace:
+def parse_args(args: Sequence[str]) -> CliOptions:
     parser = ArgumentParser(
         formatter_class=RawDescriptionHelpFormatter,
         description="""
@@ -106,7 +106,7 @@ Example:
         help="[tag] URL to Apple Music album for metadata download OR file with already downloaded metadata",  # noqa: B950
     )
 
-    return parser.parse_args(args)
+    return parser.parse_args(args, namespace=CliOptions())
 
 
 def _to_exit_code(command_result: CommandResult) -> ExitCode:
@@ -125,7 +125,7 @@ def absolute_path(path: str) -> Path:
 
 def cli() -> None:
     try:
-        options = parse_args(sys.argv[1:])
+        options: CliOptions = parse_args(sys.argv[1:])
         sys.exit(_to_exit_code(main(options)))
     except ApitError as e:
         print(e, file=sys.stderr)

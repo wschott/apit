@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
 
+from apit.cli_options import CliOptions
 from apit.command import Command
 from apit.command_result import CommandResult
 from apit.commands import determine_command_type
@@ -11,7 +12,7 @@ from apit.file_handling import collect_files
 from apit.logger import ColoredFormatter
 
 
-def main(options) -> CommandResult:
+def main(options: CliOptions) -> CommandResult:
     configure_logging(_to_log_level(options.verbose_level))
 
     logging.info("CLI options: %s", options)
@@ -21,6 +22,7 @@ def main(options) -> CommandResult:
         raise ApitError("No matching files found")
     logging.info("Input path: %s", options.path)
 
+    # TODO add to CommandOptions (similar to CliOptions)?
     options.cache_path = Path(CACHE_PATH).expanduser()
 
     CommandType: type[Command] = determine_command_type(options.command)
