@@ -56,6 +56,9 @@ class TagCommand(Command):
 def to_pre_action_options(options) -> Mapping[str, list[Song] | bool | Path | None]:
     source: str = options.source
 
+    if not source:
+        raise ApitError("No source provided")
+
     metadata_json = get_metadata_json(source)
 
     songs = extract_songs(metadata_json)

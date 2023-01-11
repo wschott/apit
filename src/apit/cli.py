@@ -101,6 +101,7 @@ Example:
     parser.add_argument(
         "source",
         metavar="SOURCE",
+        nargs="?",
         help="[tag] URL to Apple Music album for metadata download OR file with already downloaded metadata",  # noqa: B950
     )
 
