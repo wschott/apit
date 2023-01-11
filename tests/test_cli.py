@@ -70,3 +70,8 @@ def test_parse_args_missing_folder():
 def test_parse_args_invalid_option():
     with pytest.raises(SystemExit):
         parse_args(["-x", "show", "./tests/fixtures"])
+
+
+def test_parse_args_using_non_existing_folder():
+    with pytest.raises(SystemExit):
+        parse_args(["show", "./non-existing"])

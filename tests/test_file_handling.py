@@ -1,8 +1,5 @@
 from pathlib import Path
 
-import pytest
-
-from apit.error import ApitError
 from apit.file_handling import _generate_filename_prefix
 from apit.file_handling import collect_files
 from apit.file_handling import extract_disc_and_track_number
@@ -34,11 +31,6 @@ def test_collect_files_using_filter():
     assert collect_files(Path("tests/fixtures/folder-iteration"), [".m4a"]) == [
         Path("tests/fixtures/folder-iteration/1 first.m4a")
     ]
-
-
-def test_collect_files_using_non_existing_folder():
-    with pytest.raises(ApitError, match="Invalid path"):
-        collect_files(Path("./non-existing"))
 
 
 def test_extract_disc_and_track_number_using_only_track_number():

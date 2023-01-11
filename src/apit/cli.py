@@ -1,5 +1,6 @@
 import sys
 from argparse import ArgumentParser
+from argparse import ArgumentTypeError
 from argparse import Namespace
 from argparse import RawDescriptionHelpFormatter
 from collections.abc import Sequence
@@ -95,8 +96,8 @@ Example:
     parser.add_argument(
         "path",
         metavar="PATH",
-        type=lambda path: Path(path).absolute(),
-        help="path containing m4a files",
+        type=absolute_path,
+        help="path containing files",
     )
     parser.add_argument(
         "source",
@@ -113,6 +114,13 @@ def _to_exit_code(command_result: CommandResult) -> ExitCode:
         CommandResult.SUCCESS: ExitCode.OK,
         CommandResult.FAIL: ExitCode.ERROR,
     }.get(command_result, ExitCode.ERROR)
+
+
+def absolute_path(path: str) -> Path:
+    abs_path = Path(path).absolute()
+    if not abs_path.exists():
+        raise ArgumentTypeError(f"invalid path: {path}")
+    return abs_path
 
 
 def cli() -> None:

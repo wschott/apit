@@ -4,7 +4,6 @@ from collections.abc import Iterable
 from enum import Enum
 from pathlib import Path
 
-from apit.error import ApitError
 from apit.metadata import Song
 
 REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME = re.compile(
@@ -26,9 +25,6 @@ MIME_TPYE_TO_EXTENSION_MAP = {
 def collect_files(
     path: Path, filter_ext: Iterable[str] | str | None = None
 ) -> list[Path]:
-    if not path.exists():
-        raise ApitError(f"Invalid path: {path}")
-
     if path.is_file():
         unfiltered_files = [path]
     elif path.is_dir():
