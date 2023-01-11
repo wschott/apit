@@ -26,7 +26,6 @@ from apit.store.data_parser import extract_songs
 from apit.tagging.read import is_itunes_bought_file
 from apit.url_utils import is_url
 from apit.user_input import ask_user_for_confirmation
-from apit.user_input import ask_user_for_input
 
 
 class TagCommand(Command):
@@ -56,12 +55,6 @@ class TagCommand(Command):
 
 def to_pre_action_options(options) -> Mapping[str, list[Song] | bool | Path | None]:
     source: str = options.source
-
-    if not source:
-        source = ask_user_for_input(
-            question="Input Apple Music/iTunes Store URL (starts with https://music.apple.com/...): ",  # noqa: B950
-            abortion="Incompatible Apple Music/iTunes Store URL provided",
-        )
 
     metadata_json = get_metadata_json(source)
 

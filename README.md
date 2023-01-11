@@ -31,7 +31,13 @@ At least [Python](https://www.python.org) 3.10
 
 ## Tag the music files' metadata using data from Apple Music/iTunes Store
 
-    $ apit tag ~/Music/Music/Media/Artist/Album/
+Example using an url:
+
+    $ apit tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+
+Example using an already downloaded metadata file:
+
+    $ apit tag ~/Music/Music/Media/Artist/Album/ ~/.apit/Artist-Album-123456789.json
 
 ### Filename format requirements
 
@@ -51,7 +57,7 @@ Examples:
 
 ### Metadata source requirement
 
-You must provide a source for the metadata to be used. Simply search for the album matching your files in the Apple Music/iTunes Store functionality or in a search engine and copy & paste the link to that album.
+You must provide a source for the metadata to be used. Simply search for the album matching your files in the Apple Music/iTunes Store functionality or in a search engine and copy & paste the url to that album.
 The format of that url **must match** the following form (as of 2020-05 using Apple Music on macOS 10.15 Catalina):
 
     https://music.apple.com/{COUNTRY_CODE}/album/album-name/{ID}
@@ -71,21 +77,6 @@ This will lookup the metadata of the album with the ID _123456789_ in the _US_ s
 ### Attention: Beware of album variations (e.g. deluxe editions)
 
 You should compare your files against the album's metadata you found via the iTunes Store or a search engine. Sometimes the songs' track order vary from album edition to album edition (e.g. deluxe edition) or the album published in another country has a different order. This means that your files will be tagged using the wrong metadata if you choose the wrong edition! You can overcome this by renaming your files before tagging to match against the appropriate metadata. Optionally, you can edit your files' track number metadata again after tagging to revert to your original track order.
-
-## Provide a source using a command line option
-
-You can provide the source using a command line option instead of entering/pasting a source while executing apit:
-
-- either using an **url** (depending on your OS you maybe have to quote the url)
-- or using an **already downloaded metadata file** (i.e. no further download will happen)
-
-Example using an url:
-
-    $ apit tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
-
-Example using an existing metadata file:
-
-    $ apit tag ~/Music/Music/Media/Artist/Album/ ~/.apit/Artist-Album-123456789.json
 
 ## Artwork
 

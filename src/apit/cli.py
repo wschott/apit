@@ -101,8 +101,7 @@ Example:
     parser.add_argument(
         "source",
         metavar="SOURCE",
-        nargs="?",
-        help="[tag] optional url (to be downloaded) or file (already downloaded) containing Apple Music/iTunes Store data or album ID (with optional country code)",  # noqa: B950
+        help="[tag] URL to Apple Music album for metadata download OR file with already downloaded metadata",  # noqa: B950
     )
 
     return parser.parse_args(args)
