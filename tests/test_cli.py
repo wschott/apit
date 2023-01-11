@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from apit.cli import parse_args
@@ -6,7 +8,7 @@ from apit.cli import parse_args
 def test_parse_args():
     args = parse_args(["show", "./tests/fixtures"])
     assert args.command == "show"
-    assert args.path == "./tests/fixtures"
+    assert args.path == Path("./tests/fixtures").absolute()
     assert not args.has_backup_flag
     assert not args.has_search_result_cache_flag
 
@@ -46,7 +48,7 @@ def test_parse_args_complex_args(tmp_path):
     assert args.has_backup_flag
     assert args.verbose_level == 1
     assert args.command == "tag"
-    assert args.path == str(tmp_path)
+    assert args.path == tmp_path
     assert args.source == "test-metadata-file.json"
 
 

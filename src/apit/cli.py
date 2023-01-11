@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 from argparse import Namespace
 from argparse import RawDescriptionHelpFormatter
 from collections.abc import Sequence
+from pathlib import Path
 
 from apit.command_result import CommandResult
 from apit.commands import AVAILABLE_COMMANDS
@@ -91,7 +92,12 @@ Example:
         choices=AVAILABLE_COMMANDS,
         help='available commands: "show" or "tag" metadata',
     )
-    parser.add_argument("path", metavar="PATH", help="path containing m4a files")
+    parser.add_argument(
+        "path",
+        metavar="PATH",
+        type=lambda path: Path(path).absolute(),
+        help="path containing m4a files",
+    )
     parser.add_argument(
         "source",
         metavar="SOURCE",

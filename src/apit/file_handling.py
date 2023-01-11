@@ -24,10 +24,8 @@ MIME_TPYE_TO_EXTENSION_MAP = {
 
 
 def collect_files(
-    path_string: str, filter_ext: Iterable[str] | str | None = None
+    path: Path, filter_ext: Iterable[str] | str | None = None
 ) -> list[Path]:
-    path = Path(path_string).expanduser()
-
     if not path.exists():
         raise ApitError(f"Invalid path: {path}")
 
