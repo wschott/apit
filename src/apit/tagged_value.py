@@ -37,8 +37,8 @@ class TaggedValue(ABC):
 
     @abstractmethod
     def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
-        return NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def value(self, verbose: bool) -> str:
-        return NotImplemented
+        raise NotImplementedError

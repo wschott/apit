@@ -1,4 +1,7 @@
 from pathlib import Path
+from unittest.mock import patch
+
+import pytest
 
 from apit.action import Action
 from apit.action import all_actions_successful
@@ -95,8 +98,9 @@ def test_filter_not_actionable(mock_action_actionable, mock_action_not_actionabl
     ) == [mock_action_not_actionable, mock_action_not_actionable]
 
 
+@patch.multiple(Action, __abstractmethods__=set())
 def test_action_init():
-    action = TestAction(Path("file-path"), {"test-key": "test-value"})
+    action = Action(Path("file-path"), {"test-key": "test-value"})
 
     assert action.file == Path("file-path")
     assert action.options == {"test-key": "test-value"}
@@ -104,7 +108,13 @@ def test_action_init():
     assert not action.executed
     assert not action.successful
     assert not action.result
-    assert not action.needs_confirmation
+
+    with pytest.raises(NotImplementedError):
+        action.apply()
+    with pytest.raises(NotImplementedError):
+        action.needs_confirmation
+    with pytest.raises(NotImplementedError):
+        action.actionable
 
 
 def test_action_mark_as_success():

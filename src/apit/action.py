@@ -46,17 +46,17 @@ class Action(ABC):
 
     @abstractmethod
     def apply(self) -> None:
-        pass
+        raise NotImplementedError
 
     @property
     @abstractmethod
     def needs_confirmation(self) -> bool:
-        return NotImplemented
+        raise NotImplementedError
 
     @property
     @abstractmethod
     def actionable(self) -> bool:
-        return NotImplemented
+        raise NotImplementedError
 
 
 def any_action_needs_confirmation(actions: Iterable[Action]) -> bool:
