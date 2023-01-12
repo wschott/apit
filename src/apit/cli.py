@@ -1,3 +1,4 @@
+import logging
 import sys
 from argparse import ArgumentParser
 from argparse import ArgumentTypeError
@@ -6,11 +7,16 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from apit.cli_options import CliOptions
+from apit.command import Command
 from apit.command_result import CommandResult
 from apit.commands import AVAILABLE_COMMANDS
+from apit.commands import determine_command_type
+from apit.defaults import CACHE_PATH
+from apit.defaults import FILE_FILTER
 from apit.error import ApitError
 from apit.exit_code import ExitCode
-from apit.main import main
+from apit.file_handling import collect_files
+from apit.logging import configure_logging
 
 
 def parse_args(args: Sequence[str]) -> CliOptions:
@@ -130,3 +136,27 @@ def cli() -> None:
     except ApitError as e:
         print(e, file=sys.stderr)
         sys.exit(ExitCode.USAGE_ERROR)
+
+
+def main(options: CliOptions) -> CommandResult:
+    configure_logging(_to_log_level(options.verbose_level))
+
+    logging.info("CLI options: %s", options)
+
+    files = collect_files(options.path, FILE_FILTER)
+    if not files:
+        raise ApitError("No matching files found")
+    logging.info("Input path: %s", options.path)
+
+    # TODO add to CommandOptions (similar to CliOptions)?
+    options.cache_path = Path(CACHE_PATH).expanduser()
+
+    CommandType: type[Command] = determine_command_type(options.command)
+    return CommandType().execute(files, options)
+
+
+def _to_log_level(verbose_level: int) -> int:
+    return {
+        1: logging.INFO,
+        2: logging.DEBUG,  # TODO not used anymore
+    }.get(verbose_level, logging.WARN)
