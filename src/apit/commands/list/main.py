@@ -1,4 +1,3 @@
-from argparse import RawDescriptionHelpFormatter
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -14,7 +13,6 @@ def setup_cli_parser(subparsers):
         "list",
         aliases=["ls"],
         help="list metadata tags of files in PATH",
-        formatter_class=RawDescriptionHelpFormatter,
         description="list metadata tags of files in PATH",
     )
     list_command.set_defaults(func=main)

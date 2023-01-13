@@ -1,4 +1,3 @@
-from argparse import RawDescriptionHelpFormatter
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -14,19 +13,7 @@ def setup_cli_parser(subparsers):
     tag_command = subparsers.add_parser(
         "tag",
         help="tag files in PATH",
-        formatter_class=RawDescriptionHelpFormatter,
-        description="""
-tag files in PATH with metadata from Apple Music albums
-
-SOURCE argument format
-----------------------
-one of:
-- URL to Apple Music album for metadata download
-- Apple Music style URLs: https://music.apple.com/<COUNTRY_CODE>/album/album-name/<ID>
-  - Example: https://music.apple.com/us/album/album-name/123456789
-- or iTunes style URLs: http://itunes.apple.com/<COUNTRY_CODE>/album/album-name/id<ID>
-- path to a file with already downloaded metadata
-""",
+        description="tag files in PATH using Apple Music metadata",
     )
     tag_command.set_defaults(func=main)
 

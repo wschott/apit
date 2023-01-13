@@ -1,7 +1,6 @@
 import logging
 import sys
 from argparse import ArgumentParser
-from argparse import RawDescriptionHelpFormatter
 from collections.abc import Callable
 from collections.abc import Iterable
 from collections.abc import Sequence
@@ -18,25 +17,8 @@ from apit.logging import configure_logging
 
 def create_parser(command_cli_parser_setup_fns: Iterable[Callable]):
     parser = ArgumentParser(
-        formatter_class=RawDescriptionHelpFormatter,
-        description="""
-%(prog)s allows batch tagging .m4a file metadata tags using data from Apple Music/iTunes Store.
-
-Execute %(prog)s <command> -h to show help for a specific command.
-
-Filename format requirements
-----------------------------
-1. optional: disc number (followed by "-" or ".")
-2. required: track number (followed by an optional ".")
-3. required: ".m4a" extension
-
-Examples:
-- without disc number (defaults to disc 1)
-  - "14.m4a", "14 title.m4a", "14. title.m4a", "#14.m4a", "#14 title.m4a"
-  - "2. 14 title.m4a" (track 2: title contains the number 14)
-- with disc number (e.g. disc 2)
-  - "2-14 title.m4a", "2.14 title.m4a", "2.14. title.m4a"
-""",  # noqa: B950
+        description="%(prog)s - music files tagging using Apple Music/iTunes Store metadata.",
+        epilog="`%(prog)s <command> -h` shows help for a specific command.",
     )
     command_subparsers = parser.add_subparsers(
         dest="command", title="commands", required=True
