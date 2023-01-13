@@ -9,7 +9,6 @@ from apit.action import all_actions_successful
 from apit.action import any_action_needs_confirmation
 from apit.cache import save_artwork_to_cache
 from apit.cache import save_metadata_to_cache
-from apit.command import Command
 from apit.command_result import CommandResult
 from apit.error import ApitError
 from apit.file_handling import extract_disc_and_track_number
@@ -28,29 +27,25 @@ from apit.url_utils import is_url
 from apit.user_input import ask_user_for_confirmation
 
 
-class TagCommand(Command):
-    def execute(self, files: Iterable[Path], options) -> CommandResult:
-        pre_action_options = to_pre_action_options(options)
+def execute(files: Iterable[Path], options) -> CommandResult:
+    pre_action_options = to_pre_action_options(options)
 
-        actions: list[TagAction] = [
-            TagAction(file, to_action_options(file, pre_action_options))
-            for file in files
-        ]
+    actions: list[TagAction] = [
+        TagAction(file, to_action_options(file, pre_action_options)) for file in files
+    ]
 
-        if any_action_needs_confirmation(actions):
-            print_actions_preview(actions)
-            ask_user_for_confirmation()
+    if any_action_needs_confirmation(actions):
+        print_actions_preview(actions)
+        ask_user_for_confirmation()
 
-        for action in actions:
-            print("Executing:", action)
-            action.apply()
+    for action in actions:
+        print("Executing:", action)
+        action.apply()
 
-        print_report(actions, verbose=options.verbose_level > 0)
-        return (
-            CommandResult.SUCCESS
-            if all_actions_successful(actions)
-            else CommandResult.FAIL
-        )
+    print_report(actions, verbose=options.verbose_level > 0)
+    return (
+        CommandResult.SUCCESS if all_actions_successful(actions) else CommandResult.FAIL
+    )
 
 
 def to_pre_action_options(options) -> Mapping[str, list[Song] | bool | Path | None]:

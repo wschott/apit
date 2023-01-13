@@ -3,7 +3,7 @@ from pathlib import Path
 
 from ..common_cli_parser_arguments import add_path_argument
 from ..common_cli_parser_arguments import add_verbose_argument
-from .command import ListCommand
+from .command import execute
 from apit.cli_options import CliOptions
 from apit.command_result import CommandResult
 
@@ -22,4 +22,4 @@ def setup_cli_parser(subparsers):
 
 
 def main(files: Iterable[Path], options: CliOptions) -> CommandResult:
-    return ListCommand().execute(files, options)
+    return execute(files, options)
