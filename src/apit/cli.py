@@ -50,6 +50,7 @@ def cli() -> None:
 
 
 def main(options: CliOptions) -> CommandResult:
+    # TODO options set up in commands to commands
     configure_logging(_to_log_level(options.verbose_level))
     logging.info("CLI options: %s", options)
 

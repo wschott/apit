@@ -22,4 +22,4 @@ def setup_cli_parser(subparsers):
 
 
 def main(files: Iterable[Path], options: CliOptions) -> CommandResult:
-    return execute(files, options)
+    return execute(files=files, verbose_level=options.verbose_level)

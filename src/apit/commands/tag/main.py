@@ -60,4 +60,13 @@ def main(files: Iterable[Path], options: CliOptions) -> CommandResult:
     # TODO add to CommandOptions (similar to CliOptions)?
     options.cache_path = Path(CACHE_PATH).expanduser()
 
-    return execute(files, options)
+    return execute(
+        files=files,
+        verbose_level=options.verbose_level,
+        source=options.source,
+        has_backup_flag=options.has_backup_flag,
+        has_search_result_cache_flag=options.has_search_result_cache_flag,
+        cache_path=options.cache_path,
+        has_embed_artwork_flag=options.has_embed_artwork_flag,
+        artwork_size=options.artwork_size,
+    )
