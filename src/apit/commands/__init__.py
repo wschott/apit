@@ -1,18 +1,6 @@
-from collections.abc import Mapping
-
-from apit.command import Command
-from apit.commands.show.command import ShowCommand
-from apit.commands.tag.command import TagCommand
-from apit.error import ApitError
-
-AVAILABLE_COMMANDS: Mapping[str, type[Command]] = {
-    "show": ShowCommand,
-    "tag": TagCommand,
-}
+from .show.cli_parser import setup_cli_parser as show_setup_cli_parser
+from .tag.cli_parser import setup_cli_parser as tag_setup_cli_parser
 
 
-def determine_command_type(command_name: str) -> type[Command]:
-    try:
-        return AVAILABLE_COMMANDS[command_name]
-    except KeyError:
-        raise ApitError(f"Command '{command_name}' not found")
+def get_cli_parser_setups_fns():
+    return [show_setup_cli_parser, tag_setup_cli_parser]

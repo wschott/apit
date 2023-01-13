@@ -5,16 +5,13 @@ import pytest
 from apit.cli import parse_args
 
 
-def test_parse_args():
-    args = parse_args(["show", "./tests/fixtures", "./tests/metadata.json"])
+def test_show_command():
+    args = parse_args(["show", "./tests/fixtures"])
     assert args.command == "show"
     assert args.path == Path("./tests/fixtures").absolute()
-    assert args.source == "./tests/metadata.json"
-    assert not args.has_backup_flag
-    assert not args.has_search_result_cache_flag
 
 
-def test_parse_args_source_types():
+def test_tag_command_source_types():
     args = parse_args(["tag", "./tests/fixtures", "http://invalid-url.com/"])
     assert args.source == "http://invalid-url.com/"
 
@@ -23,31 +20,31 @@ def test_parse_args_source_types():
 
 
 def test_parse_args_optional_args():
-    args = parse_args(["-v", "show", "./tests/fixtures", "./tests/metadata.json"])
+    args = parse_args(["show", "-v", "./tests/fixtures"])
     assert args.verbose_level == 1
 
-    args = parse_args(["-vv", "show", "./tests/fixtures", "./tests/metadata.json"])
+    args = parse_args(["show", "-vv", "./tests/fixtures"])
     assert args.verbose_level == 2
 
-    args = parse_args(["-b", "tag", "./tests/fixtures", "./tests/metadata.json"])
+    args = parse_args(["tag", "-b", "./tests/fixtures", "./tests/metadata.json"])
     assert args.has_backup_flag
 
-    args = parse_args(["-c", "tag", "./tests/fixtures", "./tests/metadata.json"])
+    args = parse_args(["tag", "-c", "./tests/fixtures", "./tests/metadata.json"])
     assert args.has_search_result_cache_flag
 
-    args = parse_args(["-a", "tag", "./tests/fixtures", "./tests/metadata.json"])
+    args = parse_args(["tag", "-a", "./tests/fixtures", "./tests/metadata.json"])
     assert args.has_embed_artwork_flag
     assert args.artwork_size == 600
 
     args = parse_args(
-        ["--artwork-size", "700", "tag", "./tests/fixtures", "./tests/metadata.json"]
+        ["tag", "--artwork-size", "700", "./tests/fixtures", "./tests/metadata.json"]
     )
     assert args.artwork_size == 700
 
 
 def test_parse_args_complex_args(tmp_path):
     args = parse_args(
-        ["--cache", "--backup", "-v", "tag", str(tmp_path), "test-metadata-file.json"]
+        ["tag", "--cache", "--backup", "-v", str(tmp_path), "test-metadata-file.json"]
     )
     assert args.has_search_result_cache_flag
     assert args.has_backup_flag

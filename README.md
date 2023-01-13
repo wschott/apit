@@ -84,26 +84,26 @@ Optionally, you can use artwork from Apple Music/iTunes Store and save them to y
 
 Examples:
 
-    $ apit -a tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
-    $ apit -a --artwork-size 1000 tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+    $ apit tag -a ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+    $ apit tag -a --artwork-size 1000 ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
 
 ## Metadata cache
 
 The downloaded metadata can be saved to your disk for later usage using `--cache` (short: `-c`).
 
-    $ apit --cache tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+    $ apit tag --cache ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
 
 ## Create backup files
 
 You can create backup files before updating metadata if you put `--backup` (short: `-b`) in your command.
 
-    $ apit --backup tag ~/Music/Music/Media/Artist/Album/
+    $ apit tag --backup ~/Music/Music/Media/Artist/Album/
 
 ## Verbose mode
 
 To see more information what happens you can put `-v` into your command. Using `-vv` enables debug output.
 
-    $ apit -v tag ~/Music/Music/Media/Artist/Album/
+    $ apit tag -v ~/Music/Music/Media/Artist/Album/
 
 
 # apit Development

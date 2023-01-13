@@ -1,17 +1,14 @@
 import logging
 import sys
 from argparse import ArgumentParser
-from argparse import ArgumentTypeError
 from argparse import RawDescriptionHelpFormatter
+from collections.abc import Callable
+from collections.abc import Iterable
 from collections.abc import Sequence
-from pathlib import Path
 
 from apit.cli_options import CliOptions
-from apit.command import Command
 from apit.command_result import CommandResult
-from apit.commands import AVAILABLE_COMMANDS
-from apit.commands import determine_command_type
-from apit.defaults import CACHE_PATH
+from apit.commands import get_cli_parser_setups_fns
 from apit.defaults import FILE_FILTER
 from apit.error import ApitError
 from apit.exit_code import ExitCode
@@ -19,11 +16,13 @@ from apit.file_handling import collect_files
 from apit.logging import configure_logging
 
 
-def parse_args(args: Sequence[str]) -> CliOptions:
+def create_parser(command_cli_parser_setup_fns: Iterable[Callable]):
     parser = ArgumentParser(
         formatter_class=RawDescriptionHelpFormatter,
         description="""
 %(prog)s allows batch tagging .m4a file metadata tags using data from Apple Music/iTunes Store.
+
+Execute %(prog)s <command> -h to show help for a specific command.
 
 Filename format requirements
 ----------------------------
@@ -32,86 +31,23 @@ Filename format requirements
 3. required: ".m4a" extension
 
 Examples:
-  - without disc number (defaults to disc 1)
-    - "14.m4a", "14 title.m4a", "14. title.m4a", "#14.m4a", "#14 title.m4a"
-    - "2. 14 title.m4a" (track 2: title contains the number 14)
-  - with disc number (e.g. disc 2)
-    - "2-14 title.m4a", "2.14 title.m4a", "2.14. title.m4a"
-
-Source requirement
-------------------
-one of the following:
-- path to an existing file with already downloaded metadata
-- URL to Apple Music/iTunes Store in order to download metadata
-
-URL format requirements
------------------------
-COUNTRY_CODE and ID required:
-new style Apple Music: https://music.apple.com/{COUNTRY_CODE}/album/album-name/{ID}
-or old style iTunes: http://itunes.apple.com/{COUNTRY_CODE}/album/album-name/id{ID}
-
-Example:
-  - https://music.apple.com/us/album/album-name/123456789
-  - http://itunes.apple.com/us/album/album-name/id123456789
-  - http://test-domain.com/us/test-name/42/123456789?i=09876
+- without disc number (defaults to disc 1)
+  - "14.m4a", "14 title.m4a", "14. title.m4a", "#14.m4a", "#14 title.m4a"
+  - "2. 14 title.m4a" (track 2: title contains the number 14)
+- with disc number (e.g. disc 2)
+  - "2-14 title.m4a", "2.14 title.m4a", "2.14. title.m4a"
 """,  # noqa: B950
     )
+    command_subparsers = parser.add_subparsers(
+        dest="command", title="commands", required=True
+    )
+    for parser_setup_fn in command_cli_parser_setup_fns:
+        parser_setup_fn(command_subparsers)
+    return parser
 
-    parser.add_argument(
-        "-v",
-        dest="verbose_level",
-        action="count",
-        default=0,
-        help="increase verbosity of reporting (-vv prints debug messages)",
-    )
-    parser.add_argument(
-        "-b",
-        "--backup",
-        dest="has_backup_flag",
-        action="store_true",
-        default=False,
-        help="[tag] create backup files before updating metadata",
-    )
-    parser.add_argument(
-        "-c",
-        "--cache",
-        dest="has_search_result_cache_flag",
-        action="store_true",
-        help="[tag] save the downloaded metadata to disk",
-    )
-    parser.add_argument(
-        "-a",
-        "--artwork",
-        dest="has_embed_artwork_flag",
-        action="store_true",
-        help="[tag] download artwork to disk and save in files",
-    )
-    parser.add_argument(
-        "--artwork-size",
-        dest="artwork_size",
-        metavar="SIZE",
-        type=int,
-        default=600,
-        help="[tag] set artwork size for download (default: %(default)s)",
-    )
-    parser.add_argument(
-        "command",
-        choices=AVAILABLE_COMMANDS,
-        help='available commands: "show" or "tag" metadata',
-    )
-    parser.add_argument(
-        "path",
-        metavar="PATH",
-        type=absolute_path,
-        help="path containing files",
-    )
-    parser.add_argument(
-        "source",
-        metavar="SOURCE",
-        nargs="?",
-        help="[tag] URL to Apple Music album for metadata download OR file with already downloaded metadata",  # noqa: B950
-    )
 
+def parse_args(args: Sequence[str]) -> CliOptions:
+    parser = create_parser(get_cli_parser_setups_fns())
     return parser.parse_args(args, namespace=CliOptions())
 
 
@@ -120,13 +56,6 @@ def _to_exit_code(command_result: CommandResult) -> ExitCode:
         CommandResult.SUCCESS: ExitCode.OK,
         CommandResult.FAIL: ExitCode.ERROR,
     }.get(command_result, ExitCode.ERROR)
-
-
-def absolute_path(path: str) -> Path:
-    abs_path = Path(path).absolute()
-    if not abs_path.exists():
-        raise ArgumentTypeError(f"invalid path: {path}")
-    return abs_path
 
 
 def cli() -> None:
@@ -140,7 +69,6 @@ def cli() -> None:
 
 def main(options: CliOptions) -> CommandResult:
     configure_logging(_to_log_level(options.verbose_level))
-
     logging.info("CLI options: %s", options)
 
     files = collect_files(options.path, FILE_FILTER)
@@ -148,11 +76,7 @@ def main(options: CliOptions) -> CommandResult:
         raise ApitError("No matching files found")
     logging.info("Input path: %s", options.path)
 
-    # TODO add to CommandOptions (similar to CliOptions)?
-    options.cache_path = Path(CACHE_PATH).expanduser()
-
-    CommandType: type[Command] = determine_command_type(options.command)
-    return CommandType().execute(files, options)
+    return options.func(files, options)
 
 
 def _to_log_level(verbose_level: int) -> int:
