@@ -27,7 +27,7 @@ At least [Python](https://www.python.org) 3.10
 
 ## Print the current metadata
 
-    $ apit show ~/Music/Music/Media/Artist/Album/
+    $ apit list ~/Music/Music/Media/Artist/Album/
 
 ## Tag the music files' metadata using data from Apple Music/iTunes Store
 

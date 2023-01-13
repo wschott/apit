@@ -6,8 +6,8 @@ from apit.action import filter_not_actionable
 from apit.action import filter_successes
 from apit.color import Color
 from apit.color import to_colored_text
-from apit.commands.show.action import ReadAction
-from apit.commands.show.reporter import ReadActionReporter
+from apit.commands.list.action import ReadAction
+from apit.commands.list.reporter import ReadActionReporter
 from apit.commands.tag.action import TagAction
 from apit.commands.tag.reporter import TagActionReporter
 from apit.error import ApitError

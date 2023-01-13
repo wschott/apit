@@ -8,7 +8,7 @@ from apit.command_result import CommandResult
 from apit.report import print_report
 
 
-class ShowCommand(Command):
+class ListCommand(Command):
     def execute(self, files: Iterable[Path], options) -> CommandResult:
         actions: list[ReadAction] = [ReadAction(file, {}) for file in files]
 

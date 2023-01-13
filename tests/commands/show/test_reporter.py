@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from apit.commands.show.action import ReadAction
-from apit.commands.show.reporter import ReadActionReporter
+from apit.commands.list.action import ReadAction
+from apit.commands.list.reporter import ReadActionReporter
 
 
 def test_init():

@@ -5,10 +5,15 @@ import pytest
 from apit.cli import parse_args
 
 
-def test_show_command():
-    args = parse_args(["show", "./tests/fixtures"])
-    assert args.command == "show"
+def test_list_command():
+    args = parse_args(["list", "./tests/fixtures"])
+    assert args.command == "list"
     assert args.path == Path("./tests/fixtures").absolute()
+
+
+def test_list_alias():
+    args = parse_args(["ls", "./tests/fixtures"])
+    assert args.command == "ls"
 
 
 def test_tag_command_source_types():
@@ -20,10 +25,10 @@ def test_tag_command_source_types():
 
 
 def test_parse_args_optional_args():
-    args = parse_args(["show", "-v", "./tests/fixtures"])
+    args = parse_args(["list", "-v", "./tests/fixtures"])
     assert args.verbose_level == 1
 
-    args = parse_args(["show", "-vv", "./tests/fixtures"])
+    args = parse_args(["list", "-vv", "./tests/fixtures"])
     assert args.verbose_level == 2
 
     args = parse_args(["tag", "-b", "./tests/fixtures", "./tests/metadata.json"])
@@ -61,14 +66,14 @@ def test_parse_args_missing_command():
 
 def test_parse_args_missing_folder():
     with pytest.raises(SystemExit):
-        parse_args(["show"])
+        parse_args(["list"])
 
 
 def test_parse_args_invalid_option():
     with pytest.raises(SystemExit):
-        parse_args(["-x", "show", "./tests/fixtures"])
+        parse_args(["-x", "list", "./tests/fixtures"])
 
 
 def test_parse_args_using_non_existing_folder():
     with pytest.raises(SystemExit):
-        parse_args(["show", "./non-existing"])
+        parse_args(["list", "./non-existing"])

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from apit.commands.show.action import ReadAction
+from apit.commands.list.action import ReadAction
 from apit.error import ApitError
 
 
@@ -20,7 +20,7 @@ def test_read_action_after_init():
 
 def test_read_action_apply(monkeypatch, test_file_tags):
     monkeypatch.setattr(
-        "apit.commands.show.action.read_tags", lambda *args: test_file_tags
+        "apit.commands.list.action.read_tags", lambda *args: test_file_tags
     )
     action = ReadAction(Path("./tests/fixtures/folder-iteration/1 first.m4a"), {})
 
@@ -37,7 +37,7 @@ def test_read_action_apply_error_while_reading(monkeypatch):
     def _raise(*args):
         raise error
 
-    monkeypatch.setattr("apit.commands.show.action.read_tags", _raise)
+    monkeypatch.setattr("apit.commands.list.action.read_tags", _raise)
     action = ReadAction(Path("./tests/fixtures/folder-iteration/1 first.m4a"), {})
 
     action.apply()
