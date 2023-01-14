@@ -8,29 +8,27 @@ from apit.file_handling import generate_cache_filename
 from apit.file_handling import MIME_TYPE
 
 
-# TODO create temporary files for testing?
-def test_collect_files_using_folder():
-    # TODO test expanddir()
-    assert collect_files(Path("tests/fixtures/folder-iteration")) == [
-        Path("tests/fixtures/folder-iteration/1 first.m4a"),
-        Path("tests/fixtures/folder-iteration/2 second.mp3"),
-        Path("tests/fixtures/folder-iteration/3 third.mp4"),
-    ]
+def test_collect_files_using_folder(tmp_path, make_tmp_file):
+    file_1 = make_tmp_file("1 first.m4a")
+    file_2 = make_tmp_file("2 second.mp3")
+    file_3 = make_tmp_file("3 third.mp4")
+
+    assert collect_files(tmp_path) == [file_1, file_2, file_3]
 
 
-def test_collect_files_using_single_file():
-    assert collect_files(Path("tests/fixtures/folder-iteration/1 first.m4a")) == [
-        Path("tests/fixtures/folder-iteration/1 first.m4a"),
-    ]
+def test_collect_files_using_single_file(make_tmp_file):
+    file_1 = make_tmp_file("1 first.m4a")
+
+    assert collect_files(file_1) == [file_1]
 
 
-def test_collect_files_using_filter():
-    assert collect_files(Path("tests/fixtures/folder-iteration"), ".m4a") == [
-        Path("tests/fixtures/folder-iteration/1 first.m4a")
-    ]
-    assert collect_files(Path("tests/fixtures/folder-iteration"), [".m4a"]) == [
-        Path("tests/fixtures/folder-iteration/1 first.m4a")
-    ]
+def test_collect_files_using_filter(tmp_path, make_tmp_file):
+    file_1 = make_tmp_file("1 first.m4a")
+    make_tmp_file("2 second.mp3")
+    make_tmp_file("3 third.mp4")
+
+    assert collect_files(tmp_path, ".m4a") == [file_1]
+    assert collect_files(tmp_path, [".m4a"]) == [file_1]
 
 
 def test_extract_disc_and_track_number_using_only_track_number():

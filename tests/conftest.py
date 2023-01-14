@@ -36,6 +36,16 @@ class TestTag(TaggedValue):
         return self._unprocessed_value
 
 
+@pytest.fixture
+def make_tmp_file(tmp_path):
+    def _make_tmp_file(name: str) -> Path:
+        path_name: Path = tmp_path / name
+        path_name.touch()
+        return path_name
+
+    return _make_tmp_file
+
+
 @pytest.fixture()
 def song_metadata_as_json_obj():
     return song_metadata_as_json_obj2(disc=2, track=3)
