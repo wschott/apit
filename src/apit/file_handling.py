@@ -41,11 +41,11 @@ def collect_files(
     return [f for f in sorted_files if f.suffix in filter_ext]
 
 
-def extract_disc_and_track_number(path: Path) -> tuple[int, int] | None:
+def extract_disc_and_track_number(path: Path) -> tuple[int | None, int | None]:
     match = REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME.match(path.name)
 
     if not match:
-        return None
+        return None, None
 
     disc = (
         int(match.groupdict()["disc"]) if match.groupdict()["disc"] is not None else 1

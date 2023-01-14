@@ -120,11 +120,7 @@ def to_pre_action_options(
 def to_action_options(
     file: Path, options
 ) -> Mapping[str, Song | bool | int | Path | None]:
-    disc_and_track = extract_disc_and_track_number(file)
-    disc: int | None = None
-    track: int | None = None
-    if disc_and_track is not None:
-        disc, track = disc_and_track
+    disc, track = extract_disc_and_track_number(file)
 
     return {
         "song": find_song(options["songs"], disc=disc, track=track),
