@@ -8,9 +8,9 @@ import pytest
 from apit.error import ApitError
 from apit.metadata import Song
 from apit.tagging.mp4.constants import MP4_MAPPING
-from apit.tagging.update import _modify_mp4_file
-from apit.tagging.update import _read_artwork_content
-from apit.tagging.update import update_metadata
+from apit.tagging.mp4.update import _modify_mp4_file
+from apit.tagging.mp4.update import _read_artwork_content
+from apit.tagging.mp4.update import update_metadata
 
 
 def test_modify_mp4_file(test_song: Song):
@@ -49,7 +49,7 @@ def test_modify_mp4_file_with_cover(test_song: Song):
 def test_metadata_updating(monkeypatch, test_song: Song):
     mock_mp4_file = MagicMock()
     monkeypatch.setattr(
-        "apit.tagging.update.read_metadata_raw", lambda *args: mock_mp4_file
+        "apit.tagging.mp4.update.read_metadata_raw", lambda *args: mock_mp4_file
     )
 
     result = update_metadata(Path("dummy.m4a"), test_song)
@@ -62,14 +62,16 @@ def test_metadata_updating_with_artwork(monkeypatch, test_song: Song):
     cover_path = Path("cover.jpg")
     mock_mp4_file = MagicMock()
     monkeypatch.setattr(
-        "apit.tagging.update.read_metadata_raw", lambda *args: mock_mp4_file
+        "apit.tagging.mp4.update.read_metadata_raw", lambda *args: mock_mp4_file
     )
     mock_read_artwork_content = MagicMock()
     monkeypatch.setattr(
-        "apit.tagging.update._read_artwork_content", mock_read_artwork_content
+        "apit.tagging.mp4.update._read_artwork_content", mock_read_artwork_content
     )
     mock_modify_mp4_file = MagicMock()
-    monkeypatch.setattr("apit.tagging.update._modify_mp4_file", mock_modify_mp4_file)
+    monkeypatch.setattr(
+        "apit.tagging.mp4.update._modify_mp4_file", mock_modify_mp4_file
+    )
 
     result = update_metadata(Path("dummy.m4a"), test_song, cover_path)
 
@@ -85,7 +87,7 @@ def test_metadata_updating_file_read_error(monkeypatch, test_song):
     def _raise(*args):
         raise ApitError("read-error")
 
-    monkeypatch.setattr("apit.tagging.update.read_metadata_raw", _raise)
+    monkeypatch.setattr("apit.tagging.mp4.update.read_metadata_raw", _raise)
 
     with pytest.raises(ApitError, match="read-error"):
         update_metadata(Path("dummy.m4a"), test_song)
@@ -95,7 +97,7 @@ def test_metadata_updating_file_save_error(monkeypatch, test_song):
     mock_mp4_file = MagicMock()
     mock_mp4_file.save.side_effect = mutagen.MutagenError("save-error")
     monkeypatch.setattr(
-        "apit.tagging.update.read_metadata_raw", lambda *args: mock_mp4_file
+        "apit.tagging.mp4.update.read_metadata_raw", lambda *args: mock_mp4_file
     )
 
     with pytest.raises(ApitError, match="save-error"):
