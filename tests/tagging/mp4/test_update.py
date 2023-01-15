@@ -136,6 +136,16 @@ def test_read_artwork_content_with_unsupported_filetype():
         _read_artwork_content(MagicMock(suffix=".uns"))
 
 
+def test_update_fails_for_original_file(monkeypatch, test_song: Song):
+    mock_mp4_file = MagicMock(tags={"apID": "owner information"})
+    monkeypatch.setattr(
+        "apit.tagging.mp4.update.read_metadata_raw", lambda *args: mock_mp4_file
+    )
+
+    with pytest.raises(ApitError, match="original iTunes Store file"):
+        update_metadata(Path("dummy.m4a"), test_song)
+
+
 def _mocked_mp4_file() -> MagicMock:
     mocked_dict = MagicMock()
     real_dict: dict = {}

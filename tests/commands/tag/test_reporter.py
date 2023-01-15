@@ -13,29 +13,12 @@ def test_not_actionable_msg_not_file_matched():
             "song": None,
             "disc": None,
             "track": None,
-            "is_original": False,
         },
     )
 
     reporter = TagActionReporter(action, verbose=False)
 
     assert reporter.not_actionable_msg == "filename not matchable"
-
-
-def test_not_actionable_msg_file_original():
-    action = TagAction(
-        Path("dummy.m4a"),
-        {
-            "song": None,
-            "disc": 1,
-            "track": 1,
-            "is_original": True,
-        },
-    )
-
-    reporter = TagActionReporter(action, verbose=False)
-
-    assert reporter.not_actionable_msg == "original iTunes Store file"
 
 
 def test_not_actionable_msg_not_metadata_matched():
@@ -45,7 +28,6 @@ def test_not_actionable_msg_not_metadata_matched():
             "song": None,
             "disc": 1,
             "track": 1,
-            "is_original": False,
         },
     )
 
@@ -61,7 +43,6 @@ def test_preview_msg_not_actionable():
             "song": None,
             "disc": None,
             "track": None,
-            "is_original": False,
         },
     )
 
@@ -77,7 +58,6 @@ def test_preview_msg_actionable(test_song: Song):
             "song": test_song,
             "disc": test_song.disc_number,
             "track": test_song.track_number,
-            "is_original": False,
         },
     )
 
@@ -93,7 +73,6 @@ def test_status_msg_successful(test_song: Song):
             "song": test_song,
             "disc": test_song.disc_number,
             "track": test_song.track_number,
-            "is_original": False,
         },
     )
     action.mark_as_success("test-success")
@@ -110,7 +89,6 @@ def test_status_msg_tag_not_successful(test_song: Song):
             "song": test_song,
             "disc": test_song.disc_number,
             "track": test_song.track_number,
-            "is_original": False,
         },
     )
     action.mark_as_fail(ApitError("test-error"))
@@ -127,7 +105,6 @@ def test_status_msg_tag_not_actionable():
             "song": None,
             "disc": None,
             "track": None,
-            "is_original": False,
         },
     )
 

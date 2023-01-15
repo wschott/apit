@@ -15,7 +15,6 @@ def test_tag_action_after_init(make_tmp_file, test_song: Song):
             "song": test_song,
             "disc": test_song.disc_number,
             "track": test_song.track_number,
-            "is_original": False,
             "should_backup": False,
             "cover_path": None,
         },
@@ -26,7 +25,6 @@ def test_tag_action_after_init(make_tmp_file, test_song: Song):
         "song": test_song,
         "disc": test_song.disc_number,
         "track": test_song.track_number,
-        "is_original": False,
         "should_backup": False,
         "cover_path": None,
     }
@@ -92,7 +90,6 @@ def test_tag_action_is_filename_identical_to_song(
     monkeypatch.setitem(action.options, "song", test_song)
     monkeypatch.setitem(action.options, "disc", test_song.disc_number)
     monkeypatch.setitem(action.options, "track", test_song.track_number)
-    monkeypatch.setitem(action.options, "is_original", False)
 
     assert action.is_filename_identical_to_song
 
@@ -105,7 +102,6 @@ def test_tag_action_not_is_filename_identical_to_song(
     monkeypatch.setitem(action.options, "song", test_song)
     monkeypatch.setitem(action.options, "disc", test_song.disc_number)
     monkeypatch.setitem(action.options, "track", test_song.track_number)
-    monkeypatch.setitem(action.options, "is_original", False)
 
     assert not action.is_filename_identical_to_song
 
@@ -116,7 +112,6 @@ def test_tag_action_actionable(monkeypatch, make_tmp_file, test_song: Song):
     monkeypatch.setitem(action.options, "song", test_song)
     monkeypatch.setitem(action.options, "disc", test_song.disc_number)
     monkeypatch.setitem(action.options, "track", test_song.track_number)
-    monkeypatch.setitem(action.options, "is_original", False)
 
     assert action.actionable
 
@@ -129,7 +124,6 @@ def test_tag_action_not_actionable_due_to_missing_file(
     monkeypatch.setitem(action.options, "song", test_song)
     monkeypatch.setitem(action.options, "disc", None)
     monkeypatch.setitem(action.options, "track", None)
-    monkeypatch.setitem(action.options, "is_original", False)
 
     assert not action.actionable
 
@@ -142,20 +136,6 @@ def test_tag_action_not_actionable_due_to_missing_metadata(
     monkeypatch.setitem(action.options, "song", None)
     monkeypatch.setitem(action.options, "disc", test_song.disc_number)
     monkeypatch.setitem(action.options, "track", test_song.track_number)
-    monkeypatch.setitem(action.options, "is_original", False)
-
-    assert not action.actionable
-
-
-def test_tag_action_not_actionable_due_to_itunes_original(
-    monkeypatch, make_tmp_file, test_song: Song
-):
-    action = TagAction(make_tmp_file("1 first.m4a"), {})
-
-    monkeypatch.setitem(action.options, "song", test_song)
-    monkeypatch.setitem(action.options, "disc", test_song.disc_number)
-    monkeypatch.setitem(action.options, "track", test_song.track_number)
-    monkeypatch.setitem(action.options, "is_original", True)
 
     assert not action.actionable
 
@@ -166,7 +146,6 @@ def test_tag_action_needs_confirmation(monkeypatch, make_tmp_file, test_song: So
     monkeypatch.setitem(action.options, "song", test_song)
     monkeypatch.setitem(action.options, "disc", test_song.disc_number)
     monkeypatch.setitem(action.options, "track", test_song.track_number)
-    monkeypatch.setitem(action.options, "is_original", False)
 
     assert action.needs_confirmation
 
@@ -177,7 +156,6 @@ def test_tag_action_needs_confirmation_false(monkeypatch, make_tmp_file):
     monkeypatch.setitem(action.options, "song", None)
     monkeypatch.setitem(action.options, "disc", None)
     monkeypatch.setitem(action.options, "track", None)
-    monkeypatch.setitem(action.options, "is_original", False)
 
     assert not action.needs_confirmation
 
@@ -188,7 +166,6 @@ def test_tag_action_apply_not_actionable(monkeypatch, make_tmp_file):
     monkeypatch.setitem(action.options, "song", None)
     monkeypatch.setitem(action.options, "disc", None)
     monkeypatch.setitem(action.options, "track", None)
-    monkeypatch.setitem(action.options, "is_original", False)
 
     mock_mark_as_success = MagicMock()
     monkeypatch.setattr(action, "mark_as_success", mock_mark_as_success)
@@ -217,7 +194,6 @@ def test_tag_action_apply(
     monkeypatch.setitem(action.options, "song", test_song)
     monkeypatch.setitem(action.options, "disc", test_song.disc_number)
     monkeypatch.setitem(action.options, "track", test_song.track_number)
-    monkeypatch.setitem(action.options, "is_original", False)
     monkeypatch.setitem(action.options, "should_backup", False)
     monkeypatch.setitem(action.options, "cover_path", None)
 
@@ -240,7 +216,6 @@ def test_tag_action_apply_error(monkeypatch, make_tmp_file, test_song: Song):
     monkeypatch.setitem(action.options, "song", test_song)
     monkeypatch.setitem(action.options, "disc", test_song.disc_number)
     monkeypatch.setitem(action.options, "track", test_song.track_number)
-    monkeypatch.setitem(action.options, "is_original", False)
     monkeypatch.setitem(action.options, "should_backup", False)
     monkeypatch.setitem(action.options, "cover_path", None)
 

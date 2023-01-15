@@ -13,8 +13,6 @@ class TagActionReporter(ActionReporter):
     def not_actionable_msg(self) -> str:
         if not self.action.file_matched:
             return "filename not matchable"
-        elif self.action.options["is_original"]:  # TODO refactor access
-            return "original iTunes Store file"
         elif not self.action.metadata_matched:
             return "file not matched against metadata"
         raise ApitError("Unknown state")

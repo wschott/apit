@@ -17,6 +17,9 @@ def update_metadata(
 ) -> mutagen.mp4.MP4:
     mp4_file = read_metadata_raw(file)
 
+    if is_itunes_bought_file(mp4_file):
+        raise ApitError("original iTunes Store file")
+
     if cover_path:
         artwork = _read_artwork_content(cover_path)
         _modify_mp4_file(mp4_file, song, artwork)
@@ -75,3 +78,16 @@ def _modify_mp4_file(
     # command.append(f'--plID "{track.collection_Id}"')
 
     return mp4_file
+
+
+BLACKLIST: list[str] = [
+    MP4_MAPPING.OWNER_NAME,
+    MP4_MAPPING.USER_MAIL,
+]
+
+
+def is_itunes_bought_file(mp4_file: mutagen.mp4.MP4) -> bool:
+    if not mp4_file.tags:
+        return False
+
+    return any(item in mp4_file.tags for item in BLACKLIST)

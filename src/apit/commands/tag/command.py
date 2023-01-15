@@ -22,7 +22,6 @@ from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
 from apit.store.connection import generate_lookup_url_by_url
 from apit.store.data_parser import extract_songs
-from apit.tagging.read import is_itunes_bought_file
 from apit.url_utils import is_url
 from apit.user_input import ask_user_for_confirmation
 
@@ -126,7 +125,6 @@ def to_action_options(
         "song": find_song(options["songs"], disc=disc, track=track),
         "disc": disc,
         "track": track,
-        "is_original": is_itunes_bought_file(file),
         "should_backup": options["should_backup"],
         "cover_path": options["cover_path"],
     }

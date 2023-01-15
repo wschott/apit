@@ -6,52 +6,6 @@ import pytest
 
 from apit.error import ApitError
 from apit.tagging.mp4.read import read_metadata_raw
-from apit.tagging.read import is_itunes_bought_file
-
-
-def test_is_itunes_bought_file_for_itunes_file(monkeypatch):
-    monkeypatch.setattr(
-        "mutagen.mp4.MP4",
-        lambda *args: MagicMock(
-            tags={
-                "apID": "owner information",
-                "aART": "Album Artist",
-            }
-        ),
-    )
-    assert is_itunes_bought_file(Path("tests/fixtures/1 itunes file.m4a"))
-
-    monkeypatch.setattr(
-        "mutagen.mp4.MP4",
-        lambda *args: MagicMock(
-            tags={
-                "ownr": "owner information",
-                "aART": "Album Artist",
-            }
-        ),
-    )
-    assert is_itunes_bought_file(Path("tests/fixtures/1 itunes file.m4a"))
-
-
-def test_is_itunes_bought_file_for_not_itunes_file(monkeypatch):
-    monkeypatch.setattr(
-        "mutagen.mp4.MP4",
-        lambda *args: MagicMock(
-            tags={
-                "trkn": "owner information",
-                "aART": "Album Artist",
-            }
-        ),
-    )
-    assert not is_itunes_bought_file(Path("tests/fixtures/1 itunes file.m4a"))
-
-
-def test_is_itunes_bought_file_error(monkeypatch):
-    def _raise(*args):
-        raise ApitError
-
-    monkeypatch.setattr("apit.tagging.mp4.read.read_metadata_raw", _raise)
-    assert not is_itunes_bought_file(Path("tests/fixtures/1 itunes file.m4a"))
 
 
 def test_metadata_reading(monkeypatch):

@@ -20,11 +20,7 @@ class TagAction(Action):
 
     @property
     def actionable(self) -> bool:
-        return (
-            self.file_matched
-            and self.metadata_matched
-            and not self.options["is_original"]
-        )
+        return self.file_matched and self.metadata_matched
 
     @property
     def metadata_matched(self) -> bool:
