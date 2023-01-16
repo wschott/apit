@@ -38,7 +38,7 @@ def collect_files(
     if isinstance(filter_ext, str):
         filter_ext = [filter_ext]
 
-    return [f for f in sorted_files if f.suffix in filter_ext]
+    return [f for f in sorted_files if f.suffix[1:] in filter_ext]
 
 
 def extract_disc_and_track_number(path: Path) -> tuple[int | None, int | None]:

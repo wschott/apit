@@ -27,8 +27,8 @@ def test_collect_files_using_filter(tmp_path, make_tmp_file):
     make_tmp_file("2 second.mp3")
     make_tmp_file("3 third.mp4")
 
-    assert collect_files(tmp_path, ".m4a") == [file_1]
-    assert collect_files(tmp_path, [".m4a"]) == [file_1]
+    assert collect_files(tmp_path, "m4a") == [file_1]
+    assert collect_files(tmp_path, ["m4a"]) == [file_1]
 
 
 def test_extract_disc_and_track_number_using_only_track_number():

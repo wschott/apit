@@ -12,3 +12,8 @@ class ApitStoreConnectionError(ApitError):
 class ApitNoTagsPresentError(ApitError):
     def __init__(self) -> None:
         super().__init__("No tags present")
+
+
+class ApitUnsupportedFileTypeError(ApitError):
+    def __init__(self, extension: str) -> None:
+        super().__init__(f"Unsupported file type: {extension}")
