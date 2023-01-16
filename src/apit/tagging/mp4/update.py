@@ -17,6 +17,9 @@ def update_metadata(
 ) -> mutagen.mp4.MP4:
     mp4_file = read_metadata_raw(file)
 
+    if mp4_file.tags is None:
+        mp4_file.add_tags()
+
     if is_itunes_bought_file(mp4_file):
         raise ApitError("original iTunes Store file")
 
