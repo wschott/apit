@@ -17,6 +17,8 @@
 - search store results and match against local files
 - add "not actionable" message for original iTunes store files
 - add -f to allow writing m4a files from iTunes store
+- musicbrainz lookup + tagging
+- acoustid fingerprint
 
 
 # Development
