@@ -32,4 +32,4 @@ class ReadActionReporter(ActionReporter):
                 return to_tags_report(self.action.result, self.verbose)
             else:
                 return "No tags present"
-        return self.status_msg
+        return f"{self.status_msg} {self.action.result}"

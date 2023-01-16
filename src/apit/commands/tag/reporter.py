@@ -39,4 +39,4 @@ class TagActionReporter(ActionReporter):
     def result(self) -> str:
         if self.action.executed and self.action.successful and self.action.result:
             return to_tags_report(self.action.result, self.verbose)
-        return self.status_msg
+        return f"{self.status_msg} {self.action.result}"
