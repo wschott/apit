@@ -53,25 +53,25 @@ def _read_artwork_content(artwork_path: Path) -> mutagen.mp4.MP4Cover:
 def _modify_mp4_file(
     mp4_file: mutagen.mp4.MP4, song: Song, artwork: mutagen.mp4.MP4Cover | None = None
 ) -> mutagen.mp4.MP4:
-    mp4_file[MP4_MAPPING.ARTIST] = song.artist
-    mp4_file[MP4_MAPPING.TITLE] = song.title
-    mp4_file[MP4_MAPPING.ALBUM_NAME] = song.album_name
-    mp4_file[MP4_MAPPING.GENRE] = song.genre
-    mp4_file[MP4_MAPPING.RELEASE_DATE] = song.release_date
-    mp4_file[MP4_MAPPING.DISC_NUMBER] = [(song.disc_number, song.disc_total)]
-    mp4_file[MP4_MAPPING.TRACK_NUMBER] = [(song.track_number, song.track_total)]
-    mp4_file[MP4_MAPPING.RATING] = [RATING_MAPPING[to_rating(song.rating)]]
-    mp4_file[MP4_MAPPING.MEDIA_TYPE] = [
+    mp4_file[MP4_MAPPING.ARTIST.value] = song.artist
+    mp4_file[MP4_MAPPING.TITLE.value] = song.title
+    mp4_file[MP4_MAPPING.ALBUM_NAME.value] = song.album_name
+    mp4_file[MP4_MAPPING.GENRE.value] = song.genre
+    mp4_file[MP4_MAPPING.RELEASE_DATE.value] = song.release_date
+    mp4_file[MP4_MAPPING.DISC_NUMBER.value] = [(song.disc_number, song.disc_total)]
+    mp4_file[MP4_MAPPING.TRACK_NUMBER.value] = [(song.track_number, song.track_total)]
+    mp4_file[MP4_MAPPING.RATING.value] = [RATING_MAPPING[to_rating(song.rating)]]
+    mp4_file[MP4_MAPPING.MEDIA_TYPE.value] = [
         ITEM_KIND_MAPPING[to_item_kind(song.media_kind)]
     ]
-    mp4_file[MP4_MAPPING.ALBUM_ARTIST] = song.album_artist
-    mp4_file[MP4_MAPPING.COPYRIGHT] = song.copyright
-    mp4_file[MP4_MAPPING.COMPILATION] = song.compilation
-    mp4_file[MP4_MAPPING.CONTENT_ID] = [song.content_id]
+    mp4_file[MP4_MAPPING.ALBUM_ARTIST.value] = song.album_artist
+    mp4_file[MP4_MAPPING.COPYRIGHT.value] = song.copyright
+    mp4_file[MP4_MAPPING.COMPILATION.value] = song.compilation
+    mp4_file[MP4_MAPPING.CONTENT_ID.value] = [song.content_id]
 
     if artwork:
         # TODO first, remove all artwork
-        mp4_file[MP4_MAPPING.ARTWORK] = [artwork]
+        mp4_file[MP4_MAPPING.ARTWORK.value] = [artwork]
 
     # command.append(f'--xID "{track[]}"')
     # if track.genre in GENRE_MAP:
