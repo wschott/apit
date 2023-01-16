@@ -105,30 +105,26 @@ def test_metadata_updating_file_save_error(monkeypatch, test_song):
     assert mock_mp4_file.save.call_args == call()
 
 
-def test_read_artwork_content_with_jpg(monkeypatch):
-    mock_cover_path = MagicMock(suffix=".jpg")
-    mock_cover_path.read_bytes.return_value = "artwork-value"
+def test_read_artwork_content_with_jpg(tmp_path):
+    p = tmp_path / "test.jpg"
+    p.write_bytes(b"artwork-value")
 
-    mock_mp4_cover = MagicMock(FORMAT_JPEG="jpg")
-    monkeypatch.setattr("mutagen.mp4.MP4Cover", mock_mp4_cover)
+    artwork = _read_artwork_content(p)
 
-    artwork = _read_artwork_content(mock_cover_path)
-
-    assert mock_mp4_cover.call_args == call("artwork-value", imageformat="jpg")
-    assert artwork == mock_mp4_cover()
+    assert artwork == mutagen.mp4.MP4Cover(
+        b"artwork-value", imageformat=mutagen.mp4.MP4Cover.FORMAT_JPEG
+    )
 
 
-def test_read_artwork_content_with_png(monkeypatch):
-    mock_cover_path = MagicMock(suffix=".png")
-    mock_cover_path.read_bytes.return_value = "artwork-value"
+def test_read_artwork_content_with_png(tmp_path):
+    p = tmp_path / "test.png"
+    p.write_bytes(b"artwork-value")
 
-    mock_mp4_cover = MagicMock(FORMAT_PNG="png")
-    monkeypatch.setattr("mutagen.mp4.MP4Cover", mock_mp4_cover)
+    artwork = _read_artwork_content(p)
 
-    artwork = _read_artwork_content(mock_cover_path)
-
-    assert mock_mp4_cover.call_args == call("artwork-value", imageformat="png")
-    assert artwork == mock_mp4_cover()
+    assert artwork == mutagen.mp4.MP4Cover(
+        b"artwork-value", imageformat=mutagen.mp4.MP4Cover.FORMAT_PNG
+    )
 
 
 def test_read_artwork_content_with_unsupported_filetype():

@@ -11,6 +11,11 @@ from apit.store.constants import RATING_MAPPING
 from apit.store.constants import to_item_kind
 from apit.store.constants import to_rating
 
+ARTWORK_FORMATS = {
+    ".jpg": mutagen.mp4.MP4Cover.FORMAT_JPEG,
+    ".png": mutagen.mp4.MP4Cover.FORMAT_PNG,
+}
+
 
 def update_metadata(
     file: Path, song: Song, cover_path: Path | None = None
@@ -38,16 +43,12 @@ def update_metadata(
 
 
 def _read_artwork_content(artwork_path: Path) -> mutagen.mp4.MP4Cover:
-    artwork_content = artwork_path.read_bytes()
-    if artwork_path.suffix == ".jpg":
-        return mutagen.mp4.MP4Cover(
-            artwork_content, imageformat=mutagen.mp4.MP4Cover.FORMAT_JPEG
-        )
-    elif artwork_path.suffix == ".png":
-        return mutagen.mp4.MP4Cover(
-            artwork_content, imageformat=mutagen.mp4.MP4Cover.FORMAT_PNG
-        )
-    raise ApitError("Unknown artwork image type")
+    try:
+        image_format = ARTWORK_FORMATS[artwork_path.suffix]
+    except KeyError:
+        raise ApitError(f"Unknown artwork image type: {artwork_path.suffix}")
+    else:
+        return mutagen.mp4.MP4Cover(artwork_path.read_bytes(), imageformat=image_format)
 
 
 def _modify_mp4_file(
