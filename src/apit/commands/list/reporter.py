@@ -28,5 +28,8 @@ class ReadActionReporter(ActionReporter):
     @property
     def result(self) -> str:
         if self.action.executed and self.action.successful and self.action.result:
-            return to_tags_report(self.action.result, self.verbose)
+            if self.action.result.has_tags:
+                return to_tags_report(self.action.result, self.verbose)
+            else:
+                return "No tags present"
         return self.status_msg

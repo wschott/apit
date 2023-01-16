@@ -30,6 +30,8 @@ class MockTagAction(NamedTuple):
 
 class TestTag(TaggedValue):
     def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
+        if tag_id == TagId("known-tag"):
+            return ReadableTagName.TITLE
         return None
 
     def value(self, verbose: bool) -> str:
