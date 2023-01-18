@@ -1,6 +1,6 @@
 # apit
 
-[![Build Status](https://github.com/wschott/apit/actions/workflows/python-package.yml/badge.svg)](https://github.com/wschott/apit/actions/workflows/python-package.yml)
+[![Build Status](https://github.com/wschott/apit/actions/workflows/tests.yml/badge.svg)](https://github.com/wschott/apit/actions/workflows/tests.yml)
 
 **RUN THIS AT YOUR OWN RISK! MAKE A BACKUP BEFORE RUNNING THIS!**
 
