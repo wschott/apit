@@ -72,9 +72,12 @@ def _modify_mp3_file(
     )
     _update_specific_tag(mp3_file.tags, MP3_MAPPING.ALBUM_ARTIST, song.album_artist)
     _update_specific_tag(mp3_file.tags, MP3_MAPPING.COPYRIGHT, song.copyright)
-    _update_specific_tag(
-        mp3_file.tags, MP3_MAPPING.COMPILATION, str(int(song.compilation))
-    )  # TODO only set if song.compilation? unset otherwise?
+    if song.compilation:
+        _update_specific_tag(
+            mp3_file.tags, MP3_MAPPING.COMPILATION, str(int(song.compilation))
+        )
+    else:
+        _unset_tag(mp3_file.tags, MP3_MAPPING.COMPILATION)
 
     if artwork:
         _update_artwork_tag(mp3_file.tags, MP3_MAPPING.ARTWORK, artwork)
@@ -97,5 +100,9 @@ def _update_specific_tag(tags, tag_id: TagId, value):
 
 
 def _update_artwork_tag(tags, tag_id: TagId, value):
-    tags.delall(tag_id)
+    _unset_tag(tags, tag_id)
     tags.add(value)
+
+
+def _unset_tag(tags, tag_id: TagId):
+    tags.delall(tag_id)
