@@ -5,6 +5,7 @@ from enum import Enum
 from pathlib import Path
 
 from apit.metadata import Song
+from apit.sort import sort_naturally
 
 REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME = re.compile(
     r"^[#]?((?P<disc>\d+)[-.])?(?P<track>\d+).+"
@@ -30,7 +31,7 @@ def collect_files(
     elif path.is_dir():
         unfiltered_files = [Path(f) for f in os.scandir(path) if f.is_file()]
 
-    sorted_files = sorted(unfiltered_files)
+    sorted_files = sort_naturally(unfiltered_files)
 
     if not filter_ext:
         return sorted_files
