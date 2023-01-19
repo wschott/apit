@@ -1,3 +1,4 @@
+from apit.string_utils import clean
 from apit.string_utils import compare_normalized_caseless
 from apit.string_utils import normalize_unicode
 from apit.string_utils import pad_with_spaces
@@ -25,3 +26,7 @@ def test_pad_with_spaces():
     assert pad_with_spaces("test", length=5) == "test "
     assert pad_with_spaces("test", length=4) == "test"
     assert pad_with_spaces("test", length=3) == "test"
+
+
+def test_clean():
+    assert clean("-t. é\\ s/ t_") == "tést"

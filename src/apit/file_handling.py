@@ -8,7 +8,7 @@ from apit.metadata import Song
 from apit.sort import sort_naturally
 
 REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME = re.compile(
-    r"^[#]?((?P<disc>\d+)[-.])?(?P<track>\d+).+"
+    r"^[#]?((?P<disc>\d+)[-.])?(?P<track>\d+)"
 )
 
 

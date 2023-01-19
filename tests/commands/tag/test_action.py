@@ -106,6 +106,21 @@ def test_tag_action_not_is_filename_identical_to_song(
     assert not action.is_filename_identical_to_song
 
 
+def test_tag_action_is_filename_with_strange_chars_identical_to_song(
+    monkeypatch, make_tmp_file, test_song: Song
+):
+    action = TagAction(
+        make_tmp_file("2-3 Track! feat.=; [Other & $Artist]_Bonus Track-.m4a"),
+        {},
+    )
+
+    monkeypatch.setitem(action.options, "song", test_song)
+    monkeypatch.setitem(action.options, "disc", test_song.disc_number)
+    monkeypatch.setitem(action.options, "track", test_song.track_number)
+
+    assert action.is_filename_identical_to_song
+
+
 def test_tag_action_actionable(monkeypatch, make_tmp_file, test_song: Song):
     action = TagAction(make_tmp_file("1 first.m4a"), {})
 

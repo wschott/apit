@@ -1,10 +1,12 @@
 import shutil
-from pathlib import Path
 
 from apit.action import Action
 from apit.error import ApitError
+from apit.file_handling import extract_disc_and_track_number
+from apit.file_handling import REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME
 from apit.file_tags import FileTags
 from apit.metadata import Song
+from apit.string_utils import clean
 from apit.string_utils import compare_normalized_caseless
 from apit.tagging.update import update_tags
 
@@ -30,10 +32,19 @@ class TagAction(Action):
     def is_filename_identical_to_song(self) -> bool:
         if not self.actionable:
             return False
-        actual_file_filename = Path(self.file).with_suffix("").name
-        action_resulting_filename = f"{self.song.track_number_padded} {self.song.title}"
-        return compare_normalized_caseless(
-            actual_file_filename, action_resulting_filename
+
+        filename_disc, filename_track = extract_disc_and_track_number(self.file)
+        filename_without_track_number = REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME.sub(
+            "", str(self.file.with_suffix("").name)
+        )
+
+        return (
+            self.song.track_number == filename_track
+            and self.song.disc_number == filename_disc
+            and compare_normalized_caseless(
+                clean(filename_without_track_number),
+                clean(self.song.title),
+            )
         )
 
     @property

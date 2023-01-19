@@ -1,3 +1,4 @@
+import re
 import unicodedata
 
 ELLIPSIS = "…"
@@ -23,3 +24,7 @@ def compare_normalized_caseless(string1: str, string2: str) -> bool:
 
 def pad_with_spaces(string: str, length: int) -> str:
     return string.ljust(length, " ")
+
+
+def clean(uncleaned_str: str) -> str:
+    return re.sub(r"[\W_]+", "", uncleaned_str)
