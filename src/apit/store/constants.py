@@ -30,7 +30,7 @@ class STORE_KEY(StrEnum):
     MEDIA_KIND      = 'kind'
     CONTENT_ID      = 'trackId'  # catalog ID
     COLLECTION_ID   = 'collectionId'  # same as ALBUM:collectionId   # TODO rename to PLAYLIST_ID?
-    COLLECTION_ARTIST = 'collectionArtistName'  # presence indicates, that this is part of a compilation
+    COLLECTION_ARTIST = 'collectionArtistId'  # presence indicates, that this is part of a compilation
     # TODO ARTIST_ID       = 'artistId'
 
     # album values
