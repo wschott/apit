@@ -4,7 +4,7 @@
 
 **RUN THIS AT YOUR OWN RISK! MAKE A BACKUP BEFORE RUNNING THIS!**
 
-apit allows batch tagging .m4a (AAC and ALAC) file metadata tags using data from Apple Music/iTunes Store.
+apit allows batch tagging .mp3 and .m4a (AAC and ALAC) file metadata tags using data from Apple Music/iTunes Store.
 
 
 # Installation
@@ -45,15 +45,15 @@ The filename of your files must have the following format in order to match them
 
 1. **optional**: **disc number** (followed by "-" or ".")
 2. **required**: **track number** (followed by an optional ".")
-3. **required**: `.m4a` **extension**
+3. **required**: `.mp3` or `.m4a` **extension**
 
 Examples:
 
    - without disc number (defaults to disc 1)
-      - `14.m4a`, `14 title.m4a`, `14. title.m4a`, `#14.m4a`, `#14 title.m4a`
+      - `14.m4a`, `14 title.mp3`, `14. title.m4a`, `#14.m4a`, `#14 title.m4a`
       - `2. 14 title.m4a` (track 2: title contains the number 14)
    - with disc number (e.g. disc 2)
-      - `2-14 title.m4a`, `2.14 title.m4a`, `2.14. title.m4a`
+      - `2-14 title.m4a`, `2.14 title.mp3`, `2.14. title.m4a`
 
 ### Metadata source requirement
 

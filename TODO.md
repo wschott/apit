@@ -13,7 +13,6 @@
 - allow setting cli flag to optionally overwrite original itunes files (-> don't skip them)?
 - add flag to add a new artwork instead of removing all before adding
 - new command: download lyrics
-- add mp3 support
 - search store results and match against local files
 - add "not actionable" message for original iTunes store files
 - add -f to allow writing m4a files from iTunes store
