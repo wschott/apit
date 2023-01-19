@@ -10,7 +10,7 @@ from apit.error import ApitError
 
 class Action(ABC):
     def __init__(self, file: Path, options) -> None:
-        self.file = file
+        self.file: Path = file
         self.options = options
 
         logging.info(f"{self} options: {options}")

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from apit.metadata import Album
+from apit.utils import generate_padded_track_number
 
 
 @dataclass
@@ -41,8 +42,9 @@ class Song:
 
     @property
     def track_number_padded(self) -> str:
-        total_track_str_length = len(str(self.track_total))
-        padded_track_number = str(self.track_number).rjust(total_track_str_length, "0")
-        if self.disc_total > 1:
-            return f"{self.disc_number}-{padded_track_number}"
-        return padded_track_number
+        return generate_padded_track_number(
+            track_number=self.track_number,
+            track_total=self.track_total,
+            disc_number=self.disc_number,
+            disc_total=self.disc_total,
+        )
