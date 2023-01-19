@@ -27,9 +27,9 @@ class Mp3Tag(TaggedValue):
             self._unprocessed_value, mutagen.id3.APIC
         ):  # MP3_MAPPING.ARTWORK
             return "<present>"
-        elif isinstance(
-            self._unprocessed_value, mutagen.id3.TCMP
-        ):  # MP3_MAPPING.COMPILATION
+        elif self.tag_id == MP3_MAPPING.GAPLESS or isinstance(
+            self._unprocessed_value, mutagen.id3.TCMP  # MP3_MAPPING.COMPILATION
+        ):
             return "<yes>" if self._unprocessed_value.text[0] == "1" else "<no>"  # type: ignore
         else:
             return self._unprocessed_value
