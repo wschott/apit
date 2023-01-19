@@ -16,7 +16,7 @@ def test_tag_action_after_init(make_tmp_file, test_song: Song):
             "disc": test_song.disc_number,
             "track": test_song.track_number,
             "should_backup": False,
-            "cover_path": None,
+            "artwork": None,
         },
     )
 
@@ -26,7 +26,7 @@ def test_tag_action_after_init(make_tmp_file, test_song: Song):
         "disc": test_song.disc_number,
         "track": test_song.track_number,
         "should_backup": False,
-        "cover_path": None,
+        "artwork": None,
     }
     assert not action.executed
     assert not action.successful
@@ -210,7 +210,7 @@ def test_tag_action_apply(
     monkeypatch.setitem(action.options, "disc", test_song.disc_number)
     monkeypatch.setitem(action.options, "track", test_song.track_number)
     monkeypatch.setitem(action.options, "should_backup", False)
-    monkeypatch.setitem(action.options, "cover_path", None)
+    monkeypatch.setitem(action.options, "artwork", None)
 
     action.apply()
 
@@ -232,7 +232,7 @@ def test_tag_action_apply_error(monkeypatch, make_tmp_file, test_song: Song):
     monkeypatch.setitem(action.options, "disc", test_song.disc_number)
     monkeypatch.setitem(action.options, "track", test_song.track_number)
     monkeypatch.setitem(action.options, "should_backup", False)
-    monkeypatch.setitem(action.options, "cover_path", None)
+    monkeypatch.setitem(action.options, "artwork", None)
 
     action.apply()
 

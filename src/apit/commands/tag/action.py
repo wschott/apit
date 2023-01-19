@@ -60,7 +60,7 @@ class TagAction(Action):
                 self.backup_song()
 
             result: FileTags = update_tags(
-                self.file, self.song, self.options["cover_path"]
+                self.file, self.song, self.options["artwork"]
             )
         except ApitError as e:
             self.mark_as_fail(e)

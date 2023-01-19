@@ -7,29 +7,20 @@ import mutagen.mp3
 from .constants import MP3_MAPPING
 from .read import read_metadata_raw
 from apit.error import ApitError
-from apit.file_handling import MIME_TYPE
+from apit.metadata import Artwork
 from apit.metadata import Song
 from apit.tag_id import TagId
 
-ARTWORK_FORMATS = {
-    ".jpg": MIME_TYPE.JPEG.value,
-    ".png": MIME_TYPE.PNG.value,
-}
-
 
 def update_metadata(
-    file: Path, song: Song, cover_path: Path | None = None
+    file: Path, song: Song, artwork: Artwork | None = None
 ) -> mutagen.mp3.MP3:
     mp3_file = read_metadata_raw(file)
 
     if mp3_file.tags is None:
         mp3_file.add_tags()
 
-    if cover_path:
-        artwork = _read_artwork_content(cover_path)
-        _modify_mp3_file(mp3_file, song, artwork)
-    else:
-        _modify_mp3_file(mp3_file, song)
+    _modify_mp3_file(mp3_file, song, artwork)
     # TODO error handling
     try:
         mp3_file.save()
@@ -39,21 +30,16 @@ def update_metadata(
         return mp3_file
 
 
-def _read_artwork_content(artwork_path: Path) -> mutagen.id3.APIC:
-    try:
-        image_format = ARTWORK_FORMATS[artwork_path.suffix]
-    except KeyError:
-        raise ApitError(f"Unknown artwork image type: {artwork_path.suffix}")
-    else:
-        return mutagen.id3.APIC(
-            mime=image_format,
-            type=mutagen.id3.PictureType.COVER_FRONT,
-            data=artwork_path.read_bytes(),
-        )
+def _to_artwork(artwork: Artwork) -> mutagen.id3.APIC:
+    return mutagen.id3.APIC(
+        mime=artwork.mimetype.value,
+        type=mutagen.id3.PictureType.COVER_FRONT,
+        data=artwork.content,
+    )
 
 
 def _modify_mp3_file(
-    mp3_file: mutagen.mp3.MP3, song: Song, artwork: mutagen.id3.APIC | None = None
+    mp3_file: mutagen.mp3.MP3, song: Song, artwork: Artwork | None = None
 ) -> mutagen.mp3.MP3:
     _update_specific_tag(mp3_file.tags, MP3_MAPPING.ARTIST, song.artist)
     _update_specific_tag(mp3_file.tags, MP3_MAPPING.TITLE, song.title)
@@ -99,9 +85,10 @@ def _update_specific_tag(tags, tag_id: TagId, value):
         tag.text = value
 
 
-def _update_artwork_tag(tags, tag_id: TagId, value):
+def _update_artwork_tag(tags, tag_id: TagId, artwork: Artwork):
     _unset_tag(tags, tag_id)
-    tags.add(value)
+    apic = _to_artwork(artwork)
+    tags.add(apic)
 
 
 def _unset_tag(tags, tag_id: TagId):

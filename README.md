@@ -37,7 +37,7 @@ Example using an url:
 
 Example using an already downloaded metadata file:
 
-    $ apit tag ~/Music/Music/Media/Artist/Album/ ~/.apit/Artist-Album-123456789.json
+    $ apit tag ~/Music/Music/Media/Artist/Album/ ~/Desktop/Artist-Album-123456789.json
 
 ### Filename format requirements
 
@@ -72,7 +72,7 @@ Even this format will match:
 
     http://x/us/x/9/123456789?i=09876
 
-This will lookup the metadata of the album with the ID _123456789_ in the _US_ store of Apple Music/iTunes (and optionally download that data to `~/.apit`).
+This will lookup the metadata of the album with the ID _123456789_ in the _US_ store of Apple Music/iTunes.
 
 ### Attention: Beware of album variations (e.g. deluxe editions)
 
@@ -80,18 +80,12 @@ You should compare your files against the album's metadata you found via the iTu
 
 ## Artwork
 
-Optionally, you can use artwork from Apple Music/iTunes Store and save them to your files using `--artwork` (short: `-a`). Additionally, you can specify your desired pixel size (default: 600).
+By default, artwork from Apple Music/iTunes Store is saved to your files. Additionally, you can specify your desired pixel size (default: 600).
 
 Examples:
 
-    $ apit tag -a ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
-    $ apit tag -a --artwork-size 1000 ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
-
-## Metadata cache
-
-The downloaded metadata can be saved to your disk for later usage using `--cache` (short: `-c`).
-
-    $ apit tag --cache ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+    $ apit tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+    $ apit tag --artwork-size 1000 ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
 
 ## Create backup files
 

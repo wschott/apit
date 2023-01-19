@@ -7,7 +7,7 @@ import pytest
 
 from apit.error import ApitError
 from apit.error import ApitStoreConnectionError
-from apit.file_handling import MIME_TYPE
+from apit.mime_type import MIME_TYPE
 from apit.store.connection import _to_mime_type
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata

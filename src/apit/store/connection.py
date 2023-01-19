@@ -5,7 +5,7 @@ import urllib.request
 
 from apit.error import ApitError
 from apit.error import ApitStoreConnectionError
-from apit.file_handling import MIME_TYPE
+from apit.mime_type import MIME_TYPE
 
 # format (as of 2020-05): https://music.apple.com/us/album/album-name/123456789
 # old format: http://itunes.apple.com/us/album/album-name/id123456789

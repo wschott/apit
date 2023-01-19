@@ -7,16 +7,13 @@ from .action import TagAction
 from .command_reporter import print_actions_preview
 from apit.action import all_actions_successful
 from apit.action import any_action_needs_confirmation
-from apit.cache import save_artwork_to_cache
-from apit.cache import save_metadata_to_cache
 from apit.command_result import CommandResult
 from apit.error import ApitError
 from apit.file_handling import extract_disc_and_track_number
-from apit.file_handling import generate_artwork_filename
-from apit.file_handling import generate_cache_filename
-from apit.file_handling import MIME_TYPE
+from apit.metadata import Artwork
 from apit.metadata import find_song
 from apit.metadata import Song
+from apit.mime_type import MIME_TYPE
 from apit.report import print_report
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
@@ -31,16 +28,12 @@ def execute(
     verbose_level: int,
     source: str,
     has_backup_flag: bool,
-    has_search_result_cache_flag: bool,
-    cache_path: Path,
     has_embed_artwork_flag: bool,
     artwork_size: int,
 ) -> CommandResult:
     pre_action_options = to_pre_action_options(
         source=source,
         has_backup_flag=has_backup_flag,
-        has_search_result_cache_flag=has_search_result_cache_flag,
-        cache_path=cache_path,
         has_embed_artwork_flag=has_embed_artwork_flag,
         artwork_size=artwork_size,
     )
@@ -66,59 +59,35 @@ def execute(
 def to_pre_action_options(
     source: str,
     has_backup_flag: bool,
-    has_search_result_cache_flag: bool,
-    cache_path: Path,
     has_embed_artwork_flag: bool,
     artwork_size: int,
-) -> Mapping[str, list[Song] | bool | Path | None]:
+) -> Mapping[str, list[Song] | bool | Artwork | None]:
     metadata_json = get_metadata_json(source)
 
     songs = extract_songs(metadata_json)
 
     first_song = songs[0]  # TODO refactor # TODO fix possible IndexError
 
-    if has_search_result_cache_flag and is_url(source):
-        # TODO find better location for this code
-        if not songs:
-            raise ApitError("Failed to generate a cache filename due to missing song")
-        metadata_cache_file = generate_cache_filename(cache_path, first_song)
-        save_metadata_to_cache(metadata_json, metadata_cache_file)
-        logging.info("Downloaded metadata cached in: %s", metadata_cache_file)
-
-    artwork_path = None
+    artwork: Artwork | None = None
     if has_embed_artwork_flag:
-        artwork_path = get_cached_artwork_path_if_exists(first_song, cache_path)
+        size = artwork_size
+        upscaled_url = upscale_artwork_url(first_song, size)
+        logging.info("Use cover link (with size %d): %s", size, upscaled_url)
+        logging.info("Download cover (with size %d) from: %s", size, upscaled_url)
 
-        if artwork_path:
-            logging.info("Use cached cover: %s", artwork_path)
-        else:
-            size = artwork_size
-            upscaled_url = upscale_artwork_url(first_song, size)
-            logging.info("Use cover link (with size %d): %s", size, upscaled_url)
-            logging.info("Download cover (with size %d) from: %s", size, upscaled_url)
-            if has_search_result_cache_flag:
-                artwork_cache_path = cache_path
-            else:
-                import tempfile
-
-                artwork_cache_path = Path(tempfile.gettempdir())
-            artwork_content, image_type = download_artwork(upscaled_url)
-            artwork_path = generate_artwork_filename(
-                artwork_cache_path, first_song, image_type
-            )
-            save_artwork_to_cache(artwork_content, artwork_path)
-            logging.info("Cover cached in: %s", artwork_path)
+        artwork_content, image_type = download_artwork(upscaled_url)
+        artwork = Artwork(content=artwork_content, mimetype=MIME_TYPE(image_type))
 
     return {
         "songs": songs,
         "should_backup": has_backup_flag,
-        "cover_path": artwork_path,
+        "artwork": artwork,
     }
 
 
 def to_action_options(
     file: Path, options
-) -> Mapping[str, Song | bool | int | Path | None]:
+) -> Mapping[str, Song | bool | int | Artwork | None]:
     disc, track = extract_disc_and_track_number(file)
 
     return {
@@ -126,22 +95,12 @@ def to_action_options(
         "disc": disc,
         "track": track,
         "should_backup": options["should_backup"],
-        "cover_path": options["cover_path"],
+        "artwork": options["artwork"],
     }
 
 
 def upscale_artwork_url(song: Song, size: int) -> str:
     return song.artwork_url.replace("100x100", f"{size}x{size}")
-
-
-def get_cached_artwork_path_if_exists(song: Song, cache_path: Path) -> Path | None:
-    jpeg_path = generate_artwork_filename(cache_path, song, MIME_TYPE.JPEG)
-    png_path = generate_artwork_filename(cache_path, song, MIME_TYPE.PNG)
-    if jpeg_path.exists():
-        return jpeg_path
-    elif png_path.exists():
-        return png_path
-    return None
 
 
 def get_metadata_json(source: str) -> str:

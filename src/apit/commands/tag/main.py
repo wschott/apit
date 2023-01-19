@@ -6,7 +6,6 @@ from ..common_cli_parser_arguments import add_verbose_argument
 from .command import execute
 from apit.cli_options import CliOptions
 from apit.command_result import CommandResult
-from apit.defaults import CACHE_PATH
 
 
 def setup_cli_parser(subparsers):
@@ -25,13 +24,6 @@ def setup_cli_parser(subparsers):
         action="store_true",
         default=False,
         help="create backup before updating tags (default: %(default)s)",
-    )
-    tag_command.add_argument(
-        "-c",
-        "--cache",
-        dest="has_search_result_cache_flag",
-        action="store_true",
-        help="save the downloaded metadata to disk (default: %(default)s)",
     )
     tag_command.add_argument(
         "-a",
@@ -57,16 +49,11 @@ def setup_cli_parser(subparsers):
 
 
 def main(files: Iterable[Path], options: CliOptions) -> CommandResult:
-    # TODO add to CommandOptions (similar to CliOptions)?
-    options.cache_path = Path(CACHE_PATH).expanduser()
-
     return execute(
         files=files,
         verbose_level=options.verbose_level,
         source=options.source,
         has_backup_flag=options.has_backup_flag,
-        has_search_result_cache_flag=options.has_search_result_cache_flag,
-        cache_path=options.cache_path,
         has_embed_artwork_flag=options.has_embed_artwork_flag,
         artwork_size=options.artwork_size,
     )

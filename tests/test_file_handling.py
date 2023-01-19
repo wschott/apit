@@ -1,11 +1,7 @@
 from pathlib import Path
 
-from apit.file_handling import _generate_filename_prefix
 from apit.file_handling import collect_files
 from apit.file_handling import extract_disc_and_track_number
-from apit.file_handling import generate_artwork_filename
-from apit.file_handling import generate_cache_filename
-from apit.file_handling import MIME_TYPE
 
 
 def test_collect_files_using_folder(tmp_path, make_tmp_file):
@@ -73,22 +69,3 @@ def test_extract_disc_and_track_number_using_disc_and_track_number():
 
 def test_extract_disc_and_track_number_using_invalid_filename():
     assert extract_disc_and_track_number(Path("song title.m4a")) == (None, None)
-
-
-def test_generate_cache_filename(test_song):
-    assert generate_cache_filename(Path("."), test_song) == Path(
-        "./Album_Artist-Test_Album_Namè-12345.json"
-    )
-
-
-def test_generate_artwork_filename(test_song):
-    assert generate_artwork_filename(Path("."), test_song, MIME_TYPE.JPEG) == Path(
-        "./Album_Artist-Test_Album_Namè-12345.jpg"
-    )
-    assert generate_artwork_filename(Path("."), test_song, MIME_TYPE.PNG) == Path(
-        "./Album_Artist-Test_Album_Namè-12345.png"
-    )
-
-
-def test_generate_filename_prefix(test_song):
-    assert _generate_filename_prefix(test_song) == "Album_Artist-Test_Album_Namè-12345"

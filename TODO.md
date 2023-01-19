@@ -2,20 +2,13 @@
 
 - add CWD usage
 - improve logging output
-- metadata caching
-  - add metadata cache lookup (e.g. using folder name)
-  - check against metadata cache before downloading
-    - ask user what should be done if already cached data is found
-    - allow re-download using -f/--force
-  - move metadata downloads to ~/.apit/metadata-cache/?
 - add a ~/.apit/config file to omit cli flags?
 - add apit execution logging to ~/.apit/logs/?
-- allow setting cli flag to optionally overwrite original itunes files (-> don't skip them)?
+- add -f cli flag to allow writing m4a files from iTunes store
 - add flag to add a new artwork instead of removing all before adding
 - new command: download lyrics
 - search store results and match against local files
 - add "not actionable" message for original iTunes store files
-- add -f to allow writing m4a files from iTunes store
 - musicbrainz lookup + tagging
 - acoustid fingerprint
 

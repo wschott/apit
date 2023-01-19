@@ -1,10 +1,7 @@
 import json
-import subprocess
 
 import pytest
 
-from apit.cache import save_artwork_to_cache
-from apit.cache import save_metadata_to_cache
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
 
@@ -35,29 +32,7 @@ def test_download_metadata_using_real_itunes_data():
 
 
 @pytest.mark.integration
-def test_downloaded_metadata_json_is_saved_using_unicode_chars(tmp_path):
-    cache_file = tmp_path / "test-file.json"
-
-    json_str = download_metadata(REAL_LOOKUP_URL)
-    save_metadata_to_cache(json_str, cache_file)
-
-    data_read = cache_file.read_text()
-    assert data_read == json_str
-    data = json.loads(data_read)
-    assert data["results"][0]["copyright"] == "℗ 2010 UMG Recordings, Inc."
-
-
-@pytest.mark.integration
-def test_downloaded_artwork(tmp_path):
-    cache_file = tmp_path / "test-file.jpg"
-
+def test_downloaded_artwork():
     artwork_content, image_type = download_artwork(REAL_ARTWORK_URL)
-    save_artwork_to_cache(artwork_content, cache_file)
 
-    data_read = cache_file.read_bytes()
-    assert data_read == artwork_content
-    assert b"JFIF" in data_read
-    assert (
-        "JPEG image data"
-        in subprocess.run(["file", cache_file], text=True, capture_output=True).stdout
-    )
+    assert b"JFIF" in artwork_content

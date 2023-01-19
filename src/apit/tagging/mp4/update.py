@@ -5,20 +5,22 @@ import mutagen.mp4
 from .constants import MP4_MAPPING
 from .read import read_metadata_raw
 from apit.error import ApitError
+from apit.metadata import Artwork
 from apit.metadata import Song
+from apit.mime_type import MIME_TYPE
 from apit.store.constants import ITEM_KIND_MAPPING
 from apit.store.constants import RATING_MAPPING
 from apit.store.constants import to_item_kind
 from apit.store.constants import to_rating
 
 ARTWORK_FORMATS = {
-    ".jpg": mutagen.mp4.MP4Cover.FORMAT_JPEG,
-    ".png": mutagen.mp4.MP4Cover.FORMAT_PNG,
+    MIME_TYPE.JPEG: mutagen.mp4.MP4Cover.FORMAT_JPEG,
+    MIME_TYPE.PNG: mutagen.mp4.MP4Cover.FORMAT_PNG,
 }
 
 
 def update_metadata(
-    file: Path, song: Song, cover_path: Path | None = None
+    file: Path, song: Song, artwork: Artwork | None = None
 ) -> mutagen.mp4.MP4:
     mp4_file = read_metadata_raw(file)
 
@@ -28,11 +30,7 @@ def update_metadata(
     if is_itunes_bought_file(mp4_file):
         raise ApitError("original iTunes Store file")
 
-    if cover_path:
-        artwork = _read_artwork_content(cover_path)
-        _modify_mp4_file(mp4_file, song, artwork)
-    else:
-        _modify_mp4_file(mp4_file, song)
+    _modify_mp4_file(mp4_file, song, artwork)
     # TODO error handling
     try:
         mp4_file.save()
@@ -42,17 +40,17 @@ def update_metadata(
         return mp4_file
 
 
-def _read_artwork_content(artwork_path: Path) -> mutagen.mp4.MP4Cover:
+def _to_artwork(artwork: Artwork) -> mutagen.mp4.MP4Cover:
     try:
-        image_format = ARTWORK_FORMATS[artwork_path.suffix]
+        image_format = ARTWORK_FORMATS[artwork.mimetype]
     except KeyError:
-        raise ApitError(f"Unknown artwork image type: {artwork_path.suffix}")
+        raise ApitError(f"Unknown artwork mime type: {artwork.mimetype}")
     else:
-        return mutagen.mp4.MP4Cover(artwork_path.read_bytes(), imageformat=image_format)
+        return mutagen.mp4.MP4Cover(artwork.content, imageformat=image_format)
 
 
 def _modify_mp4_file(
-    mp4_file: mutagen.mp4.MP4, song: Song, artwork: mutagen.mp4.MP4Cover | None = None
+    mp4_file: mutagen.mp4.MP4, song: Song, artwork: Artwork | None = None
 ) -> mutagen.mp4.MP4:
     mp4_file[MP4_MAPPING.ARTIST.value] = song.artist
     mp4_file[MP4_MAPPING.TITLE.value] = song.title
@@ -72,7 +70,8 @@ def _modify_mp4_file(
 
     if artwork:
         # TODO first, remove all artwork
-        mp4_file[MP4_MAPPING.ARTWORK.value] = [artwork]
+        mp4_cover = _to_artwork(artwork)
+        mp4_file[MP4_MAPPING.ARTWORK.value] = [mp4_cover]
 
     # command.append(f'--xID "{track[]}"')
     # if track.genre in GENRE_MAP:

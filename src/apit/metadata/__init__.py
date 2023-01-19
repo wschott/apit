@@ -1,6 +1,7 @@
 from collections.abc import Iterable
 
 from .album import Album  # noqa: F401
+from .artwork import Artwork  # noqa: F401
 from .song import Song
 
 

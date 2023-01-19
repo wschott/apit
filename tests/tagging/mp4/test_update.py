@@ -6,10 +6,12 @@ import mutagen
 import pytest
 
 from apit.error import ApitError
+from apit.metadata import Artwork
 from apit.metadata import Song
+from apit.mime_type import MIME_TYPE
 from apit.tagging.mp4.constants import MP4_MAPPING
 from apit.tagging.mp4.update import _modify_mp4_file
-from apit.tagging.mp4.update import _read_artwork_content
+from apit.tagging.mp4.update import _to_artwork
 from apit.tagging.mp4.update import update_metadata
 
 
@@ -38,11 +40,15 @@ def test_modify_mp4_file(test_song: Song):
 
 
 def test_modify_mp4_file_with_cover(test_song: Song):
-    artwork = MagicMock()
+    artwork = Artwork(b"artwork-value", MIME_TYPE.JPEG)
     mock_mp4_file = _mocked_mp4_file()
     updated_mock_mp4_file = _modify_mp4_file(mock_mp4_file, test_song, artwork)
 
-    assert updated_mock_mp4_file[MP4_MAPPING.ARTWORK] == [artwork]
+    assert updated_mock_mp4_file[MP4_MAPPING.ARTWORK] == [
+        mutagen.mp4.MP4Cover(
+            artwork.content, imageformat=mutagen.mp4.MP4Cover.FORMAT_JPEG
+        )
+    ]
     assert updated_mock_mp4_file[MP4_MAPPING.ARTIST] == test_song.artist
 
 
@@ -59,26 +65,19 @@ def test_metadata_updating(monkeypatch, test_song: Song):
 
 
 def test_metadata_updating_with_artwork(monkeypatch, test_song: Song):
-    cover_path = Path("cover.jpg")
+    artwork = Artwork(b"artwork-value", MIME_TYPE.JPEG)
     mock_mp4_file = MagicMock()
     monkeypatch.setattr(
         "apit.tagging.mp4.update.read_metadata_raw", lambda *args: mock_mp4_file
-    )
-    mock_read_artwork_content = MagicMock()
-    monkeypatch.setattr(
-        "apit.tagging.mp4.update._read_artwork_content", mock_read_artwork_content
     )
     mock_modify_mp4_file = MagicMock()
     monkeypatch.setattr(
         "apit.tagging.mp4.update._modify_mp4_file", mock_modify_mp4_file
     )
 
-    result = update_metadata(Path("dummy.m4a"), test_song, cover_path)
+    result = update_metadata(Path("dummy.m4a"), test_song, artwork)
 
-    assert mock_read_artwork_content.call_args == call(cover_path)
-    assert mock_modify_mp4_file.call_args == call(
-        mock_mp4_file, test_song, mock_read_artwork_content()
-    )
+    assert mock_modify_mp4_file.call_args == call(mock_mp4_file, test_song, artwork)
     assert mock_mp4_file.save.call_args == call()
     assert result == mock_mp4_file
 
@@ -105,31 +104,31 @@ def test_metadata_updating_file_save_error(monkeypatch, test_song):
     assert mock_mp4_file.save.call_args == call()
 
 
-def test_read_artwork_content_with_jpg(tmp_path):
-    p = tmp_path / "test.jpg"
-    p.write_bytes(b"artwork-value")
+def test_to_artwork_with_jpg():
+    artwork = Artwork(b"artwork-value", MIME_TYPE.JPEG)
 
-    artwork = _read_artwork_content(p)
+    mp4_artwork = _to_artwork(artwork)
 
-    assert artwork == mutagen.mp4.MP4Cover(
+    assert mp4_artwork == mutagen.mp4.MP4Cover(
         b"artwork-value", imageformat=mutagen.mp4.MP4Cover.FORMAT_JPEG
     )
 
 
-def test_read_artwork_content_with_png(tmp_path):
-    p = tmp_path / "test.png"
-    p.write_bytes(b"artwork-value")
+def test_to_artwork_with_png():
+    artwork = Artwork(b"artwork-value", MIME_TYPE.PNG)
 
-    artwork = _read_artwork_content(p)
+    mp4_artwork = _to_artwork(artwork)
 
-    assert artwork == mutagen.mp4.MP4Cover(
+    assert mp4_artwork == mutagen.mp4.MP4Cover(
         b"artwork-value", imageformat=mutagen.mp4.MP4Cover.FORMAT_PNG
     )
 
 
-def test_read_artwork_content_with_unsupported_filetype():
-    with pytest.raises(ApitError, match="Unknown artwork image type"):
-        _read_artwork_content(MagicMock(suffix=".uns"))
+def test_to_artwork_with_unsupported_filetype():
+    artwork = Artwork(content=b"artwork-value", mimetype="unknown")
+
+    with pytest.raises(ApitError, match="Unknown artwork mime type"):
+        _to_artwork(artwork)
 
 
 def test_update_fails_for_original_file(monkeypatch, test_song: Song):

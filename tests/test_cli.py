@@ -34,9 +34,6 @@ def test_parse_args_optional_args():
     args = parse_args(["tag", "-b", "./tests/fixtures", "./tests/metadata.json"])
     assert args.has_backup_flag
 
-    args = parse_args(["tag", "-c", "./tests/fixtures", "./tests/metadata.json"])
-    assert args.has_search_result_cache_flag
-
     args = parse_args(["tag", "-a", "./tests/fixtures", "./tests/metadata.json"])
     assert args.has_embed_artwork_flag
     assert args.artwork_size == 600
@@ -49,9 +46,8 @@ def test_parse_args_optional_args():
 
 def test_parse_args_complex_args(tmp_path):
     args = parse_args(
-        ["tag", "--cache", "--backup", "-v", str(tmp_path), "test-metadata-file.json"]
+        ["tag", "--backup", "-v", str(tmp_path), "test-metadata-file.json"]
     )
-    assert args.has_search_result_cache_flag
     assert args.has_backup_flag
     assert args.verbose_level == 1
     assert args.command == "tag"

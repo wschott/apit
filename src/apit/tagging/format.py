@@ -3,6 +3,7 @@ from abc import abstractmethod
 from pathlib import Path
 
 from apit.file_tags import FileTags
+from apit.metadata import Artwork
 from apit.metadata import Song
 
 
@@ -16,5 +17,5 @@ class Format(ABC):
 
     @staticmethod
     @abstractmethod
-    def update(file: Path, song: Song, cover_path: Path | None = None) -> FileTags:
+    def update(file: Path, song: Song, artwork: Artwork | None = None) -> FileTags:
         raise NotImplementedError
