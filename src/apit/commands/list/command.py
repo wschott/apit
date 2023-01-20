@@ -1,3 +1,4 @@
+import logging
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -11,7 +12,7 @@ def execute(files: Iterable[Path], verbose_level: int) -> CommandResult:
     actions: list[ReadAction] = [ReadAction(file) for file in files]
 
     for action in actions:
-        print("Executing:", action)
+        logging.info("Executing: %s", action)
         action.apply()
 
     print_report(actions, verbose=verbose_level > 0)

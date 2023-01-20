@@ -43,7 +43,7 @@ def execute(
         ask_user_for_confirmation()
 
     for action in actions:
-        print("Executing:", action)
+        logging.info("Executing: %s", action)
         action.apply()
 
     print_report(actions, verbose=verbose_level > 0)
