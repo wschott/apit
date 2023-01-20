@@ -16,6 +16,14 @@ def test_list_alias():
     assert args.command == "ls"
 
 
+def test_tag_command():
+    args = parse_args(["tag", "./tests/fixtures", "http://invalid-url.com/"])
+    assert args.command == "tag"
+    assert args.path == Path("./tests/fixtures").absolute()
+    assert args.has_embed_artwork_flag
+    assert args.artwork_size == 600
+
+
 def test_tag_command_source_types():
     args = parse_args(["tag", "./tests/fixtures", "http://invalid-url.com/"])
     assert args.source == "http://invalid-url.com/"
@@ -34,9 +42,10 @@ def test_parse_args_optional_args():
     args = parse_args(["tag", "-b", "./tests/fixtures", "./tests/metadata.json"])
     assert args.has_backup_flag
 
-    args = parse_args(["tag", "-a", "./tests/fixtures", "./tests/metadata.json"])
-    assert args.has_embed_artwork_flag
-    assert args.artwork_size == 600
+    args = parse_args(
+        ["tag", "--no-artwork", "./tests/fixtures", "./tests/metadata.json"]
+    )
+    assert not args.has_embed_artwork_flag
 
     args = parse_args(
         ["tag", "--artwork-size", "700", "./tests/fixtures", "./tests/metadata.json"]

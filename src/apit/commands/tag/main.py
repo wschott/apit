@@ -1,3 +1,4 @@
+from argparse import BooleanOptionalAction
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -26,11 +27,11 @@ def setup_cli_parser(subparsers):
         help="create backup before updating tags (default: %(default)s)",
     )
     tag_command.add_argument(
-        "-a",
         "--artwork",
         dest="has_embed_artwork_flag",
-        action="store_true",
-        help="download artwork to disk and save in files (default: %(default)s)",
+        action=BooleanOptionalAction,
+        default=True,
+        help="download and embed artwork in files",
     )
     tag_command.add_argument(
         "--artwork-size",
