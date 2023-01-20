@@ -72,7 +72,7 @@ Even this format will match:
 
     http://x/us/x/9/123456789?i=09876
 
-This will lookup the metadata of the album with the ID _123456789_ in the _US_ store of Apple Music/iTunes.
+This will look up the metadata of the album with the ID _123456789_ in the _US_ store of Apple Music/iTunes.
 
 ### Attention: Beware of album variations (e.g. deluxe editions)
 

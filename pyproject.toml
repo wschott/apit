@@ -1,6 +1,6 @@
 [project]
 name = "apit"
-version = "0.10.0"
+version = "0.11.0"
 description = "apit allows batch tagging .mp3 and .m4a (AAC and ALAC) file metadata tags using data from Apple Music/iTunes Store."
 readme = "README.md"
 requires-python = ">=3.10"
