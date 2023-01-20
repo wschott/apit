@@ -9,18 +9,19 @@ from apit.action import any_action_needs_confirmation
 from apit.action import filter_errors
 from apit.action import filter_not_actionable
 from apit.action import filter_successes
+from apit.error import ApitError
 
 
 class TestAction(Action):
     def apply(self) -> None:
-        if self.options["apply-option"] == "fail":
-            self.mark_as_fail(self.options["apply-option"])
-        elif self.options["apply-option"] == "success":
-            self.mark_as_success(self.options["apply-option"])
+        if str(self.file) == "fail":
+            self.mark_as_fail(ApitError("fail"))
+        elif str(self.file) == "success":
+            self.mark_as_success("success")
 
     @property
     def actionable(self) -> bool:
-        return "apply-option" in self.options
+        return True
 
     @property
     def needs_confirmation(self) -> bool:
@@ -100,10 +101,9 @@ def test_filter_not_actionable(mock_action_actionable, mock_action_not_actionabl
 
 @patch.multiple(Action, __abstractmethods__=set())
 def test_action_init():
-    action = Action(Path("file-path"), {"test-key": "test-value"})
+    action = Action(Path("file-path"))
 
     assert action.file == Path("file-path")
-    assert action.options == {"test-key": "test-value"}
 
     assert not action.executed
     assert not action.successful
@@ -118,7 +118,7 @@ def test_action_init():
 
 
 def test_action_mark_as_success():
-    action = TestAction(Path("file-path"), {"apply-option": "success"})
+    action = TestAction(Path("success"))
 
     action.apply()
 
@@ -128,10 +128,10 @@ def test_action_mark_as_success():
 
 
 def test_action_mark_as_fail():
-    action = TestAction(Path("file-path"), {"apply-option": "fail"})
+    action = TestAction(Path("fail"))
 
     action.apply()
 
     assert action.executed
     assert not action.successful
-    assert action.result == "fail"
+    assert str(action.result) == "fail"

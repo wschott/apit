@@ -1,4 +1,3 @@
-import logging
 from abc import ABC
 from abc import abstractmethod
 from collections.abc import Iterable
@@ -9,11 +8,8 @@ from apit.error import ApitError
 
 
 class Action(ABC):
-    def __init__(self, file: Path, options) -> None:
+    def __init__(self, file: Path) -> None:
         self.file: Path = file
-        self.options = options
-
-        logging.info(f"{self} options: {options}")
 
         self._executed: bool = False
         self._success: bool | None = None

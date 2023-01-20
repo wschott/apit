@@ -1,10 +1,12 @@
 import shutil
+from pathlib import Path
 
 from apit.action import Action
 from apit.error import ApitError
 from apit.file_handling import extract_disc_and_track_number
 from apit.file_handling import REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME
 from apit.file_tags import FileTags
+from apit.metadata import Artwork
 from apit.metadata import Song
 from apit.string_utils import clean
 from apit.string_utils import compare_normalized_caseless
@@ -12,9 +14,25 @@ from apit.tagging.update import update_tags
 
 
 class TagAction(Action):
+    def __init__(
+        self,
+        file: Path,
+        song: Song | None,
+        should_backup: bool,
+        artwork: Artwork | None,
+    ) -> None:
+        super().__init__(file)
+
+        disc, track = extract_disc_and_track_number(self.file)
+        self.disc: int | None = disc
+        self.track: int | None = track
+        self.song: Song | None = song
+        self.should_backup: bool = should_backup
+        self.artwork: Artwork | None = artwork
+
     @property
     def file_matched(self) -> bool:
-        return bool(self.options["disc"]) and bool(self.options["track"])
+        return bool(self.disc) and bool(self.track)
 
     @property
     def needs_confirmation(self) -> bool:
@@ -26,42 +44,35 @@ class TagAction(Action):
 
     @property
     def metadata_matched(self) -> bool:
-        return self.options["song"] is not None
+        return self.song is not None
 
     @property
     def is_filename_identical_to_song(self) -> bool:
         if not self.actionable:
             return False
 
-        filename_disc, filename_track = extract_disc_and_track_number(self.file)
         filename_without_track_number = REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME.sub(
             "", str(self.file.with_suffix("").name)
         )
 
         return (
-            self.song.track_number == filename_track
-            and self.song.disc_number == filename_disc
+            self.song.track_number == self.track  # type: ignore
+            and self.song.disc_number == self.disc  # type: ignore
             and compare_normalized_caseless(
                 clean(filename_without_track_number),
-                clean(self.song.title),
+                clean(self.song.title),  # type: ignore
             )
         )
-
-    @property
-    def song(self) -> Song:
-        return self.options["song"]
 
     def apply(self) -> None:
         if not self.actionable:
             return
 
         try:
-            if self.options["should_backup"]:
+            if self.should_backup:
                 self.backup_song()
 
-            result: FileTags = update_tags(
-                self.file, self.song, self.options["artwork"]
-            )
+            result: FileTags = update_tags(self.file, self.song, self.artwork)  # type: ignore
         except ApitError as e:
             self.mark_as_fail(e)
         else:

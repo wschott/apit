@@ -8,12 +8,7 @@ from apit.metadata import Song
 
 def test_not_actionable_msg_not_file_matched():
     action = TagAction(
-        Path("dummy.m4a"),
-        {
-            "song": None,
-            "disc": None,
-            "track": None,
-        },
+        file=Path("dummy.m4a"), song=None, should_backup=False, artwork=None
     )
 
     reporter = TagActionReporter(action, verbose=False)
@@ -23,12 +18,7 @@ def test_not_actionable_msg_not_file_matched():
 
 def test_not_actionable_msg_not_metadata_matched():
     action = TagAction(
-        Path("dummy.m4a"),
-        {
-            "song": None,
-            "disc": 1,
-            "track": 1,
-        },
+        file=Path("1 dummy.m4a"), song=None, should_backup=False, artwork=None
     )
 
     reporter = TagActionReporter(action, verbose=False)
@@ -38,12 +28,7 @@ def test_not_actionable_msg_not_metadata_matched():
 
 def test_preview_msg_not_actionable():
     action = TagAction(
-        Path("dummy.m4a"),
-        {
-            "song": None,
-            "disc": None,
-            "track": None,
-        },
+        file=Path("dummy.m4a"), song=None, should_backup=False, artwork=None
     )
 
     reporter = TagActionReporter(action, verbose=False)
@@ -53,12 +38,7 @@ def test_preview_msg_not_actionable():
 
 def test_preview_msg_actionable(test_song: Song):
     action = TagAction(
-        Path("dummy.m4a"),
-        {
-            "song": test_song,
-            "disc": test_song.disc_number,
-            "track": test_song.track_number,
-        },
+        file=Path("2-3 dummy.m4a"), song=test_song, should_backup=False, artwork=None
     )
 
     reporter = TagActionReporter(action, verbose=False)
@@ -68,12 +48,7 @@ def test_preview_msg_actionable(test_song: Song):
 
 def test_status_msg_successful(test_song: Song):
     action = TagAction(
-        Path("dummy.m4a"),
-        {
-            "song": test_song,
-            "disc": test_song.disc_number,
-            "track": test_song.track_number,
-        },
+        file=Path("2-3 dummy.m4a"), song=test_song, should_backup=False, artwork=None
     )
     action.mark_as_success("test-success")
 
@@ -84,12 +59,7 @@ def test_status_msg_successful(test_song: Song):
 
 def test_status_msg_tag_not_successful(test_song: Song):
     action = TagAction(
-        Path("dummy.m4a"),
-        {
-            "song": test_song,
-            "disc": test_song.disc_number,
-            "track": test_song.track_number,
-        },
+        file=Path("2-3 dummy.m4a"), song=test_song, should_backup=False, artwork=None
     )
     action.mark_as_fail(ApitError("test-error"))
 
@@ -100,12 +70,7 @@ def test_status_msg_tag_not_successful(test_song: Song):
 
 def test_status_msg_tag_not_actionable():
     action = TagAction(
-        Path("dummy.m4a"),
-        {
-            "song": None,
-            "disc": None,
-            "track": None,
-        },
+        file=Path("dummy.m4a"), song=None, should_backup=False, artwork=None
     )
 
     reporter = TagActionReporter(action, verbose=False)

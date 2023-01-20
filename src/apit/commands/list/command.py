@@ -8,7 +8,7 @@ from apit.report import print_report
 
 
 def execute(files: Iterable[Path], verbose_level: int) -> CommandResult:
-    actions: list[ReadAction] = [ReadAction(file, {}) for file in files]
+    actions: list[ReadAction] = [ReadAction(file) for file in files]
 
     for action in actions:
         print("Executing:", action)

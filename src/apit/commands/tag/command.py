@@ -1,6 +1,6 @@
 import logging
 from collections.abc import Iterable
-from collections.abc import Mapping
+from collections.abc import Sequence
 from pathlib import Path
 
 from .action import TagAction
@@ -31,15 +31,11 @@ def execute(
     has_embed_artwork_flag: bool,
     artwork_size: int,
 ) -> CommandResult:
-    pre_action_options = to_pre_action_options(
-        source=source,
-        has_backup_flag=has_backup_flag,
-        has_embed_artwork_flag=has_embed_artwork_flag,
-        artwork_size=artwork_size,
-    )
+    songs = to_songs(source)
+    artwork = to_artwork(songs, artwork_size) if has_embed_artwork_flag else None
 
     actions: list[TagAction] = [
-        TagAction(file, to_action_options(file, pre_action_options)) for file in files
+        create_action(file, songs, has_backup_flag, artwork) for file in files
     ]
 
     if any_action_needs_confirmation(actions):
@@ -56,47 +52,36 @@ def execute(
     )
 
 
-def to_pre_action_options(
-    source: str,
-    has_backup_flag: bool,
-    has_embed_artwork_flag: bool,
-    artwork_size: int,
-) -> Mapping[str, list[Song] | bool | Artwork | None]:
+def to_songs(source: str) -> list[Song]:
     metadata_json = get_metadata_json(source)
+    return extract_songs(metadata_json)
 
-    songs = extract_songs(metadata_json)
 
+def to_artwork(songs: Sequence[Song], artwork_size: int) -> Artwork | None:
+    if not songs:
+        return None
     first_song = songs[0]  # TODO refactor # TODO fix possible IndexError
 
-    artwork: Artwork | None = None
-    if has_embed_artwork_flag:
-        size = artwork_size
-        upscaled_url = upscale_artwork_url(first_song, size)
-        logging.info("Use cover link (with size %d): %s", size, upscaled_url)
-        logging.info("Download cover (with size %d) from: %s", size, upscaled_url)
+    size = artwork_size
+    upscaled_url = upscale_artwork_url(first_song, size)
+    logging.info("Use cover link (with size %d): %s", size, upscaled_url)
+    logging.info("Download cover (with size %d) from: %s", size, upscaled_url)
 
-        artwork_content, image_type = download_artwork(upscaled_url)
-        artwork = Artwork(content=artwork_content, mimetype=MIME_TYPE(image_type))
-
-    return {
-        "songs": songs,
-        "should_backup": has_backup_flag,
-        "artwork": artwork,
-    }
+    artwork_content, image_type = download_artwork(upscaled_url)
+    return Artwork(content=artwork_content, mimetype=MIME_TYPE(image_type))
 
 
-def to_action_options(
-    file: Path, options
-) -> Mapping[str, Song | bool | int | Artwork | None]:
+def create_action(
+    file: Path, songs: Iterable[Song], should_backup: bool, artwork: Artwork | None
+) -> TagAction:
     disc, track = extract_disc_and_track_number(file)
 
-    return {
-        "song": find_song(options["songs"], disc=disc, track=track),
-        "disc": disc,
-        "track": track,
-        "should_backup": options["should_backup"],
-        "artwork": options["artwork"],
-    }
+    return TagAction(
+        file,
+        song=find_song(songs, disc=disc, track=track),
+        should_backup=should_backup,
+        artwork=artwork,
+    )
 
 
 def upscale_artwork_url(song: Song, size: int) -> str:
