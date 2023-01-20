@@ -21,7 +21,7 @@ REGEX_STORE_URL = re.compile(
 )
 
 
-def generate_lookup_url_by_url(source: str) -> str:
+def generate_lookup_url(source: str) -> str:
     match = REGEX_STORE_URL.match(source)
 
     if not match:
@@ -29,10 +29,6 @@ def generate_lookup_url_by_url(source: str) -> str:
 
     country_code = match.groupdict()["country_code"]
     album_id = match.groupdict()["id"]
-    return _generate_metadata_lookup_url(album_id, country_code)
-
-
-def _generate_metadata_lookup_url(album_id: str, country_code: str) -> str:
     return f"https://itunes.apple.com/lookup?entity=song&country={country_code}&id={album_id}"
 
 

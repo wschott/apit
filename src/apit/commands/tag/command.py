@@ -17,7 +17,7 @@ from apit.mime_type import MIME_TYPE
 from apit.report import print_report
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
-from apit.store.connection import generate_lookup_url_by_url
+from apit.store.connection import generate_lookup_url
 from apit.store.data_parser import extract_songs
 from apit.url_utils import is_url
 from apit.user_input import ask_user_for_confirmation
@@ -98,7 +98,7 @@ def get_metadata_json(source: str) -> str:
             raise ApitError("Error while reading metadata file: %s" % Path(source))
     elif is_url(source):
         logging.info("Use URL to download metadata: %s", source)
-        query_url = generate_lookup_url_by_url(source)
+        query_url = generate_lookup_url(source)
         logging.info("Query URL: %s", query_url)
         return download_metadata(query_url)
     raise ApitError(f"Invalid input source: {source}")

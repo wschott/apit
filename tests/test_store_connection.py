@@ -11,7 +11,7 @@ from apit.mime_type import MIME_TYPE
 from apit.store.connection import _to_mime_type
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
-from apit.store.connection import generate_lookup_url_by_url
+from apit.store.connection import generate_lookup_url
 
 # fmt: off
 STORE_URL           = 'https://music.apple.com/us/album/test-album/12345'
@@ -26,25 +26,25 @@ ARTWORK_URL         = 'https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/12/1
 
 
 def test_generate_lookup_url_by_url_using_valid_url():
-    assert generate_lookup_url_by_url(STORE_URL) == LOOKUP_URL
+    assert generate_lookup_url(STORE_URL) == LOOKUP_URL
 
 
 def test_generate_lookup_url_by_url_using_valid_old_url():
-    assert generate_lookup_url_by_url(STORE_URL_OLD) == LOOKUP_URL
+    assert generate_lookup_url(STORE_URL_OLD) == LOOKUP_URL
 
 
 def test_generate_lookup_url_by_url_using_valid_random_url():
-    assert generate_lookup_url_by_url(STORE_URL_COMPLEX) == LOOKUP_URL
-    assert generate_lookup_url_by_url(STORE_URL_ANYTHING) == LOOKUP_URL
+    assert generate_lookup_url(STORE_URL_COMPLEX) == LOOKUP_URL
+    assert generate_lookup_url(STORE_URL_ANYTHING) == LOOKUP_URL
 
 
 def test_generate_lookup_url_by_url_using_invalid_url():
     with pytest.raises(ApitError):
-        generate_lookup_url_by_url("http://invalid-url.com/")
+        generate_lookup_url("http://invalid-url.com/")
     with pytest.raises(ApitError):
-        generate_lookup_url_by_url(STORE_URL_INVALID)
+        generate_lookup_url(STORE_URL_INVALID)
     with pytest.raises(ApitError):
-        generate_lookup_url_by_url("US,12345")
+        generate_lookup_url("US,12345")
 
 
 def test_download_metadata():
