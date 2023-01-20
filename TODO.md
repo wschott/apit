@@ -2,8 +2,6 @@
 
 - add CWD usage
 - improve logging output
-- add a ~/.apit/config file to omit cli flags?
-- add apit execution logging to ~/.apit/logs/?
 - add -f cli flag to allow writing m4a files from iTunes store
 - add flag to add a new artwork instead of removing all before adding
 - new command: download lyrics
