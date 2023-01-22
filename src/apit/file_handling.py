@@ -1,4 +1,3 @@
-import os
 import re
 import shutil
 from collections.abc import Iterable
@@ -17,7 +16,7 @@ def collect_files(
     if path.is_file():
         unfiltered_files = [path]
     elif path.is_dir():
-        unfiltered_files = [Path(f) for f in os.scandir(path) if f.is_file()]
+        unfiltered_files = [f for f in path.iterdir() if f.is_file()]
 
     sorted_files = sort_naturally(unfiltered_files)
 
