@@ -45,7 +45,7 @@ def download_artwork(url: str) -> tuple[bytes, MIME_TYPE]:
     try:
         with urllib.request.urlopen(url) as response:
             content_type = response.getheader("Content-Type")
-            logging.info("Headers: %s", response.info())
+            logging.debug("Headers: %s", response.info())
             return response.read(), _to_mime_type(content_type)
     except urllib.error.URLError as e:
         raise ApitStoreConnectionError(str(e))
