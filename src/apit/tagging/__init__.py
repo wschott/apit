@@ -1,7 +1,6 @@
-from .format_registry import FormatRegistry
-from .mp3 import Mp3Format
-from .mp4 import Mp4Format
+from .format import Format
+from apit.package_utils import import_packages
 
-format_registry = FormatRegistry()
-format_registry.register(Mp4Format)
-format_registry.register(Mp3Format)
+__all__ = ["Format"]
+
+import_packages(__path__)  # import formats in sub packages

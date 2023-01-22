@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from collections.abc import Iterable
+from itertools import chain
 from typing import TypeVar
 
 T = TypeVar("T")
@@ -13,3 +14,7 @@ def flat_map(
     for inner_list in list_of_lists:
         flat_list.extend(extract_fn(inner_list))
     return flat_list
+
+
+def flatten(lists: Iterable[Iterable[T]]) -> list[T]:
+    return list(chain.from_iterable(lists))
