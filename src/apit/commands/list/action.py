@@ -1,7 +1,7 @@
 from apit.action import Action
 from apit.error import ApitError
 from apit.file_tags import FileTags
-from apit.tagging.read import read_tags
+from apit.tagging import Format
 
 
 class ReadAction(Action):
@@ -15,7 +15,7 @@ class ReadAction(Action):
 
     def apply(self) -> None:
         try:
-            result: FileTags = read_tags(self.file)
+            result: FileTags = Format.from_(self.file).read()
         except ApitError as e:
             self.mark_as_fail(e)
         else:

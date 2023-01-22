@@ -16,23 +16,24 @@ class Format(ABC, RegistryMixin):
     extensions: list[str] = []
 
     @classmethod
-    def get_by(cls, file: Path) -> type[Format]:
+    def from_(cls, file: Path) -> Format:
         extension = file.suffix[1:]
         for format in cls.registry:
             if extension in format.extensions:
-                return format
+                return format(file)
         raise ApitUnsupportedFileTypeError(extension)
 
     @classmethod
     def get_supported_extensions(cls) -> list[str]:
         return flatten([format.extensions for format in cls.registry])
 
-    @staticmethod
+    def __init__(self, file: Path) -> None:
+        self.file: Path = file
+
     @abstractmethod
-    def read(file: Path) -> FileTags:
+    def read(self) -> FileTags:
         raise NotImplementedError
 
-    @staticmethod
     @abstractmethod
-    def update(file: Path, song: Song, artwork: Artwork | None = None) -> FileTags:
+    def update(self, song: Song, artwork: Artwork | None = None) -> FileTags:
         raise NotImplementedError
