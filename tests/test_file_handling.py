@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from apit.file_handling import backup_file
 from apit.file_handling import collect_files
 from apit.file_handling import extract_disc_and_track_number
 
@@ -69,3 +70,12 @@ def test_extract_disc_and_track_number_using_disc_and_track_number():
 
 def test_extract_disc_and_track_number_using_invalid_filename():
     assert extract_disc_and_track_number(Path("song title.m4a")) == (None, None)
+
+
+def test_backup_file(make_tmp_file):
+    file = make_tmp_file("original.m4a")
+    assert not file.with_name("original.bak.m4a").exists()
+
+    backup_file(file)
+
+    assert file.with_name("original.bak.m4a").exists()

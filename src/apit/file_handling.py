@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -41,3 +42,8 @@ def extract_disc_and_track_number(path: Path) -> tuple[int | None, int | None]:
     track = int(match.groupdict()["track"])
 
     return disc, track
+
+
+def backup_file(file: Path) -> None:
+    backup_file_path = file.with_stem(f"{file.stem}.bak")
+    shutil.copy2(file, backup_file_path)

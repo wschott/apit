@@ -1,8 +1,8 @@
-import shutil
 from pathlib import Path
 
 from apit.action import Action
 from apit.error import ApitError
+from apit.file_handling import backup_file
 from apit.file_handling import extract_disc_and_track_number
 from apit.file_handling import REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME
 from apit.file_tags import FileTags
@@ -79,5 +79,4 @@ class TagAction(Action):
             self.mark_as_success(result)
 
     def backup_song(self) -> None:
-        backup_file_path = self.file.parent / f"{self.file.stem}.bak{self.file.suffix}"
-        shutil.copy2(self.file, backup_file_path)
+        backup_file(self.file)
