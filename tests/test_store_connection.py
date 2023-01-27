@@ -8,7 +8,6 @@ import pytest
 from apit.error import ApitError
 from apit.error import ApitStoreConnectionError
 from apit.mime_type import MimeType
-from apit.store.connection import _to_mime_type
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
 from apit.store.connection import generate_lookup_url
@@ -99,13 +98,3 @@ def test_download_artwork_with_url_error():
     ):
         with pytest.raises(ApitStoreConnectionError, match="HTTP Error 500: test-msg"):
             download_artwork(ARTWORK_URL)
-
-
-def test_to_mime_type():
-    assert _to_mime_type("image/jpeg") == MimeType.JPEG
-    assert _to_mime_type("image/png") == MimeType.PNG
-
-
-def test_to_mime_type_for_unknown_type():
-    with pytest.raises(ApitError, match="Unknown artwork content type: test-type"):
-        _to_mime_type("test-type")
