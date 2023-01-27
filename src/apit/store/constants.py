@@ -13,7 +13,7 @@ KIND_KEY = "kind"
 VALID_KIND_VALUES_FOR_SONG = "song"
 
 
-class STORE_KEY(StrEnum):
+class StoreKey(StrEnum):
     # song values
     ARTIST = "artistName"
     TITLE = "trackCensoredName"  # alternatively: 'trackName' without stars '*'
@@ -41,43 +41,43 @@ class STORE_KEY(StrEnum):
     ARTWORK_URL = "artworkUrl100"
 
 
-class STORE_RATING(Enum):
+class StoreRating(Enum):
     CLEAN = "cleaned"
     EXPLICIT = "explicit"
     NONE = "notExplicit"
     # EXPLICIT_OLD = 'explicit'
 
 
-RATING_MAPPING: dict[STORE_RATING, int] = {
+RATING_MAPPING: dict[StoreRating, int] = {
     # itunes value -> mutagen value
-    STORE_RATING.CLEAN: 2,
-    STORE_RATING.EXPLICIT: 1,
-    STORE_RATING.NONE: 0,
+    StoreRating.CLEAN: 2,
+    StoreRating.EXPLICIT: 1,
+    StoreRating.NONE: 0,
     # STORE_RATING.EXPLICIT_OLD: 4,  # TODO
 }
 
 
-def to_rating(rating_str: str) -> STORE_RATING:
+def to_rating(rating_str: str) -> StoreRating:
     try:
-        return STORE_RATING(rating_str)
+        return StoreRating(rating_str)
     except ValueError as e:
         raise ApitError("[Error] Unknown rating: %s" % e)
 
 
-class STORE_KIND(Enum):
+class StoreKind(Enum):
     ALBUM = "album"
     SONG = "song"
 
 
-ITEM_KIND_MAPPING: dict[STORE_KIND, int] = {
+ITEM_KIND_MAPPING: dict[StoreKind, int] = {
     # itunes value -> mutagen value
-    STORE_KIND.SONG: 1,
+    StoreKind.SONG: 1,
 }
 
 
-def to_item_kind(kind_str: str) -> STORE_KIND:
+def to_item_kind(kind_str: str) -> StoreKind:
     try:
-        return STORE_KIND(kind_str)
+        return StoreKind(kind_str)
     except ValueError as e:
         raise ApitError("[Error] Unknown item kind: %s" % e)
 

@@ -2,7 +2,7 @@ import pytest
 
 from apit.error import ApitError
 from apit.metadata import find_song
-from apit.store.constants import STORE_KEY
+from apit.store.constants import StoreKey
 from apit.store.data_parser import _find_album
 from apit.store.data_parser import _find_songs
 from apit.store.data_parser import extract_by_key
@@ -96,11 +96,11 @@ def test_to_song_using_invalid_metadata(test_album):
 
 
 def test_extract_by_key():
-    assert extract_by_key(STORE_KEY.MEDIA_KIND, {"kind": "song"}) == "song"
+    assert extract_by_key(StoreKey.MEDIA_KIND, {"kind": "song"}) == "song"
 
 
 def test_extract_by_key_using_invalid_metadata():
     with pytest.raises(ApitError, match="Unknown metadata key"):
         extract_by_key("invalid-key", {"kind": "song"})
     with pytest.raises(ApitError, match="Metadata key not found"):
-        extract_by_key(STORE_KEY.MEDIA_KIND, {"invalid-key": "song"})
+        extract_by_key(StoreKey.MEDIA_KIND, {"invalid-key": "song"})

@@ -4,8 +4,8 @@ from .constants import Mp4Mapping
 from apit.readable_names import ReadableTagName
 from apit.store.constants import ITEM_KIND_MAPPING
 from apit.store.constants import RATING_MAPPING
-from apit.store.constants import STORE_KIND
-from apit.store.constants import STORE_RATING
+from apit.store.constants import StoreKind
+from apit.store.constants import StoreRating
 from apit.tag_id import TagId
 from apit.tagged_value import TaggedValue
 
@@ -90,10 +90,10 @@ MP4_MAPPING_TO_READABLE_TAG_NAME: dict[Mp4Mapping, ReadableTagName] = {
 
 RATING_TO_READABLE_NAME: dict[int, str] = {
     4: "<explicit (old value)>",  # TODO
-    RATING_MAPPING[STORE_RATING.CLEAN]: "<clean>",
-    RATING_MAPPING[STORE_RATING.EXPLICIT]: "<explicit>",
-    RATING_MAPPING[STORE_RATING.NONE]: "<inoffensive>",
+    RATING_MAPPING[StoreRating.CLEAN]: "<clean>",
+    RATING_MAPPING[StoreRating.EXPLICIT]: "<explicit>",
+    RATING_MAPPING[StoreRating.NONE]: "<inoffensive>",
 }
 MEDIA_TYPE_TO_READABLE_NAME: dict[int, str] = {
-    ITEM_KIND_MAPPING[STORE_KIND.SONG]: "<normal>",
+    ITEM_KIND_MAPPING[StoreKind.SONG]: "<normal>",
 }
