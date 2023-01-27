@@ -4,7 +4,7 @@ from abc import ABC
 from abc import abstractmethod
 from pathlib import Path
 
-from apit.error import ApitUnsupportedFileTypeError
+from apit.error import ApitUnsupportedAudioFileError
 from apit.file_tags import FileTags
 from apit.list_utils import flatten
 from apit.metadata import Artwork
@@ -12,20 +12,20 @@ from apit.metadata import Song
 from apit.registry_mixin import RegistryMixin
 
 
-class Format(ABC, RegistryMixin):
+class AudioFile(ABC, RegistryMixin):
     extensions: list[str] = []
 
     @classmethod
-    def from_(cls, file: Path) -> Format:
+    def from_(cls, file: Path) -> AudioFile:
         extension = file.suffix[1:]
-        for format in cls.registry:
-            if extension in format.extensions:
-                return format(file)
-        raise ApitUnsupportedFileTypeError(extension)
+        for file_format in cls.registry:
+            if extension in file_format.extensions:
+                return file_format(file)
+        raise ApitUnsupportedAudioFileError(extension)
 
     @classmethod
     def get_supported_extensions(cls) -> list[str]:
-        return flatten([format.extensions for format in cls.registry])
+        return flatten([file_format.extensions for file_format in cls.registry])
 
     def __init__(self, file: Path) -> None:
         self.file: Path = file

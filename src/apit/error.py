@@ -14,6 +14,6 @@ class ApitNoTagsPresentError(ApitError):
         super().__init__("No tags present")
 
 
-class ApitUnsupportedFileTypeError(ApitError):
+class ApitUnsupportedAudioFileError(ApitError):
     def __init__(self, extension: str) -> None:
-        super().__init__(f"Unsupported file type: {extension}")
+        super().__init__(f"Unsupported audio file type: {extension}")

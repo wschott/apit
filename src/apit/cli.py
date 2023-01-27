@@ -10,7 +10,7 @@ from apit.error import ApitError
 from apit.exit_code import ExitCode
 from apit.file_handling import collect_files
 from apit.logging import configure_logging
-from apit.tagging import Format
+from apit.tagging import AudioFile
 
 
 def create_parser(command_cli_parser_setup_fns: list[Callable]):
@@ -52,7 +52,7 @@ def main(options: CliOptions) -> CommandResult:
     configure_logging(_to_log_level(options.verbose_level))
     logging.info("CLI options: %s", options)
 
-    files = collect_files(options.path, Format.get_supported_extensions())
+    files = collect_files(options.path, AudioFile.get_supported_extensions())
     if not files:
         raise ApitError("No matching files found")
     logging.info("Input path: %s", options.path)

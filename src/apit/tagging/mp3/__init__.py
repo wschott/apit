@@ -4,10 +4,10 @@ from .update import update_metadata
 from apit.file_tags import FileTags
 from apit.metadata import Artwork
 from apit.metadata import Song
-from apit.tagging.format import Format
+from apit.tagging.audio_file import AudioFile
 
 
-class Mp3Format(Format):
+class Mp3File(AudioFile):
     extensions = ["mp3"]
 
     def read(self) -> FileTags:

@@ -10,7 +10,7 @@ from apit.metadata import Artwork
 from apit.metadata import Song
 from apit.string_utils import clean
 from apit.string_utils import compare_normalized_caseless
-from apit.tagging import Format
+from apit.tagging import AudioFile
 
 
 class TagAction(Action):
@@ -72,7 +72,7 @@ class TagAction(Action):
             if self.should_backup:
                 self.backup_song()
 
-            result: FileTags = Format.from_(self.file).update(self.song, self.artwork)  # type: ignore # noqa: B950
+            result: FileTags = AudioFile.from_(self.file).update(self.song, self.artwork)  # type: ignore # noqa: B950
         except ApitError as e:
             self.mark_as_fail(e)
         else:
