@@ -8,8 +8,8 @@ import pytest
 from apit.error import ApitError
 from apit.metadata import Artwork
 from apit.metadata import Song
-from apit.mime_type import MIME_TYPE
-from apit.tagging.mp4.constants import MP4_MAPPING
+from apit.mime_type import MimeType
+from apit.tagging.mp4.constants import Mp4Mapping
 from apit.tagging.mp4.update import _modify_mp4_file
 from apit.tagging.mp4.update import _to_artwork
 from apit.tagging.mp4.update import update_metadata
@@ -19,37 +19,37 @@ def test_modify_mp4_file(test_song: Song):
     mock_mp4_file = _mocked_mp4_file()
     updated_mock_mp4_file = _modify_mp4_file(mock_mp4_file, test_song)
 
-    assert updated_mock_mp4_file[MP4_MAPPING.ARTIST] == test_song.artist
-    assert updated_mock_mp4_file[MP4_MAPPING.TITLE] == test_song.title
-    assert updated_mock_mp4_file[MP4_MAPPING.ALBUM_NAME] == test_song.album_name
-    assert updated_mock_mp4_file[MP4_MAPPING.GENRE] == test_song.genre
-    assert updated_mock_mp4_file[MP4_MAPPING.RELEASE_DATE] == test_song.release_date
-    assert updated_mock_mp4_file[MP4_MAPPING.DISC_NUMBER] == [
+    assert updated_mock_mp4_file[Mp4Mapping.ARTIST] == test_song.artist
+    assert updated_mock_mp4_file[Mp4Mapping.TITLE] == test_song.title
+    assert updated_mock_mp4_file[Mp4Mapping.ALBUM_NAME] == test_song.album_name
+    assert updated_mock_mp4_file[Mp4Mapping.GENRE] == test_song.genre
+    assert updated_mock_mp4_file[Mp4Mapping.RELEASE_DATE] == test_song.release_date
+    assert updated_mock_mp4_file[Mp4Mapping.DISC_NUMBER] == [
         (test_song.disc_number, test_song.disc_total)
     ]
-    assert updated_mock_mp4_file[MP4_MAPPING.TRACK_NUMBER] == [
+    assert updated_mock_mp4_file[Mp4Mapping.TRACK_NUMBER] == [
         (test_song.track_number, test_song.track_total)
     ]
-    assert updated_mock_mp4_file[MP4_MAPPING.RATING] == [1]
-    assert updated_mock_mp4_file[MP4_MAPPING.MEDIA_TYPE] == [1]
-    assert updated_mock_mp4_file[MP4_MAPPING.ALBUM_ARTIST] == test_song.album_artist
-    assert updated_mock_mp4_file[MP4_MAPPING.COPYRIGHT] == test_song.copyright
-    assert updated_mock_mp4_file[MP4_MAPPING.COMPILATION] == test_song.compilation
-    assert updated_mock_mp4_file[MP4_MAPPING.CONTENT_ID] == [test_song.content_id]
-    assert MP4_MAPPING.ARTWORK not in updated_mock_mp4_file
+    assert updated_mock_mp4_file[Mp4Mapping.RATING] == [1]
+    assert updated_mock_mp4_file[Mp4Mapping.MEDIA_TYPE] == [1]
+    assert updated_mock_mp4_file[Mp4Mapping.ALBUM_ARTIST] == test_song.album_artist
+    assert updated_mock_mp4_file[Mp4Mapping.COPYRIGHT] == test_song.copyright
+    assert updated_mock_mp4_file[Mp4Mapping.COMPILATION] == test_song.compilation
+    assert updated_mock_mp4_file[Mp4Mapping.CONTENT_ID] == [test_song.content_id]
+    assert Mp4Mapping.ARTWORK not in updated_mock_mp4_file
 
 
 def test_modify_mp4_file_with_cover(test_song: Song):
-    artwork = Artwork(b"artwork-value", MIME_TYPE.JPEG)
+    artwork = Artwork(b"artwork-value", MimeType.JPEG)
     mock_mp4_file = _mocked_mp4_file()
     updated_mock_mp4_file = _modify_mp4_file(mock_mp4_file, test_song, artwork)
 
-    assert updated_mock_mp4_file[MP4_MAPPING.ARTWORK] == [
+    assert updated_mock_mp4_file[Mp4Mapping.ARTWORK] == [
         mutagen.mp4.MP4Cover(
             artwork.content, imageformat=mutagen.mp4.MP4Cover.FORMAT_JPEG
         )
     ]
-    assert updated_mock_mp4_file[MP4_MAPPING.ARTIST] == test_song.artist
+    assert updated_mock_mp4_file[Mp4Mapping.ARTIST] == test_song.artist
 
 
 def test_metadata_updating(monkeypatch, test_song: Song):
@@ -65,7 +65,7 @@ def test_metadata_updating(monkeypatch, test_song: Song):
 
 
 def test_metadata_updating_with_artwork(monkeypatch, test_song: Song):
-    artwork = Artwork(b"artwork-value", MIME_TYPE.JPEG)
+    artwork = Artwork(b"artwork-value", MimeType.JPEG)
     mock_mp4_file = MagicMock()
     monkeypatch.setattr(
         "apit.tagging.mp4.update.read_metadata_raw", lambda *args: mock_mp4_file
@@ -105,7 +105,7 @@ def test_metadata_updating_file_save_error(monkeypatch, test_song):
 
 
 def test_to_artwork_with_jpg():
-    artwork = Artwork(b"artwork-value", MIME_TYPE.JPEG)
+    artwork = Artwork(b"artwork-value", MimeType.JPEG)
 
     mp4_artwork = _to_artwork(artwork)
 
@@ -115,7 +115,7 @@ def test_to_artwork_with_jpg():
 
 
 def test_to_artwork_with_png():
-    artwork = Artwork(b"artwork-value", MIME_TYPE.PNG)
+    artwork = Artwork(b"artwork-value", MimeType.PNG)
 
     mp4_artwork = _to_artwork(artwork)
 

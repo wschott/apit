@@ -13,7 +13,7 @@ from apit.file_handling import extract_disc_and_track_number
 from apit.metadata import Artwork
 from apit.metadata import find_song
 from apit.metadata import Song
-from apit.mime_type import MIME_TYPE
+from apit.mime_type import MimeType
 from apit.report import print_report
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
@@ -68,7 +68,7 @@ def to_artwork(songs: Sequence[Song], artwork_size: int) -> Artwork | None:
     logging.info("Download cover (with size %d) from: %s", size, upscaled_url)
 
     artwork_content, image_type = download_artwork(upscaled_url)
-    return Artwork(content=artwork_content, mimetype=MIME_TYPE(image_type))
+    return Artwork(content=artwork_content, mimetype=MimeType(image_type))
 
 
 def create_action(

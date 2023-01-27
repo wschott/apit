@@ -3,7 +3,7 @@ from apit.tag_id import TagIdEnum
 
 
 # Atom meanings: see https://github.com/quodlibet/mutagen/blob/master/mutagen/id3/_frames.py
-class MP3_MAPPING(TagIdEnum):
+class Mp3Mapping(TagIdEnum):
     # fmt: off
     TITLE           = 'TIT2'
     ALBUM_NAME      = 'TALB'

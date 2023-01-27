@@ -3,7 +3,7 @@ from apit.tag_id import TagIdEnum
 
 
 # Atom meanings: see https://github.com/quodlibet/mutagen/blob/master/mutagen/mp4/__init__.py
-class MP4_MAPPING(TagIdEnum):
+class Mp4Mapping(TagIdEnum):
     # fmt: off
     TITLE           = '\xa9nam'
     ALBUM_NAME      = '\xa9alb'

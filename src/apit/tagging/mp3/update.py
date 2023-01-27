@@ -4,7 +4,7 @@ from pathlib import Path
 import mutagen.id3
 import mutagen.mp3
 
-from .constants import MP3_MAPPING
+from .constants import Mp3Mapping
 from .read import read_metadata_raw
 from apit.error import ApitError
 from apit.metadata import Artwork
@@ -41,32 +41,32 @@ def _to_artwork(artwork: Artwork) -> mutagen.id3.APIC:
 def _modify_mp3_file(
     mp3_file: mutagen.mp3.MP3, song: Song, artwork: Artwork | None = None
 ) -> mutagen.mp3.MP3:
-    _update_specific_tag(mp3_file.tags, MP3_MAPPING.ARTIST, song.artist)
-    _update_specific_tag(mp3_file.tags, MP3_MAPPING.TITLE, song.title)
-    _update_specific_tag(mp3_file.tags, MP3_MAPPING.ALBUM_NAME, song.album_name)
-    _update_specific_tag(mp3_file.tags, MP3_MAPPING.GENRE, song.genre)
+    _update_specific_tag(mp3_file.tags, Mp3Mapping.ARTIST, song.artist)
+    _update_specific_tag(mp3_file.tags, Mp3Mapping.TITLE, song.title)
+    _update_specific_tag(mp3_file.tags, Mp3Mapping.ALBUM_NAME, song.album_name)
+    _update_specific_tag(mp3_file.tags, Mp3Mapping.GENRE, song.genre)
     _update_specific_tag(
-        mp3_file.tags, MP3_MAPPING.RELEASE_DATE, extract_year(song.release_date)
+        mp3_file.tags, Mp3Mapping.RELEASE_DATE, extract_year(song.release_date)
     )
     _update_specific_tag(
-        mp3_file.tags, MP3_MAPPING.DISC_NUMBER, f"{song.disc_number}/{song.disc_total}"
+        mp3_file.tags, Mp3Mapping.DISC_NUMBER, f"{song.disc_number}/{song.disc_total}"
     )
     _update_specific_tag(
         mp3_file.tags,
-        MP3_MAPPING.TRACK_NUMBER,
+        Mp3Mapping.TRACK_NUMBER,
         f"{song.track_number}/{song.track_total}",
     )
-    _update_specific_tag(mp3_file.tags, MP3_MAPPING.ALBUM_ARTIST, song.album_artist)
-    _update_specific_tag(mp3_file.tags, MP3_MAPPING.COPYRIGHT, song.copyright)
+    _update_specific_tag(mp3_file.tags, Mp3Mapping.ALBUM_ARTIST, song.album_artist)
+    _update_specific_tag(mp3_file.tags, Mp3Mapping.COPYRIGHT, song.copyright)
     if song.compilation:
         _update_specific_tag(
-            mp3_file.tags, MP3_MAPPING.COMPILATION, str(int(song.compilation))
+            mp3_file.tags, Mp3Mapping.COMPILATION, str(int(song.compilation))
         )
     else:
-        _unset_tag(mp3_file.tags, MP3_MAPPING.COMPILATION)
+        _unset_tag(mp3_file.tags, Mp3Mapping.COMPILATION)
 
     if artwork:
-        _update_artwork_tag(mp3_file.tags, MP3_MAPPING.ARTWORK, artwork)
+        _update_artwork_tag(mp3_file.tags, Mp3Mapping.ARTWORK, artwork)
 
     return mp3_file
 

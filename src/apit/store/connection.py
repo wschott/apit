@@ -5,7 +5,7 @@ import urllib.request
 
 from apit.error import ApitError
 from apit.error import ApitStoreConnectionError
-from apit.mime_type import MIME_TYPE
+from apit.mime_type import MimeType
 
 # format (as of 2020-05): https://music.apple.com/us/album/album-name/123456789
 # old format: http://itunes.apple.com/us/album/album-name/id123456789
@@ -41,7 +41,7 @@ def download_metadata(url: str) -> str:
         raise ApitStoreConnectionError(str(e))
 
 
-def download_artwork(url: str) -> tuple[bytes, MIME_TYPE]:
+def download_artwork(url: str) -> tuple[bytes, MimeType]:
     try:
         with urllib.request.urlopen(url) as response:
             content_type = response.getheader("Content-Type")
@@ -51,8 +51,8 @@ def download_artwork(url: str) -> tuple[bytes, MIME_TYPE]:
         raise ApitStoreConnectionError(str(e))
 
 
-def _to_mime_type(content_type: str) -> MIME_TYPE:
+def _to_mime_type(content_type: str) -> MimeType:
     try:
-        return MIME_TYPE(content_type)
+        return MimeType(content_type)
     except ValueError:
         raise ApitError(f"Unknown artwork content type: {content_type}")

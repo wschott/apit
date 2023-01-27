@@ -7,7 +7,7 @@ import pytest
 
 from apit.error import ApitError
 from apit.error import ApitStoreConnectionError
-from apit.mime_type import MIME_TYPE
+from apit.mime_type import MimeType
 from apit.store.connection import _to_mime_type
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
@@ -84,7 +84,7 @@ def test_download_artwork():
     with patch("urllib.request.urlopen", return_value=mock):
         artwork = download_artwork(ARTWORK_URL)
 
-    assert b"artwork-content", MIME_TYPE.JPEG == artwork
+    assert b"artwork-content", MimeType.JPEG == artwork
 
 
 def test_download_artwork_with_url_error():
@@ -102,8 +102,8 @@ def test_download_artwork_with_url_error():
 
 
 def test_to_mime_type():
-    assert _to_mime_type("image/jpeg") == MIME_TYPE.JPEG
-    assert _to_mime_type("image/png") == MIME_TYPE.PNG
+    assert _to_mime_type("image/jpeg") == MimeType.JPEG
+    assert _to_mime_type("image/png") == MimeType.PNG
 
 
 def test_to_mime_type_for_unknown_type():
