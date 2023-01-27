@@ -12,16 +12,14 @@ from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata
 from apit.store.connection import generate_lookup_url
 
-# fmt: off
-STORE_URL           = 'https://music.apple.com/us/album/test-album/12345'
-STORE_URL_INVALID   = 'https://music.apple.com/album/us/test-album/12345'
-STORE_URL_COMPLEX   = 'http://test.com/us/test/42/12345?i=09876/54321'
-STORE_URL_ANYTHING  = 'http://test/us/x/9/12345?i=09876'
-STORE_URL_OLD       = 'http://itunes.apple.com/us/album/test-album/id12345'
-LOOKUP_URL          = 'https://itunes.apple.com/lookup?entity=song&country=us&id=12345'
-LOOKUP_URL_NON_US   = 'https://itunes.apple.com/lookup?entity=song&country=xy&id=12345'
-ARTWORK_URL         = 'https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/12/12/12/12345678-1234-1234-1234-123456781234/source/600x600bb.jpg'
-# fmt: on
+STORE_URL = "https://music.apple.com/us/album/test-album/12345"
+STORE_URL_INVALID = "https://music.apple.com/album/us/test-album/12345"
+STORE_URL_COMPLEX = "http://test.com/us/test/42/12345?i=09876/54321"
+STORE_URL_ANYTHING = "http://test/us/x/9/12345?i=09876"
+STORE_URL_OLD = "http://itunes.apple.com/us/album/test-album/id12345"
+LOOKUP_URL = "https://itunes.apple.com/lookup?entity=song&country=us&id=12345"
+LOOKUP_URL_NON_US = "https://itunes.apple.com/lookup?entity=song&country=xy&id=12345"
+ARTWORK_URL = "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/12/12/12/12345678-1234-1234-1234-123456781234/source/600x600bb.jpg"
 
 
 def test_generate_lookup_url_by_url_using_valid_url():

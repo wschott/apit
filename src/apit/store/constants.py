@@ -14,29 +14,31 @@ VALID_KIND_VALUES_FOR_SONG = "song"
 
 
 class STORE_KEY(StrEnum):
-    # fmt: off
     # song values
-    ARTIST          = 'artistName'
-    TITLE           = 'trackCensoredName'  # alternatively: 'trackName' without stars '*'
-    ALBUM_NAME      = 'collectionCensoredName'  # alternatively: 'collectionName' without stars '*'; in ALBUM: both fields are present as well
-    GENRE           = 'primaryGenreName'
-    RELEASE_DATE    = 'releaseDate'
-    TRACK_NUMBER    = 'trackNumber'
-    TRACK_TOTAL     = 'trackCount'
-    DISC_NUMBER     = 'discNumber'
-    DISC_TOTAL      = 'discCount'
-    RATING          = 'trackExplicitness'
-    MEDIA_KIND      = 'kind'
-    CONTENT_ID      = 'trackId'  # catalog ID
-    COLLECTION_ID   = 'collectionId'  # same as ALBUM:collectionId   # TODO rename to PLAYLIST_ID?
-    COLLECTION_ARTIST = 'collectionArtistId'  # presence indicates, that this is part of a compilation
+    ARTIST = "artistName"
+    TITLE = "trackCensoredName"  # alternatively: 'trackName' without stars '*'
+    ALBUM_NAME = "collectionCensoredName"  # alternatively: 'collectionName' without stars '*'; in ALBUM: both fields are present as well
+    GENRE = "primaryGenreName"
+    RELEASE_DATE = "releaseDate"
+    TRACK_NUMBER = "trackNumber"
+    TRACK_TOTAL = "trackCount"
+    DISC_NUMBER = "discNumber"
+    DISC_TOTAL = "discCount"
+    RATING = "trackExplicitness"
+    MEDIA_KIND = "kind"
+    CONTENT_ID = "trackId"  # catalog ID
+    COLLECTION_ID = (
+        "collectionId"  # same as ALBUM:collectionId   # TODO rename to PLAYLIST_ID?
+    )
+    COLLECTION_ARTIST = (
+        "collectionArtistId"  # presence indicates, that this is part of a compilation
+    )
     # TODO ARTIST_ID       = 'artistId'
 
     # album values
-    ALBUM_ARTIST    = 'artistName'
-    COPYRIGHT       = 'copyright'
-    ARTWORK_URL     = 'artworkUrl100'
-    # fmt: on
+    ALBUM_ARTIST = "artistName"
+    COPYRIGHT = "copyright"
+    ARTWORK_URL = "artworkUrl100"
 
 
 class STORE_RATING(Enum):
