@@ -1,6 +1,4 @@
 import logging
-from collections.abc import Iterable
-from collections.abc import Sequence
 from pathlib import Path
 
 from .action import TagAction
@@ -24,7 +22,7 @@ from apit.user_input import ask_user_for_confirmation
 
 
 def execute(
-    files: Iterable[Path],
+    files: list[Path],
     verbose_level: int,
     source: str,
     has_backup_flag: bool,
@@ -57,7 +55,7 @@ def to_songs(source: str) -> list[Song]:
     return extract_songs(metadata_json)
 
 
-def to_artwork(songs: Sequence[Song], artwork_size: int) -> Artwork | None:
+def to_artwork(songs: list[Song], artwork_size: int) -> Artwork | None:
     if not songs:
         return None
     first_song = songs[0]  # TODO refactor # TODO fix possible IndexError
@@ -72,7 +70,7 @@ def to_artwork(songs: Sequence[Song], artwork_size: int) -> Artwork | None:
 
 
 def create_action(
-    file: Path, songs: Iterable[Song], should_backup: bool, artwork: Artwork | None
+    file: Path, songs: list[Song], should_backup: bool, artwork: Artwork | None
 ) -> TagAction:
     disc, track = extract_disc_and_track_number(file)
 

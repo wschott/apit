@@ -1,5 +1,4 @@
 import logging
-from collections.abc import Iterable
 from pathlib import Path
 
 from .action import ReadAction
@@ -8,7 +7,7 @@ from apit.command_result import CommandResult
 from apit.report import print_report
 
 
-def execute(files: Iterable[Path], verbose_level: int) -> CommandResult:
+def execute(files: list[Path], verbose_level: int) -> CommandResult:
     actions: list[ReadAction] = [ReadAction(file) for file in files]
 
     for action in actions:

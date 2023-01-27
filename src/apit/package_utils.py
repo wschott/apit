@@ -1,8 +1,7 @@
 import pkgutil
-from collections.abc import Iterable
 
 
-def import_packages(path: Iterable[str]) -> None:
+def import_packages(path: list[str]) -> None:
     for loader, module_name, is_pkg in pkgutil.iter_modules(path):
         if not is_pkg:
             continue

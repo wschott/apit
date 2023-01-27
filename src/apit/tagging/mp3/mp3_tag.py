@@ -1,5 +1,4 @@
 import os
-from collections.abc import Mapping
 
 import mutagen.id3
 
@@ -35,7 +34,7 @@ class Mp3Tag(TaggedValue):
             return self._unprocessed_value
 
 
-MP3_MAPPING_TO_READABLE_TAG_NAME: Mapping[Mp3Mapping, ReadableTagName] = {
+MP3_MAPPING_TO_READABLE_TAG_NAME: dict[Mp3Mapping, ReadableTagName] = {
     Mp3Mapping.TITLE: ReadableTagName.TITLE,
     Mp3Mapping.ARTIST: ReadableTagName.ARTIST,
     Mp3Mapping.ALBUM_NAME: ReadableTagName.ALBUM_NAME,

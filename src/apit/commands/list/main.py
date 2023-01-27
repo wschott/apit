@@ -1,4 +1,3 @@
-from collections.abc import Iterable
 from pathlib import Path
 
 from ..common_cli_parser_arguments import add_path_argument
@@ -21,5 +20,5 @@ def setup_cli_parser(subparsers):
     add_path_argument(list_command)
 
 
-def main(files: Iterable[Path], options: CliOptions) -> CommandResult:
+def main(files: list[Path], options: CliOptions) -> CommandResult:
     return execute(files=files, verbose_level=options.verbose_level)

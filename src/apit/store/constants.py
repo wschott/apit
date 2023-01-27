@@ -2,7 +2,6 @@
 # Documentation:
 # https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/
 # https://godoc.org/trimmer.io/go-xmp/models/itunes
-from collections.abc import Mapping
 from enum import Enum
 
 from apit.error import ApitError
@@ -47,7 +46,7 @@ class STORE_RATING(Enum):
     # EXPLICIT_OLD = 'explicit'
 
 
-RATING_MAPPING: Mapping[STORE_RATING, int] = {
+RATING_MAPPING: dict[STORE_RATING, int] = {
     # itunes value -> mutagen value
     STORE_RATING.CLEAN: 2,
     STORE_RATING.EXPLICIT: 1,
@@ -68,7 +67,7 @@ class STORE_KIND(Enum):
     SONG = "song"
 
 
-ITEM_KIND_MAPPING: Mapping[STORE_KIND, int] = {
+ITEM_KIND_MAPPING: dict[STORE_KIND, int] = {
     # itunes value -> mutagen value
     STORE_KIND.SONG: 1,
 }

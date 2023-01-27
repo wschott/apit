@@ -1,4 +1,3 @@
-from collections.abc import Iterable
 from dataclasses import dataclass
 
 from .named_tag_sections import ORDER_ALBUM
@@ -17,7 +16,7 @@ from apit.tagged_value import TaggedValue
 @dataclass
 class NamedSection:
     title: str
-    readable_tag_names: Iterable[ReadableTagName]
+    readable_tag_names: list[ReadableTagName]
 
 
 KNOWN_NAMED_SECTIONS: list[NamedSection] = [
@@ -32,7 +31,7 @@ KNOWN_NAMED_SECTIONS: list[NamedSection] = [
 @dataclass
 class MetadataSection:
     title: str
-    tags: Iterable[TaggedValue]
+    tags: list[TaggedValue]
 
 
 def to_tags_report(file_tags: FileTags, verbose: bool) -> str:
@@ -50,12 +49,12 @@ def to_tags_report(file_tags: FileTags, verbose: bool) -> str:
     )
 
 
-def filter_valid_sections(sections: Iterable[MetadataSection]) -> list[MetadataSection]:
+def filter_valid_sections(sections: list[MetadataSection]) -> list[MetadataSection]:
     return [section for section in sections if section.tags]
 
 
 def to_printable_tables(
-    sections: Iterable[MetadataSection],
+    sections: list[MetadataSection],
     verbose: bool,
 ) -> str:
     max_tag_description_length = calculate_tag_max_len(sections, verbose)
@@ -71,10 +70,10 @@ def to_printable_tables(
     return "\n\n".join(metadata_tables)
 
 
-def to_table_rows(tags: Iterable[TaggedValue], verbose: bool) -> list[tuple[str, str]]:
+def to_table_rows(tags: list[TaggedValue], verbose: bool) -> list[tuple[str, str]]:
     return [(tag.description(verbose), tag.value(verbose)) for tag in tags]
 
 
-def calculate_tag_max_len(sections: Iterable[MetadataSection], verbose: bool) -> int:
+def calculate_tag_max_len(sections: list[MetadataSection], verbose: bool) -> int:
     tags: list[TaggedValue] = flat_map(lambda section: section.tags, sections)
     return max(len(tag.description(verbose)) for tag in tags if tag.is_known)

@@ -1,5 +1,4 @@
 import os
-from collections.abc import Mapping
 
 from .constants import Mp4Mapping
 from apit.readable_names import ReadableTagName
@@ -50,7 +49,7 @@ class Mp4Tag(TaggedValue):
             return self._unprocessed_value
 
 
-MP4_MAPPING_TO_READABLE_TAG_NAME: Mapping[Mp4Mapping, ReadableTagName] = {
+MP4_MAPPING_TO_READABLE_TAG_NAME: dict[Mp4Mapping, ReadableTagName] = {
     Mp4Mapping.TITLE: ReadableTagName.TITLE,
     Mp4Mapping.ARTIST: ReadableTagName.ARTIST,
     Mp4Mapping.ALBUM_NAME: ReadableTagName.ALBUM_NAME,
@@ -89,12 +88,12 @@ MP4_MAPPING_TO_READABLE_TAG_NAME: Mapping[Mp4Mapping, ReadableTagName] = {
 }
 
 
-RATING_TO_READABLE_NAME: Mapping[int, str] = {
+RATING_TO_READABLE_NAME: dict[int, str] = {
     4: "<explicit (old value)>",  # TODO
     RATING_MAPPING[STORE_RATING.CLEAN]: "<clean>",
     RATING_MAPPING[STORE_RATING.EXPLICIT]: "<explicit>",
     RATING_MAPPING[STORE_RATING.NONE]: "<inoffensive>",
 }
-MEDIA_TYPE_TO_READABLE_NAME: Mapping[int, str] = {
+MEDIA_TYPE_TO_READABLE_NAME: dict[int, str] = {
     ITEM_KIND_MAPPING[STORE_KIND.SONG]: "<normal>",
 }

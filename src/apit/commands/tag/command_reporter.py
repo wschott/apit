@@ -1,5 +1,3 @@
-from collections.abc import Iterable
-
 from .action import TagAction
 from .reporter import TagActionReporter
 from apit.color import Color
@@ -11,7 +9,7 @@ STR_SELECTED = "[✕]"
 STR_NOT_SELECTED = "[ ]"
 
 
-def print_actions_preview(actions: Iterable[TagAction]) -> None:
+def print_actions_preview(actions: list[TagAction]) -> None:
     print("Preview:")
     print()
 

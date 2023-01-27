@@ -6,7 +6,7 @@ from beautifultable import WEP_WRAP
 METADATA_TABLE_WIDTH = 122
 
 
-def legend_table(rows: Iterable[Iterable[str]]) -> str:
+def legend_table(rows: list[list[str]]) -> str:
     table = BeautifulTable(default_alignment=BeautifulTable.ALIGN_LEFT)
     table.set_style(BeautifulTable.STYLE_NONE)
     table.columns.separator = "→"
@@ -17,7 +17,7 @@ def legend_table(rows: Iterable[Iterable[str]]) -> str:
     return str(table)
 
 
-def tag_preview_table(header: Iterable[str], rows: Iterable[Iterable[str]]) -> str:
+def tag_preview_table(header: list[str], rows: list[list[str]]) -> str:
     table = BeautifulTable(default_alignment=BeautifulTable.ALIGN_LEFT)
     table.set_style(BeautifulTable.STYLE_COMPACT)
     table.maxwidth = 126
