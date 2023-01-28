@@ -1,7 +1,7 @@
 from apit.action import Action
 from apit.error import ApitError
 from apit.file_tags import FileTags
-from apit.file_type import AudioFile
+from apit.file_type import AudioFileFactory
 
 
 class ReadAction(Action):
@@ -15,7 +15,7 @@ class ReadAction(Action):
 
     def apply(self) -> None:
         try:
-            result: FileTags = AudioFile.from_(self.file).read()
+            result: FileTags = AudioFileFactory.load(self.file).read()
         except ApitError as e:
             self.mark_as_fail(e)
         else:

@@ -6,7 +6,7 @@ from apit.file_handling import backup_file
 from apit.file_handling import extract_disc_and_track_number
 from apit.file_handling import REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME
 from apit.file_tags import FileTags
-from apit.file_type import AudioFile
+from apit.file_type import AudioFileFactory
 from apit.metadata import Artwork
 from apit.metadata import Song
 from apit.string_utils import clean
@@ -74,7 +74,7 @@ class TagAction(Action):
             if self.should_backup:
                 self.backup_song()
 
-            result: FileTags = AudioFile.from_(self.file).update(self.song, self.artwork)  # type: ignore # noqa: B950
+            result: FileTags = AudioFileFactory.load(self.file).update(self.song, self.artwork)  # type: ignore # noqa: B950
         except ApitError as e:
             self.mark_as_fail(e)
         else:
