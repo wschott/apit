@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from apit.file_handling import backup_file
 from apit.file_handling import collect_files
 from apit.file_handling import extract_disc_and_track_number
@@ -27,45 +29,65 @@ def test_collect_files_using_single_file(make_tmp_file):
     assert collect_files(file_1) == [file_1]
 
 
-def test_collect_files_using_filter(tmp_path, make_tmp_file):
+@pytest.mark.parametrize("filter_ext", ["m4a", ["m4a"]])
+def test_collect_files_using_filter(filter_ext, tmp_path, make_tmp_file):
     file_1 = make_tmp_file("1 first.m4a")
     make_tmp_file("2 second.mp3")
     make_tmp_file("3 third.mp4")
 
-    assert collect_files(tmp_path, "m4a") == [file_1]
-    assert collect_files(tmp_path, ["m4a"]) == [file_1]
+    assert collect_files(tmp_path, filter_ext) == [file_1]
 
 
-def test_extract_disc_and_track_number_using_only_track_number():
-    assert extract_disc_and_track_number(Path("14.m4a")) == (1, 14)
-    assert extract_disc_and_track_number(Path("14..m4a")) == (1, 14)
-    assert extract_disc_and_track_number(Path("#14.m4a")) == (1, 14)
-    assert extract_disc_and_track_number(Path("14 song title.m4a")) == (1, 14)
-    assert extract_disc_and_track_number(Path("14song title.m4a")) == (1, 14)
-    assert extract_disc_and_track_number(Path("14. song title.m4a")) == (1, 14)
-    assert extract_disc_and_track_number(Path("14.song title.m4a")) == (1, 14)
-    assert extract_disc_and_track_number(Path("#14 song title.m4a")) == (1, 14)
+@pytest.mark.parametrize(
+    "path",
+    [
+        "14.m4a",
+        "14..m4a",
+        "#14.m4a",
+        "14 song title.m4a",
+        "14song title.m4a",
+        "14. song title.m4a",
+        "14.song title.m4a",
+        "#14 song title.m4a",
+    ],
+)
+def test_extract_disc_and_track_number_using_only_track_number(path: str):
+    assert extract_disc_and_track_number(Path(path)) == (1, 14)
 
 
-def test_extract_disc_and_track_number_using_only_track_number_containing_numbers_in_title():
-    assert extract_disc_and_track_number(Path("2 14 song title.m4a")) == (1, 2)
-    assert extract_disc_and_track_number(Path("2. 14 song title.m4a")) == (1, 2)
-    assert extract_disc_and_track_number(Path("2. 14. song title.m4a")) == (1, 2)
+@pytest.mark.parametrize(
+    "path",
+    [
+        "2 14 song title.m4a",
+        "2. 14 song title.m4a",
+        "2. 14. song title.m4a",
+    ],
+)
+def test_extract_disc_and_track_number_using_only_track_number_containing_numbers_in_title(
+    path: str,
+):
+    assert extract_disc_and_track_number(Path(path)) == (1, 2)
 
 
-def test_extract_disc_and_track_number_using_disc_and_track_number():
-    assert extract_disc_and_track_number(Path("2-14.m4a")) == (2, 14)
-    assert extract_disc_and_track_number(Path("2.14.m4a")) == (2, 14)
-    assert extract_disc_and_track_number(Path("2.14..m4a")) == (2, 14)
-    assert extract_disc_and_track_number(Path("2.14..m4a")) == (2, 14)
-    assert extract_disc_and_track_number(Path("#2-14.m4a")) == (2, 14)
-    assert extract_disc_and_track_number(Path("2-14song title.m4a")) == (2, 14)
-    assert extract_disc_and_track_number(Path("2-14 song title.m4a")) == (2, 14)
-    assert extract_disc_and_track_number(Path("2.14 song title.m4a")) == (2, 14)
-    assert extract_disc_and_track_number(Path("2.14.song title.m4a")) == (2, 14)
-    assert extract_disc_and_track_number(Path("2-14.song title.m4a")) == (2, 14)
-    assert extract_disc_and_track_number(Path("2.14. song title.m4a")) == (2, 14)
-    assert extract_disc_and_track_number(Path("2-14. song title.m4a")) == (2, 14)
+@pytest.mark.parametrize(
+    "path",
+    [
+        "2-14.m4a",
+        "2.14.m4a",
+        "2.14..m4a",
+        "2.14..m4a",
+        "#2-14.m4a",
+        "2-14song title.m4a",
+        "2-14 song title.m4a",
+        "2.14 song title.m4a",
+        "2.14.song title.m4a",
+        "2-14.song title.m4a",
+        "2.14. song title.m4a",
+        "2-14. song title.m4a",
+    ],
+)
+def test_extract_disc_and_track_number_using_disc_and_track_number(path: str):
+    assert extract_disc_and_track_number(Path(path)) == (2, 14)
 
 
 def test_extract_disc_and_track_number_using_invalid_filename():
