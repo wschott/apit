@@ -9,6 +9,8 @@ from .constants import VALID_KIND_VALUES_FOR_SONG
 from apit.error import ApitError
 from apit.metadata import Album
 from apit.metadata import Song
+from apit.types import DiscNumber
+from apit.types import TrackNumber
 
 
 def extract_songs(metadata_json: str) -> list[Song]:
@@ -59,9 +61,9 @@ def to_song(album: Album, item: dict[str, Any]) -> Song:
 
     return Song(
         album=album,
-        track_number=extract_by_key(StoreKey.TRACK_NUMBER, item),
+        track_number=TrackNumber(extract_by_key(StoreKey.TRACK_NUMBER, item)),
         track_total=extract_by_key(StoreKey.TRACK_TOTAL, item),
-        disc_number=extract_by_key(StoreKey.DISC_NUMBER, item),
+        disc_number=DiscNumber(extract_by_key(StoreKey.DISC_NUMBER, item)),
         disc_total=extract_by_key(StoreKey.DISC_TOTAL, item),
         title=extract_by_key(StoreKey.TITLE, item),
         artist=extract_by_key(StoreKey.ARTIST, item),

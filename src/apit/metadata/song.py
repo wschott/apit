@@ -1,15 +1,17 @@
 from dataclasses import dataclass
 
 from apit.metadata import Album
+from apit.types import DiscNumber
+from apit.types import TrackNumber
 from apit.utils import generate_padded_track_number
 
 
 @dataclass
 class Song:
     album: Album
-    track_number: int
+    track_number: TrackNumber
     track_total: int
-    disc_number: int
+    disc_number: DiscNumber
     disc_total: int
     title: str
     artist: str

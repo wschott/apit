@@ -11,6 +11,8 @@ from apit.metadata import Artwork
 from apit.metadata import Song
 from apit.string_utils import clean
 from apit.string_utils import compare_normalized_caseless
+from apit.types import DiscNumber
+from apit.types import TrackNumber
 
 
 class TagAction(Action):
@@ -24,8 +26,8 @@ class TagAction(Action):
         super().__init__(file)
 
         disc, track = extract_disc_and_track_number(self.file)
-        self.disc: int | None = disc
-        self.track: int | None = track
+        self.disc: DiscNumber | None = disc
+        self.track: TrackNumber | None = track
         self.song: Song | None = song
         self.should_backup: bool = should_backup
         self.artwork: Artwork | None = artwork

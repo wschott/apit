@@ -30,7 +30,7 @@ def print_actions_preview(actions: list[TagAction]) -> None:
     )
     print()
 
-    header: list[str] = ["Metadata\nFound?", "Matching\nFilename?", "\nFile", "\nSong"]
+    header = ["Metadata\nFound?", "Matching\nFilename?", "\nFile", "\nSong"]
     rows = [_to_row(action) for action in actions]
     print(tag_preview_table(header, rows))
     print()
