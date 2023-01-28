@@ -7,7 +7,7 @@ from .named_tag_sections import ORDER_MISC
 from .named_tag_sections import ORDER_TRACK
 from .named_tag_sections import ORDER_USER
 from apit.file_tags import FileTags
-from apit.list_utils import flat_map
+from apit.list_utils import flatten
 from apit.readable_names import ReadableTagName
 from apit.reporting.table import metadata_inline_table
 from apit.reporting.table import metadata_table
@@ -76,5 +76,5 @@ def to_table_rows(tags: list[TaggedValue], verbose: bool) -> list[tuple[str, str
 
 
 def calculate_tag_max_len(sections: list[MetadataSection], verbose: bool) -> int:
-    tags: list[TaggedValue] = flat_map(lambda section: section.tags, sections)
+    tags: list[TaggedValue] = flatten(section.tags for section in sections)
     return max(len(tag.description(verbose)) for tag in tags if tag.is_known)
