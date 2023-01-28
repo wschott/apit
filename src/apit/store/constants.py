@@ -3,14 +3,15 @@
 # https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/
 # https://godoc.org/trimmer.io/go-xmp/models/itunes
 from enum import Enum
+from typing import Final
 
 from apit.error import ApitError
 from apit.str_enum import StrEnum
 
-COLLECTION_TYPE_KEY = "collectionType"
-VALID_COLLECTION_TYPE_FOR_ALBUM = "Album"
-KIND_KEY = "kind"
-VALID_KIND_VALUES_FOR_SONG = "song"
+COLLECTION_TYPE_KEY: Final = "collectionType"
+VALID_COLLECTION_TYPE_FOR_ALBUM: Final = "Album"
+KIND_KEY: Final = "kind"
+VALID_KIND_VALUES_FOR_SONG: Final = "song"
 
 
 class StoreKey(StrEnum):
@@ -48,7 +49,7 @@ class StoreRating(Enum):
     # EXPLICIT_OLD = 'explicit'
 
 
-RATING_MAPPING: dict[StoreRating, int] = {
+RATING_MAPPING: Final[dict[StoreRating, int]] = {
     # itunes value -> mutagen value
     StoreRating.CLEAN: 2,
     StoreRating.EXPLICIT: 1,
@@ -69,7 +70,7 @@ class StoreKind(Enum):
     SONG = "song"
 
 
-ITEM_KIND_MAPPING: dict[StoreKind, int] = {
+ITEM_KIND_MAPPING: Final[dict[StoreKind, int]] = {
     # itunes value -> mutagen value
     StoreKind.SONG: 1,
 }

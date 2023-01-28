@@ -1,9 +1,10 @@
 import logging
+from typing import Final
 
 from apit.color import Color
 from apit.color import to_colored_text
 
-LEVEL_TO_COLOR_MAP = {
+LEVEL_TO_COLOR_MAP: Final = {
     logging.DEBUG: Color.MAGENTA,
     logging.INFO: Color.MAGENTA,
     logging.WARNING: Color.MAGENTA,

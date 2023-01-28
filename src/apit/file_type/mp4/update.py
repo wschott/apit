@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Final
 
 import mutagen.mp4
 
@@ -13,7 +14,7 @@ from apit.store.constants import RATING_MAPPING
 from apit.store.constants import to_item_kind
 from apit.store.constants import to_rating
 
-ARTWORK_FORMATS = {
+ARTWORK_FORMATS: Final = {
     MimeType.JPEG: mutagen.mp4.MP4Cover.FORMAT_JPEG,
     MimeType.PNG: mutagen.mp4.MP4Cover.FORMAT_PNG,
 }
@@ -83,7 +84,7 @@ def _modify_mp4_file(
     return mp4_file
 
 
-BLACKLIST: list[str] = [
+BLACKLIST: Final[list[str]] = [
     Mp4Mapping.OWNER_NAME,
     Mp4Mapping.USER_MAIL,
 ]

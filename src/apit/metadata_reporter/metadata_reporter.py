@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Final
 
 from .named_tag_sections import ORDER_ALBUM
 from .named_tag_sections import ORDER_IDS
@@ -19,7 +20,7 @@ class NamedSection:
     readable_tag_names: list[ReadableTagName]
 
 
-KNOWN_NAMED_SECTIONS: list[NamedSection] = [
+KNOWN_NAMED_SECTIONS: Final[list[NamedSection]] = [
     NamedSection("Track", ORDER_TRACK),
     NamedSection("Album", ORDER_ALBUM),
     NamedSection("IDs", ORDER_IDS),

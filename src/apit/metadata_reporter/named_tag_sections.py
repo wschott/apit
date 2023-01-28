@@ -1,6 +1,8 @@
+from typing import Final
+
 from apit.readable_names import ReadableTagName
 
-ORDER_TRACK = [
+ORDER_TRACK: Final = [
     ReadableTagName.TITLE,
     ReadableTagName.SORT_ORDER_TITLE,
     ReadableTagName.ARTIST,
@@ -13,7 +15,7 @@ ORDER_TRACK = [
     ReadableTagName.BPM,
     ReadableTagName.MEDIA_TYPE,
 ]
-ORDER_ALBUM = [
+ORDER_ALBUM: Final = [
     ReadableTagName.ALBUM_NAME,
     ReadableTagName.SORT_ORDER_ALBUM,
     ReadableTagName.ALBUM_ARTIST,
@@ -24,7 +26,7 @@ ORDER_ALBUM = [
     ReadableTagName.RELEASE_DATE,
     ReadableTagName.COPYRIGHT,
 ]
-ORDER_IDS = [
+ORDER_IDS: Final = [
     ReadableTagName.CONTENT_ID,
     ReadableTagName.PLAYLIST_ID,
     ReadableTagName.ARTIST_ID,
@@ -32,14 +34,14 @@ ORDER_IDS = [
     ReadableTagName.COMPOSER_ID,
     ReadableTagName.ISRC_ID,
 ]
-ORDER_MISC = [
+ORDER_MISC: Final = [
     ReadableTagName.TOOL,
     ReadableTagName.GROUPING,
     ReadableTagName.COMMENT,
     ReadableTagName.ARTWORK,
     ReadableTagName.LYRICS,
 ]
-ORDER_USER = [
+ORDER_USER: Final = [
     ReadableTagName.OWNER_NAME,
     ReadableTagName.USER_MAIL,
     ReadableTagName.PURCHASE_DATE,

@@ -1,12 +1,13 @@
 import re
 import shutil
 from pathlib import Path
+from typing import Final
 
 from apit.sort import sort_naturally
 from apit.types import DiscNumber
 from apit.types import TrackNumber
 
-REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME = re.compile(
+REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME: Final = re.compile(
     r"^[#]?((?P<disc>\d+)[-.])?(?P<track>\d+)"
 )
 

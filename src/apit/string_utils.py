@@ -1,7 +1,8 @@
 import re
 import unicodedata
+from typing import Final
 
-ELLIPSIS = "…"
+ELLIPSIS: Final = "…"
 
 
 def truncate_text(text: str, length: int) -> str:

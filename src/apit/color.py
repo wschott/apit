@@ -1,8 +1,8 @@
 from enum import Enum
+from typing import Final
 
-
-PREFIX = "\033[3%dm"
-SUFFIX = "\033[0m"
+PREFIX: Final = "\033[3%dm"
+SUFFIX: Final = "\033[0m"
 
 
 class Color(Enum):

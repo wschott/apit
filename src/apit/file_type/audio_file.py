@@ -12,7 +12,7 @@ from apit.metadata import Song
 from apit.registry_mixin import RegistryMixin
 
 
-class AudioFile(ABC, RegistryMixin):
+class AudioFile(ABC, RegistryMixin["AudioFile"]):
     extensions: list[str] = []
 
     @classmethod
