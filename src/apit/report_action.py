@@ -5,11 +5,6 @@ from abc import abstractmethod
 class ActionReporter(ABC):
     @property
     @abstractmethod
-    def not_actionable_msg(self) -> str:
-        raise NotImplementedError
-
-    @property
-    @abstractmethod
     def preview_msg(self) -> str:
         raise NotImplementedError
 

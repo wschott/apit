@@ -9,7 +9,6 @@ def test_init():
     reporter = ReadActionReporter(action, verbose=False)
 
     assert reporter.preview_msg == ""
-    assert reporter.not_actionable_msg == ""
     assert reporter.status_msg == "[error]"  # TODO correct?
 
 

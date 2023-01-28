@@ -10,8 +10,6 @@ def test_init():
     reporter = ActionReporter()
 
     with pytest.raises(NotImplementedError):
-        reporter.not_actionable_msg
-    with pytest.raises(NotImplementedError):
         reporter.preview_msg
     with pytest.raises(NotImplementedError):
         reporter.status_msg

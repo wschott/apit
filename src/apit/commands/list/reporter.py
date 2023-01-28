@@ -10,10 +10,6 @@ class ReadActionReporter(ActionReporter):
         self.verbose = verbose
 
     @property
-    def not_actionable_msg(self) -> str:
-        return ""
-
-    @property
     def preview_msg(self) -> str:
         return ""
 
