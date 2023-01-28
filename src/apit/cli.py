@@ -9,8 +9,8 @@ from apit.commands import get_cli_parser_setups_fns
 from apit.error import ApitError
 from apit.exit_code import ExitCode
 from apit.file_handling import collect_files
+from apit.file_type import AudioFile
 from apit.logging import configure_logging
-from apit.tagging import AudioFile
 
 
 def create_parser(command_cli_parser_setup_fns: list[Callable]):

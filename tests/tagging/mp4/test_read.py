@@ -5,7 +5,7 @@ import mutagen.mp4
 import pytest
 
 from apit.error import ApitError
-from apit.tagging.mp4.read import read_metadata_raw
+from apit.file_type.mp4.read import read_metadata_raw
 
 
 def test_metadata_reading(monkeypatch):

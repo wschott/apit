@@ -1,5 +1,5 @@
+from apit.file_type.audio_file import AudioFile
 from apit.package_utils import import_packages
-from apit.tagging.audio_file import AudioFile
 
 __all__ = ["AudioFile"]
 

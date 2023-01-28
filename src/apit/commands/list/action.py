@@ -1,7 +1,7 @@
 from apit.action import Action
 from apit.error import ApitError
 from apit.file_tags import FileTags
-from apit.tagging import AudioFile
+from apit.file_type import AudioFile
 
 
 class ReadAction(Action):
