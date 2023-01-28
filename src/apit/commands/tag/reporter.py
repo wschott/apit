@@ -10,25 +10,25 @@ class TagActionReporter(ActionReporter):
         self.verbose = verbose
 
     @property
-    def not_actionable_msg(self) -> str:
+    def _not_actionable_msg(self) -> str:
         if not self.action.file_matched:
-            return "filename not matchable"
+            return "filename has no matchable track number"
         elif not self.action.metadata_matched:
-            return "file not matched against metadata"
+            return "no matching metadata found"
         raise ApitError("Unknown state")
         # TODO return '?'
 
     @property
     def preview_msg(self) -> str:
         if not self.action.actionable:
-            return f"[{self.not_actionable_msg}]"
+            return f"[{self._not_actionable_msg}]"
         return f"{self.action.song.track_number_padded} {self.action.song.title}"  # type: ignore # noqa: B950
 
     @property
     def status_msg(self) -> str:
         # TODO review conditions
         if not self.action.actionable:
-            return f"[skipped: {self.not_actionable_msg}]"
+            return f"[skipped: {self._not_actionable_msg}]"
         if not self.action.successful:
             return "[error]"
         if self.action.executed and self.action.successful:

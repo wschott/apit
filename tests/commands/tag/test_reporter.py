@@ -13,7 +13,7 @@ def test_not_actionable_msg_not_file_matched():
 
     reporter = TagActionReporter(action, verbose=False)
 
-    assert reporter.not_actionable_msg == "filename not matchable"
+    assert reporter._not_actionable_msg == "filename has no matchable track number"
 
 
 def test_not_actionable_msg_not_metadata_matched():
@@ -23,7 +23,7 @@ def test_not_actionable_msg_not_metadata_matched():
 
     reporter = TagActionReporter(action, verbose=False)
 
-    assert reporter.not_actionable_msg == "file not matched against metadata"
+    assert reporter._not_actionable_msg == "no matching metadata found"
 
 
 def test_preview_msg_not_actionable():
@@ -33,7 +33,7 @@ def test_preview_msg_not_actionable():
 
     reporter = TagActionReporter(action, verbose=False)
 
-    assert reporter.preview_msg == "[filename not matchable]"
+    assert reporter.preview_msg == "[filename has no matchable track number]"
 
 
 def test_preview_msg_actionable(test_song: Song):
