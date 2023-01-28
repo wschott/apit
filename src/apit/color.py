@@ -1,11 +1,11 @@
-from enum import Enum
+from enum import IntEnum
 from typing import Final
 
 PREFIX: Final = "\033[3%dm"
 SUFFIX: Final = "\033[0m"
 
 
-class Color(Enum):
+class Color(IntEnum):
     NONE = -1
     RED = 1
     GREEN = 2
@@ -17,4 +17,4 @@ class Color(Enum):
 def to_colored_text(text: str, color: Color) -> str:
     if color == Color.NONE:
         return text
-    return f"{PREFIX % color.value}{text}{SUFFIX}"
+    return f"{PREFIX % color}{text}{SUFFIX}"
