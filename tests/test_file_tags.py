@@ -1,11 +1,11 @@
-from .conftest import TestTag
+from .conftest import FakeTag
 from apit.file_tags import FileTags
 from apit.readable_names import ReadableTagName
 from apit.tag_id import TagId
 
 
 def test_file_tags_has_tags():
-    file_tags = FileTags([TestTag(TagId("a"), "a-value")])
+    file_tags = FileTags([FakeTag(TagId("a"), "a-value")])
 
     assert file_tags.has_tags
 
@@ -17,8 +17,8 @@ def test_file_tags_are_empty():
 
 
 def test_file_tags_filter_known():
-    known = TestTag(TagId("known-tag"), "known-tag-value")
-    unknown = TestTag(TagId("unknown-tag"), "unknown-tag-value")
+    known = FakeTag(TagId("known-tag"), "known-tag-value")
+    unknown = FakeTag(TagId("unknown-tag"), "unknown-tag-value")
 
     file_tags = FileTags([known, unknown])
 
@@ -26,8 +26,8 @@ def test_file_tags_filter_known():
 
 
 def test_file_tags_filter_unknown():
-    known = TestTag(TagId("known-tag"), "known-tag-value")
-    unknown = TestTag(TagId("unknown-tag"), "unknown-tag-value")
+    known = FakeTag(TagId("known-tag"), "known-tag-value")
+    unknown = FakeTag(TagId("unknown-tag"), "unknown-tag-value")
 
     file_tags = FileTags([known, unknown])
 

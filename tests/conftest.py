@@ -28,7 +28,7 @@ class MockTagAction(NamedTuple):
     is_filename_identical_to_song: bool
 
 
-class TestTag(TaggedValue):
+class FakeTag(TaggedValue):
     def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
         if tag_id == TagId("known-tag"):
             return ReadableTagName.TITLE
@@ -184,7 +184,7 @@ def test_song() -> Song:
 
 @pytest.fixture
 def test_file_tags() -> FileTags:
-    return FileTags([TestTag(TagId("tag_id"), "tag_value")])
+    return FileTags([FakeTag(TagId("tag_id"), "tag_value")])
 
 
 def pytest_addoption(parser):

@@ -12,7 +12,7 @@ from apit.action import filter_successes
 from apit.error import ApitError
 
 
-class TestAction(Action):
+class FakeAction(Action):
     def apply(self) -> None:
         if str(self.file) == "fail":
             self.mark_as_fail(ApitError("fail"))
@@ -118,7 +118,7 @@ def test_action_init():
 
 
 def test_action_mark_as_success():
-    action = TestAction(Path("success"))
+    action = FakeAction(Path("success"))
 
     action.apply()
 
@@ -128,7 +128,7 @@ def test_action_mark_as_success():
 
 
 def test_action_mark_as_fail():
-    action = TestAction(Path("fail"))
+    action = FakeAction(Path("fail"))
 
     action.apply()
 
