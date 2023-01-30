@@ -3,6 +3,7 @@ from pathlib import Path
 
 from .action import TagAction
 from .command_reporter import print_actions_preview
+from .reporter import TagActionReporter
 from apit.action import all_actions_successful
 from apit.action import any_action_needs_confirmation
 from apit.command_result import CommandResult
@@ -44,7 +45,7 @@ def execute(
         logging.info("Executing: %s", action)
         action.apply()
 
-    print_report(actions, verbose=verbose_level > 0)
+    print_report(actions, TagActionReporter, verbose=verbose_level > 0)
     return (
         CommandResult.SUCCESS if all_actions_successful(actions) else CommandResult.FAIL
     )
