@@ -1,6 +1,13 @@
-from .list.main import setup_cli_parser as list_setup_cli_parser
-from .tag.main import setup_cli_parser as tag_setup_cli_parser
+from apit.commands.command import Command
+from apit.package_utils import load_entry_point_modules
+
+__all__ = ["CommandFactory"]
 
 
-def get_cli_parser_setups_fns():
-    return [list_setup_cli_parser, tag_setup_cli_parser]
+commands: dict[str, Command] = load_entry_point_modules(group="apit.commands")
+
+
+class CommandFactory:
+    @classmethod
+    def get_cli_parser_setup_fns(cls):
+        return [c.setup_cli_parser for c in commands.values()]

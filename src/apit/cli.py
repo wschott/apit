@@ -5,7 +5,7 @@ from collections.abc import Callable
 
 from apit.cli_options import CliOptions
 from apit.command_result import CommandResult
-from apit.commands import get_cli_parser_setups_fns
+from apit.commands import CommandFactory
 from apit.errors import ApitError
 from apit.exit_code import ExitCode
 from apit.file_handling import collect_files
@@ -27,7 +27,7 @@ def create_parser(command_cli_parser_setup_fns: list[Callable]):
 
 
 def parse_args(args: list[str]) -> CliOptions:
-    parser = create_parser(get_cli_parser_setups_fns())
+    parser = create_parser(CommandFactory.get_cli_parser_setup_fns())
     return parser.parse_args(args, namespace=CliOptions())
 
 
