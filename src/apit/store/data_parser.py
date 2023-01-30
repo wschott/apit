@@ -6,7 +6,7 @@ from .constants import KIND_KEY
 from .constants import StoreKey
 from .constants import VALID_COLLECTION_TYPE_FOR_ALBUM
 from .constants import VALID_KIND_VALUES_FOR_SONG
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.metadata import Album
 from apit.metadata import Song
 from apit.types import DiscNumber

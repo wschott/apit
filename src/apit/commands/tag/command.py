@@ -7,7 +7,7 @@ from .reporter import TagActionReporter
 from apit.action import all_actions_successful
 from apit.action import any_action_needs_confirmation
 from apit.command_result import CommandResult
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.file_handling import extract_disc_and_track_number
 from apit.metadata import Artwork
 from apit.metadata import find_song

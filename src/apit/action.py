@@ -4,7 +4,7 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
-from apit.error import ApitError
+from apit.errors import ApitError
 
 
 class Action(ABC):

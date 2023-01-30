@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 
 from apit.commands.tag.action import TagAction
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.file_tags import FileTags
 from apit.metadata import Song
 
@@ -197,8 +197,12 @@ def test_tag_action_apply_not_actionable(monkeypatch, make_tmp_file):
 def test_tag_action_apply(
     monkeypatch, make_tmp_file, test_song: Song, test_file_tags: FileTags
 ):
-    monkeypatch.setattr("apit.file_type.mp4.update_metadata", lambda *args: MagicMock())
-    monkeypatch.setattr("apit.file_type.mp4.to_file_tags", lambda *args: test_file_tags)
+    monkeypatch.setattr(
+        "apit.file_types.mp4.update_metadata", lambda *args: MagicMock()
+    )
+    monkeypatch.setattr(
+        "apit.file_types.mp4.to_file_tags", lambda *args: test_file_tags
+    )
 
     action = TagAction(
         file=make_tmp_file("2-3 first.m4a"),
@@ -220,7 +224,7 @@ def test_tag_action_apply_error(monkeypatch, make_tmp_file, test_song: Song):
     def _raise(*args):
         raise error
 
-    monkeypatch.setattr("apit.file_type.mp4.update_metadata", _raise)
+    monkeypatch.setattr("apit.file_types.mp4.update_metadata", _raise)
 
     action = TagAction(
         file=make_tmp_file("2-3 first.m4a"),

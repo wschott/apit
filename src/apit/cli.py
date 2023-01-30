@@ -6,10 +6,10 @@ from collections.abc import Callable
 from apit.cli_options import CliOptions
 from apit.command_result import CommandResult
 from apit.commands import get_cli_parser_setups_fns
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.exit_code import ExitCode
 from apit.file_handling import collect_files
-from apit.file_type import AudioFileFactory
+from apit.file_types import AudioFileFactory
 from apit.logging import configure_logging
 
 

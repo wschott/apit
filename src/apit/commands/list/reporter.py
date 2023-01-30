@@ -1,6 +1,6 @@
 from .action import ReadAction
 from apit.action_reporter import ActionReporter
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.reporting.tags_report import to_tags_report
 
 

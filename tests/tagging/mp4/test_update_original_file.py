@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 
-from apit.file_type.mp4.update import is_itunes_bought_file
+from apit.file_types.mp4.update import is_itunes_bought_file
 
 
 def test_is_itunes_bought_file_for_itunes_file():

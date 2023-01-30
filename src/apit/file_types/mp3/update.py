@@ -6,7 +6,7 @@ import mutagen.mp3
 
 from .constants import Mp3Mapping
 from .read import read_metadata_raw
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.metadata import Artwork
 from apit.metadata import Song
 from apit.tag_id import TagId

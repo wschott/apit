@@ -9,7 +9,7 @@ from apit.action import any_action_needs_confirmation
 from apit.action import filter_errors
 from apit.action import filter_not_actionable
 from apit.action import filter_successes
-from apit.error import ApitError
+from apit.errors import ApitError
 
 
 class FakeAction(Action):

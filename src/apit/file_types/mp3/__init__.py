@@ -4,8 +4,8 @@ from .read import read_metadata_raw
 from .to_file_tags import to_file_tags
 from .update import update_metadata
 from apit.file_tags import FileTags
-from apit.file_type.audio_file import AudioFile
-from apit.file_type.audio_file import AudioFileFactory
+from apit.file_types.audio_file import AudioFile
+from apit.file_types.audio_file import AudioFileFactory
 from apit.metadata import Artwork
 from apit.metadata import Song
 

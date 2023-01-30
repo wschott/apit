@@ -1,7 +1,7 @@
 from typing import Generic
 from typing import TypeVar
 
-from apit.error import ApitUnsupportedTypeError
+from apit.errors import ApitUnsupportedTypeError
 
 T = TypeVar("T")
 

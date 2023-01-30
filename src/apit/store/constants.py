@@ -5,7 +5,7 @@
 from enum import Enum
 from typing import Final
 
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.str_enum import StrEnum
 
 COLLECTION_TYPE_KEY: Final = "collectionType"

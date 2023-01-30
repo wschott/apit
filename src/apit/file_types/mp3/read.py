@@ -2,7 +2,7 @@ from pathlib import Path
 
 import mutagen.mp3
 
-from apit.error import ApitError
+from apit.errors import ApitError
 
 
 def read_metadata_raw(file: Path) -> mutagen.mp3.MP3:

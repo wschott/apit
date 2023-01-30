@@ -1,6 +1,6 @@
 import pytest
 
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.metadata import find_song
 from apit.store.constants import StoreKey
 from apit.store.data_parser import _find_album

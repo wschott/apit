@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 
 from apit.commands.list.action import ReadAction
-from apit.error import ApitError
+from apit.errors import ApitError
 
 
 def test_read_action_after_init(make_tmp_file):
@@ -19,9 +19,11 @@ def test_read_action_after_init(make_tmp_file):
 
 def test_read_action_apply(monkeypatch, make_tmp_file, test_file_tags):
     monkeypatch.setattr(
-        "apit.file_type.mp4.read_metadata_raw", lambda *args: MagicMock()
+        "apit.file_types.mp4.read_metadata_raw", lambda *args: MagicMock()
     )
-    monkeypatch.setattr("apit.file_type.mp4.to_file_tags", lambda *args: test_file_tags)
+    monkeypatch.setattr(
+        "apit.file_types.mp4.to_file_tags", lambda *args: test_file_tags
+    )
     action = ReadAction(make_tmp_file("1 first.m4a"))
 
     action.apply()
@@ -37,7 +39,7 @@ def test_read_action_apply_error_while_reading(monkeypatch, make_tmp_file):
     def _raise(*args):
         raise error
 
-    monkeypatch.setattr("apit.file_type.mp4.read_metadata_raw", _raise)
+    monkeypatch.setattr("apit.file_types.mp4.read_metadata_raw", _raise)
     action = ReadAction(make_tmp_file("1 first.m4a"))
 
     action.apply()

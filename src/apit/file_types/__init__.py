@@ -1,4 +1,4 @@
-from apit.file_type.audio_file import AudioFileFactory
+from apit.file_types.audio_file import AudioFileFactory
 from apit.package_utils import import_packages
 
 __all__ = ["AudioFileFactory"]

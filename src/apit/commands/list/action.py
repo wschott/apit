@@ -1,7 +1,7 @@
 from apit.action import Action
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.file_tags import FileTags
-from apit.file_type import AudioFileFactory
+from apit.file_types import AudioFileFactory
 
 
 class ReadAction(Action):

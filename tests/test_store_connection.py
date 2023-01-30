@@ -5,8 +5,8 @@ from unittest.mock import patch
 
 import pytest
 
-from apit.error import ApitError
-from apit.error import ApitStoreConnectionError
+from apit.errors import ApitError
+from apit.errors import ApitStoreConnectionError
 from apit.mime_type import MimeType
 from apit.store.connection import download_artwork
 from apit.store.connection import download_metadata

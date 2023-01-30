@@ -1,6 +1,6 @@
 import pytest
 
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.store.constants import StoreKind
 from apit.store.constants import StoreRating
 from apit.store.constants import to_item_kind

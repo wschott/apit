@@ -1,6 +1,6 @@
 from enum import Enum
 
-from apit.error import ApitError
+from apit.errors import ApitError
 
 
 class MimeType(Enum):

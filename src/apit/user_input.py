@@ -1,4 +1,4 @@
-from apit.error import ApitError
+from apit.errors import ApitError
 
 
 def ask_user_for_input(question: str, abortion: str) -> str:

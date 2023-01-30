@@ -4,8 +4,8 @@ import urllib.error
 import urllib.request
 from typing import Final
 
-from apit.error import ApitError
-from apit.error import ApitStoreConnectionError
+from apit.errors import ApitError
+from apit.errors import ApitStoreConnectionError
 from apit.mime_type import MimeType
 from apit.mime_type import to_mime_type
 

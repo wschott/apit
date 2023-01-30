@@ -4,8 +4,8 @@ from unittest.mock import MagicMock
 import mutagen.mp4
 import pytest
 
-from apit.error import ApitError
-from apit.file_type.mp4.read import read_metadata_raw
+from apit.errors import ApitError
+from apit.file_types.mp4.read import read_metadata_raw
 
 
 def test_metadata_reading(monkeypatch):

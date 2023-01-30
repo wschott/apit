@@ -1,6 +1,6 @@
 import pytest
 
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.mime_type import MimeType
 from apit.mime_type import to_mime_type
 

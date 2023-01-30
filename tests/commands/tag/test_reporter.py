@@ -2,7 +2,7 @@ from pathlib import Path
 
 from apit.commands.tag.action import TagAction
 from apit.commands.tag.reporter import TagActionReporter
-from apit.error import ApitError
+from apit.errors import ApitError
 from apit.metadata import Song
 
 
