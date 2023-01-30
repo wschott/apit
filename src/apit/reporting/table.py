@@ -31,23 +31,7 @@ def tag_preview_table(header: list[str], rows: list[list[str]]) -> str:
     return str(table)
 
 
-def metadata_table(header: str, rows: str) -> str:
-    table = BeautifulTable(
-        default_alignment=BeautifulTable.ALIGN_LEFT,
-        default_padding=0,
-        maxwidth=METADATA_TABLE_WIDTH,
-    )
-    table.set_style(BeautifulTable.STYLE_NONE)
-    table.columns.header.separator = "─"
-
-    table.columns.header = [header]
-    for row in [[rows]]:
-        table.rows.append(row)
-
-    return str(table)
-
-
-def metadata_inline_table(rows: Iterable[Iterable[str]], tag_length: int) -> str:
+def metadata_table(rows: Iterable[Iterable[str]], tag_length: int) -> str:
     table = BeautifulTable(
         default_alignment=BeautifulTable.ALIGN_LEFT, maxwidth=METADATA_TABLE_WIDTH
     )
