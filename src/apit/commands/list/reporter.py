@@ -1,7 +1,7 @@
 from .action import ReadAction
 from apit.action_reporter import ActionReporter
 from apit.error import ApitError
-from apit.metadata_reporter.metadata_reporter import to_tags_report
+from apit.reporting.tags_report import to_tags_report
 
 
 class ReadActionReporter(ActionReporter):
