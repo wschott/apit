@@ -4,7 +4,9 @@ from typing import NamedTuple
 import pytest
 
 from apit.file_tags import FileTags
+from apit.file_types.audio_file import AudioFile
 from apit.metadata import Album
+from apit.metadata import Artwork
 from apit.metadata import Song
 from apit.readable_names import ReadableTagName
 from apit.store.data_parser import to_album
@@ -36,6 +38,20 @@ class FakeTag(TaggedValue):
 
     def value(self, verbose: bool) -> str:
         return self._unprocessed_value
+
+
+class FakeFile(AudioFile):
+    def __init__(self, file: Path) -> None:
+        pass
+
+    def read(self) -> FileTags:
+        return test_file_tags_data
+
+    def update(self, song: Song, artwork: Artwork | None = None) -> FileTags:
+        return test_file_tags_data
+
+
+test_file_tags_data = FileTags([FakeTag(TagId("tag_id"), "tag_value")])
 
 
 @pytest.fixture
@@ -184,7 +200,7 @@ def test_song() -> Song:
 
 @pytest.fixture
 def test_file_tags() -> FileTags:
-    return FileTags([FakeTag(TagId("tag_id"), "tag_value")])
+    return test_file_tags_data
 
 
 def pytest_addoption(parser):

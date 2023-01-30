@@ -1,10 +1,7 @@
-import importlib
-import pkgutil
+from importlib.metadata import entry_points
+from typing import Any
 
 
-def import_packages(path: list[str], package: str) -> None:
-    for _, module_name, is_pkg in pkgutil.iter_modules(path):
-        if not is_pkg:
-            continue
-        subpackage = f"{package}.{module_name}"
-        importlib.import_module(subpackage)
+def load_entry_point_modules(group: str) -> dict[str, Any]:
+    eps = entry_points(group=group)
+    return {ep.name: ep.load() for ep in eps}

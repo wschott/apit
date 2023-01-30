@@ -5,12 +5,10 @@ from .to_file_tags import to_file_tags
 from .update import update_metadata
 from apit.file_tags import FileTags
 from apit.file_types.audio_file import AudioFile
-from apit.file_types.audio_file import AudioFileFactory
 from apit.metadata import Artwork
 from apit.metadata import Song
 
 
-@AudioFileFactory.register("mp3")
 class Mp3File(AudioFile):
     def __init__(self, file: Path) -> None:
         self.file: Path = file

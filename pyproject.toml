@@ -33,6 +33,10 @@ homepage = "https://github.com/wschott/apit"
 [project.scripts]
 apit = "apit.cli:cli"
 
+[project.entry-points.'apit.file_types']
+mp3 = 'apit.file_types.mp3:Mp3File'
+m4a = 'apit.file_types.mp4:Mp4File'
+
 [build-system]
 requires = ["setuptools>=61.0.0"]
 build-backend = "setuptools.build_meta"
