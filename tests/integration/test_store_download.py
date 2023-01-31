@@ -2,16 +2,15 @@ import json
 
 import pytest
 
-from apit.store.connection import download_artwork
-from apit.store.connection import download_metadata
-
-REAL_LOOKUP_URL = "https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903"
-REAL_ARTWORK_URL = "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/88/92/4c/88924c01-6fb3-8616-f0b3-881b1ed09e03/source/100x100bb.jpg"  # noqa: B950
+from apit.store.download import download_artwork
+from apit.store.download import download_metadata
 
 
 @pytest.mark.integration
 def test_download_metadata_using_real_itunes_data():
-    json_str = download_metadata(REAL_LOOKUP_URL)
+    json_str = download_metadata(
+        "https://itunes.apple.com/lookup?entity=song&country=us&id=1440742903"
+    )
 
     data = json.loads(json_str)
 
@@ -33,6 +32,8 @@ def test_download_metadata_using_real_itunes_data():
 
 @pytest.mark.integration
 def test_downloaded_artwork():
-    artwork_content, image_type = download_artwork(REAL_ARTWORK_URL)
+    artwork_content, image_type = download_artwork(
+        "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/88/92/4c/88924c01-6fb3-8616-f0b3-881b1ed09e03/source/100x100bb.jpg"
+    )
 
     assert b"JFIF" in artwork_content

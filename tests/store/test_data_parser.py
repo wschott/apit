@@ -9,6 +9,8 @@ from apit.store.data_parser import extract_by_key
 from apit.store.data_parser import extract_songs
 from apit.store.data_parser import to_album
 from apit.store.data_parser import to_song
+from apit.types import DiscNumber
+from apit.types import TrackNumber
 from tests.conftest import assert_dummy_test_album
 from tests.conftest import assert_dummy_test_song
 from tests.conftest import dummy_album
@@ -19,7 +21,7 @@ def test_extract_songs(test_metadata):
 
     assert len(songs) == 14
 
-    song = find_song(songs, disc=1, track=3)
+    song = find_song(songs, disc=DiscNumber(1), track=TrackNumber(3))
 
     assert song.album_artist == "Kanye West"
     assert song.copyright == "℗ 2010 Roc-A-Fella Records, LLC"
@@ -32,15 +34,22 @@ def test_extract_songs(test_metadata):
     assert song.title == "Power"
 
 
-def test_extract_songs_using_invalid_metadata():
+def test_extract_songs_using_invalid_metadata_with_format_error():
     with pytest.raises(ApitError, match="format error"):
         extract_songs("")
+
+
+@pytest.mark.parametrize(
+    "json_str",
+    [
+        '{"test":[], "resultCount": 0}',
+        '{"results":[], "test": 0}',
+        '{"results":[], "resultCount": 0}',
+    ],
+)
+def test_extract_songs_using_invalid_metadata_with_empty_results(json_str: str):
     with pytest.raises(ApitError, match="results empty"):
-        extract_songs('{"test":[], "resultCount": 0}')
-    with pytest.raises(ApitError, match="results empty"):
-        extract_songs('{"results":[], "test": 0}')
-    with pytest.raises(ApitError, match="results empty"):
-        extract_songs('{"results":[], "resultCount": 0}')
+        extract_songs(json_str)
 
 
 def test_find_album(album_metadata_as_json_obj):
@@ -72,7 +81,7 @@ def test_find_songs(song_metadata_as_json_obj, test_album):
 
     assert len(songs) == 2
 
-    song = find_song(songs, disc=2, track=3)
+    song = find_song(songs, disc=DiscNumber(2), track=TrackNumber(3))
     assert_dummy_test_song(song)
 
 

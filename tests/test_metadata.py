@@ -3,6 +3,8 @@ from typing import NamedTuple
 from apit.metadata import Album
 from apit.metadata import find_song
 from apit.metadata import Song
+from apit.types import DiscNumber
+from apit.types import TrackNumber
 
 
 class MockSong(NamedTuple):
@@ -32,9 +34,9 @@ def test_song():
         artist="Track Artist",
         album_name="Test Album Namè",
         media_kind="song",
-        disc_number=2,
+        disc_number=DiscNumber(2),
         disc_total=3,
-        track_number=3,
+        track_number=TrackNumber(3),
         track_total=12,
         title="Track (feat. Other & $Artist) [Bonus Track]",
         genre="Test Genré",
@@ -69,10 +71,24 @@ def test_find_song():
     second_song = MockSong(disc_number=3, track_number=4)
     songs = [first_song, second_song]
 
-    assert find_song(songs, disc=3, track=4) == second_song
+    assert find_song(songs, disc=DiscNumber(3), track=TrackNumber(4)) == second_song
 
 
 def test_find_song_not_matching():
-    assert find_song([], disc=3, track=4) is None
-    assert find_song([MockSong(disc_number=3, track_number=4)], disc=3, track=2) is None
-    assert find_song([MockSong(disc_number=3, track_number=4)], disc=1, track=4) is None
+    assert find_song([], disc=DiscNumber(3), track=TrackNumber(4)) is None
+    assert (
+        find_song(
+            [MockSong(disc_number=DiscNumber(3), track_number=TrackNumber(4))],
+            disc=DiscNumber(3),
+            track=TrackNumber(2),
+        )
+        is None
+    )
+    assert (
+        find_song(
+            [MockSong(disc_number=DiscNumber(3), track_number=TrackNumber(4))],
+            disc=DiscNumber(1),
+            track=TrackNumber(4),
+        )
+        is None
+    )

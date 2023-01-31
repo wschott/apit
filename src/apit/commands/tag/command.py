@@ -14,10 +14,10 @@ from apit.metadata import find_song
 from apit.metadata import Song
 from apit.mime_type import MimeType
 from apit.report import print_report
-from apit.store.connection import download_artwork
-from apit.store.connection import download_metadata
-from apit.store.connection import generate_lookup_url
 from apit.store.data_parser import extract_songs
+from apit.store.download import download_artwork
+from apit.store.download import download_metadata
+from apit.store.download import generate_lookup_url
 from apit.url_utils import is_url
 from apit.user_input import ask_user_for_confirmation
 

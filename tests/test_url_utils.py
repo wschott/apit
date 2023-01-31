@@ -12,7 +12,7 @@ from apit.url_utils import is_url
         "http://test-domain.com/path?query",
     ],
 )
-def test_valid_urls(url: str):
+def test_is_url_for_valid_url(url: str):
     assert is_url(url)
 
 
@@ -25,5 +25,5 @@ def test_valid_urls(url: str):
         "://test-domain.com/path?query",
     ],
 )
-def test_invalid_urls(url: str):
+def test_is_url_for_invalid_url(url: str):
     assert not is_url(url)

@@ -11,14 +11,11 @@ from apit.mime_type import to_mime_type
 
 # format (as of 2020-05): https://music.apple.com/us/album/album-name/123456789
 # old format: http://itunes.apple.com/us/album/album-name/id123456789
-REGEX_GROUP_COUNTRY_CODE: Final = r"(?P<country_code>[a-z]{2})"
-REGEX_GROUP_ID: Final = r"(?P<id>\d+)"
-
 REGEX_STORE_URL: Final = re.compile(
-    r"https?://[^/]*/"
-    + REGEX_GROUP_COUNTRY_CODE
-    + r"/[^/]+/[^/]+/(id)?"
-    + REGEX_GROUP_ID,
+    r"https?://[^/]*"
+    + r"/(?P<country_code>[a-z]{2})"
+    + r"/[^/]+/[^/]+"
+    + r"/(id)?(?P<id>\d+)",
     re.IGNORECASE,
 )
 
