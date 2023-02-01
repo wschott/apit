@@ -1,13 +1,21 @@
+from __future__ import annotations
+
 from rich.console import Console
 
 from apit.str_enum import StrEnum
 
 
 class Color(StrEnum):
-    GREEN = "bright_green"
-    RED = "bright_red"
-    YELLOW = "bright_yellow"
+    GREEN = "green"
+    RED = "red"
+    YELLOW = "yellow"
     BLACK = "black"
+    BRIGHT_GREEN = "bright_green"
+    BRIGHT_RED = "bright_red"
+    BRIGHT_YELLOW = "bright_yellow"
+
+    def as_bright(self) -> Color:
+        return Color[f"BRIGHT_{str(self.name)}"]
 
     def bb(self) -> str:
         return f"[{self.value}]"

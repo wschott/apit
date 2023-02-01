@@ -58,7 +58,7 @@ def to_summary_line_color(errors: int, skipped: int) -> Color:
 
 def to_action_bar(action: Action) -> str:
     icon, color = _to_result_styling(action)
-    return f"{color.black_on()}[{icon}] {action.file.name}"
+    return f"{color.as_bright().black_on()}[{icon}] {action.file.name}"
 
 
 def to_action_summary(action: Action) -> str:
