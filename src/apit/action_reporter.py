@@ -1,5 +1,7 @@
 from typing import Protocol
 
+from rich.table import Table
+
 from apit.action import Action
 
 
@@ -16,5 +18,5 @@ class ActionReporter(Protocol):
         ...
 
     @property
-    def result(self) -> str:
+    def result(self) -> str | Table:
         ...

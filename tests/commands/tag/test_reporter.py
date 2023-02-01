@@ -33,7 +33,7 @@ def test_preview_msg_not_actionable():
 
     reporter = TagActionReporter(action, verbose=False)
 
-    assert reporter.preview_msg == "[filename has no matchable track number]"
+    assert reporter.preview_msg == "<filename has no matchable track number>"
 
 
 def test_preview_msg_actionable(test_song: Song):
@@ -65,7 +65,7 @@ def test_status_msg_tag_not_successful(test_song: Song):
 
     reporter = TagActionReporter(action, verbose=False)
 
-    assert reporter.status_msg == "[error]"
+    assert reporter.status_msg == "<error>"
 
 
 def test_status_msg_tag_not_actionable():
@@ -75,5 +75,5 @@ def test_status_msg_tag_not_actionable():
 
     reporter = TagActionReporter(action, verbose=False)
 
-    assert reporter.status_msg.startswith("[skipped")
-    assert reporter.status_msg.endswith("]")
+    assert reporter.status_msg.startswith("<skipped")
+    assert reporter.status_msg.endswith(">")

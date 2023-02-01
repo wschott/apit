@@ -31,7 +31,7 @@ class Mp3Tag(TaggedValue):
         ):
             return "<yes>" if self._unprocessed_value.text[0] == "1" else "<no>"  # type: ignore
         else:
-            return self._unprocessed_value
+            return str(self._unprocessed_value)
 
 
 MP3_MAPPING_TO_READABLE_TAG_NAME: dict[Mp3Mapping, ReadableTagName] = {

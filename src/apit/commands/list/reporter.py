@@ -1,3 +1,5 @@
+from rich.table import Table
+
 from .action import ReadAction
 from apit.action_reporter import ActionReporter
 from apit.errors import ApitError
@@ -16,13 +18,13 @@ class ReadActionReporter(ActionReporter):
     @property
     def status_msg(self) -> str:
         if not self.action.successful:
-            return "[error]"
+            return "<error>"
         if self.action.successful:
             return "successful"
         raise ApitError("Invalid state")  # TODO refactor
 
     @property
-    def result(self) -> str:
+    def result(self) -> str | Table:
         if self.action.executed and self.action.successful and self.action.result:
             if self.action.result.has_tags:
                 return to_tags_report(self.action.result, self.verbose)

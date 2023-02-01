@@ -14,7 +14,7 @@ classifiers = [
 ]
 dependencies = [
     "mutagen",
-    "beautifultable>=1.1.0",
+    "rich>=12.6.0",
 ]
 
 [project.optional-dependencies]
@@ -69,6 +69,6 @@ no_implicit_optional = true
 module = [
     "pytest.*",
     "mutagen.*",
-    "beautifultable.*",
+    "rich.*",
 ]
 ignore_missing_imports = true

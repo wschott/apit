@@ -9,7 +9,7 @@ def test_init():
     reporter = ReadActionReporter(action, verbose=False)
 
     assert reporter.preview_msg == ""
-    assert reporter.status_msg == "[error]"  # TODO correct?
+    assert reporter.status_msg == "<error>"  # TODO correct?
 
 
 def test_successful():
@@ -25,4 +25,4 @@ def test_not_successful():
     action.mark_as_fail("test-error")
     reporter = ReadActionReporter(action, verbose=False)
 
-    assert reporter.status_msg == "[error]"
+    assert reporter.status_msg == "<error>"

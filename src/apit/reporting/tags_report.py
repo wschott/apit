@@ -1,35 +1,25 @@
 from typing import Final
 
+from rich.table import Table
+
 from apit.file_tags import FileTags
 from apit.readable_names import ReadableTagName
 from apit.reporting.table import metadata_table
 from apit.tagged_value import TaggedValue
 
 
-def to_tags_report(file_tags: FileTags, verbose: bool) -> str:
+def to_tags_report(file_tags: FileTags, verbose: bool) -> Table:
     known_tags = file_tags.filter(ORDERED_TAGS)
     unknown_tags = sorted(file_tags.filter_unknown(), key=lambda tag: tag.tag_id)
 
-    tags_report: list[str] = []
-    if known_tags:
-        tags_report.append(_to_tags_report_table(known_tags, verbose))
-    if unknown_tags:
-        tags_report.append("Unknown Tags")
-        tags_report.append(_to_tags_report_table(unknown_tags, verbose))
-    return "\n\n".join(tags_report)
+    known_tags_rows = _to_table_rows(known_tags, verbose)
+    unknown_tags_rows = _to_table_rows(unknown_tags, verbose)
 
-
-def _to_tags_report_table(tags: list[TaggedValue], verbose: bool) -> str:
-    max_tag_description_length = _calculate_tag_max_len(tags, verbose)
-    return metadata_table(_to_table_rows(tags, verbose), max_tag_description_length)
+    return metadata_table(known_tags_rows, unknown_tags_rows)
 
 
 def _to_table_rows(tags: list[TaggedValue], verbose: bool) -> list[tuple[str, str]]:
     return [(tag.description(verbose), tag.value(verbose)) for tag in tags]
-
-
-def _calculate_tag_max_len(tags: list[TaggedValue], verbose: bool) -> int:
-    return max(len(tag.description(verbose)) for tag in tags)
 
 
 ORDERED_TAGS: Final = [

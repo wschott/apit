@@ -47,7 +47,7 @@ class Mp4Tag(TaggedValue):
         elif isinstance(self._unprocessed_value, list):  # most mp4 tags
             return "".join([str(x) for x in self._unprocessed_value])
         else:
-            return self._unprocessed_value
+            return str(self._unprocessed_value)
 
 
 MP4_MAPPING_TO_READABLE_TAG_NAME: Final[dict[Mp4Mapping, ReadableTagName]] = {
