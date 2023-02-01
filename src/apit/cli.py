@@ -52,9 +52,12 @@ def main(options: CliOptions) -> CommandResult:
     configure_logging(_to_log_level(options.verbose_level))
     logging.info("CLI options: %s", options)
 
-    files = collect_files(options.path, AudioFileFactory.get_supported_extensions())
+    supported_extensions = AudioFileFactory.get_supported_extensions()
+    files = collect_files(options.path, supported_extensions)
     if not files:
-        raise ApitError("No matching files found")
+        raise ApitError(
+            f"No matching files found (supported extensions: {', '.join(supported_extensions)})."  # noqa: B950
+        )
     logging.info("Input path: %s", options.path)
 
     return options.func(files, options)
