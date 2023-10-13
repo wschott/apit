@@ -79,7 +79,7 @@ def test_download_artwork():
     with patch("urllib.request.urlopen", return_value=mock):
         artwork = download_artwork("any-url")
 
-    assert b"artwork-content", MimeType.JPEG == artwork
+    assert b"artwork-content", artwork == MimeType.JPEG
 
 
 def test_download_artwork_with_url_error():

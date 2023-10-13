@@ -22,9 +22,9 @@ dev = [
     "pre-commit",
     "tox",
     "pytest",
-    "mypy",
-    "flake8",
     "black",
+    "ruff",
+    "mypy",
 ]
 
 [project.urls]
@@ -59,6 +59,19 @@ source = [
 
 [tool.coverage.report]
 show_missing = true
+
+
+[tool.ruff]
+line-length = 88
+select = [
+    "E",   # pycodestyle
+    "F",   # pyflakes
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+    "UP",  # pyupgrade
+    "TRY", # tryceratops
+]
+ignore = ["E501", "B904", "TRY003", "TRY200"]
 
 
 [tool.mypy] # TODO

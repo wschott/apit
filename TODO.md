@@ -24,3 +24,5 @@
 - dynamic version: https://github.com/pypa/setuptools_scm
 - Python 3.11+
   - use built-in StrEnum
+- Python 3.12+
+  - @override (~typing_extensions 4.4.0)

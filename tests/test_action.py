@@ -112,9 +112,9 @@ def test_action_init():
     with pytest.raises(NotImplementedError):
         action.apply()
     with pytest.raises(NotImplementedError):
-        action.needs_confirmation
+        action.needs_confirmation  # noqa: B018
     with pytest.raises(NotImplementedError):
-        action.actionable
+        action.actionable  # noqa: B018
 
 
 def test_action_mark_as_success():
