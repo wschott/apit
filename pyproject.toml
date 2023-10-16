@@ -22,9 +22,6 @@ dev = [
     "pre-commit",
     "tox",
     "pytest",
-    "black",
-    "ruff",
-    "mypy",
 ]
 
 [project.urls]
