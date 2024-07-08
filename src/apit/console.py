@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from rich.console import Console
+from enum import StrEnum
 
-from apit.str_enum import StrEnum
+from rich.console import Console
 
 
 class Color(StrEnum):

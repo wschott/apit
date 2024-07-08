@@ -3,7 +3,7 @@ name = "apit"
 version = "0.11.0"
 description = "apit allows batch tagging .mp3 and .m4a (AAC and ALAC) file metadata tags using data from Apple Music/iTunes Store."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = ["metadata", "tagging", "mp3", "mp4", "m4a", "aac", "alac", "itunes", "apple-music"]
 authors = [{name = "Waldemar Schott"}]
 classifiers = [
@@ -72,7 +72,7 @@ ignore = ["E501", "B904", "TRY003", "TRY200"]
 
 
 [tool.mypy] # TODO
-python_version = "3.10"
+python_version = "3.11"
 no_implicit_optional = true
 
 [[tool.mypy.overrides]]

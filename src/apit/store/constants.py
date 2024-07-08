@@ -3,10 +3,10 @@
 # https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/
 # https://godoc.org/trimmer.io/go-xmp/models/itunes
 from enum import Enum
+from enum import StrEnum
 from typing import Final
 
 from apit.errors import ApitError
-from apit.str_enum import StrEnum
 
 COLLECTION_TYPE_KEY: Final = "collectionType"
 VALID_COLLECTION_TYPE_FOR_ALBUM: Final = "Album"

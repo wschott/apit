@@ -11,7 +11,7 @@ apit allows batch tagging .mp3 and .m4a (AAC and ALAC) file metadata tags using 
 
 ## Requirements
 
-At least [Python](https://www.python.org) 3.10
+At least [Python](https://www.python.org) 3.11
 
 ## apit Installation
 

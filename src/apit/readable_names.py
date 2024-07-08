@@ -1,4 +1,4 @@
-from apit.str_enum import StrEnum
+from enum import StrEnum
 
 
 class ReadableTagName(StrEnum):

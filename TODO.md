@@ -22,7 +22,5 @@
 - setup dev mode for VS code (e.g. w/ pip install flake8 ...)
 - configure mypy: https://mypy.readthedocs.io/en/stable/config_file.html#config-file
 - dynamic version: https://github.com/pypa/setuptools_scm
-- Python 3.11+
-  - use built-in StrEnum
 - Python 3.12+
   - @override (~typing_extensions 4.4.0)
