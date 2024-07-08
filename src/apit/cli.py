@@ -56,7 +56,7 @@ def main(options: CliOptions) -> CommandResult:
     files = collect_files(options.path, supported_extensions)
     if not files:
         raise ApitError(
-            f"No matching files found (supported extensions: {', '.join(supported_extensions)})."  # noqa: B950
+            f"No matching files found (supported extensions: {', '.join(supported_extensions)})."
         )
     logging.info("Input path: %s", options.path)
 

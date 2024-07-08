@@ -58,11 +58,11 @@ class TagAction(Action):
         )
 
         return (
-            self.song.track_number == self.track  # type: ignore
-            and self.song.disc_number == self.disc  # type: ignore
+            self.song.track_number == self.track  # type: ignore[union-attr]
+            and self.song.disc_number == self.disc  # type: ignore[union-attr]
             and compare_normalized_caseless(
                 clean(filename_without_track_number),
-                clean(self.song.title),  # type: ignore
+                clean(self.song.title),  # type: ignore[union-attr]
             )
         )
 
@@ -74,7 +74,10 @@ class TagAction(Action):
             if self.should_backup:
                 self.backup_song()
 
-            result: FileTags = AudioFileFactory.load(self.file).update(self.song, self.artwork)  # type: ignore # noqa: B950
+            result: FileTags = AudioFileFactory.load(self.file).update(
+                self.song,  # type: ignore[arg-type]
+                self.artwork,
+            )
         except ApitError as e:
             self.mark_as_fail(e)
         else:

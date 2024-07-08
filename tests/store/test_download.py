@@ -53,17 +53,21 @@ def test_download_metadata():
 
 
 def test_download_metadata_with_url_error():
-    with patch(
-        "urllib.request.urlopen", side_effect=urllib.error.URLError("test-msg")
-    ), pytest.raises(ApitStoreConnectionError, match="<urlopen error test-msg>"):
+    with (
+        patch("urllib.request.urlopen", side_effect=urllib.error.URLError("test-msg")),
+        pytest.raises(ApitStoreConnectionError, match="<urlopen error test-msg>"),
+    ):
         download_metadata("any-url")
 
-    with patch(
-        "urllib.request.urlopen",
-        side_effect=urllib.error.HTTPError(
-            url=None, code=500, msg="test-msg", hdrs=None, fp=None
+    with (
+        patch(
+            "urllib.request.urlopen",
+            side_effect=urllib.error.HTTPError(
+                url=None, code=500, msg="test-msg", hdrs=None, fp=None
+            ),
         ),
-    ), pytest.raises(ApitStoreConnectionError, match="HTTP Error 500: test-msg"):
+        pytest.raises(ApitStoreConnectionError, match="HTTP Error 500: test-msg"),
+    ):
         download_metadata("any-url")
 
 
@@ -83,15 +87,19 @@ def test_download_artwork():
 
 
 def test_download_artwork_with_url_error():
-    with patch(
-        "urllib.request.urlopen", side_effect=urllib.error.URLError("test-msg")
-    ), pytest.raises(ApitStoreConnectionError, match="<urlopen error test-msg>"):
+    with (
+        patch("urllib.request.urlopen", side_effect=urllib.error.URLError("test-msg")),
+        pytest.raises(ApitStoreConnectionError, match="<urlopen error test-msg>"),
+    ):
         download_artwork("any-url")
 
-    with patch(
-        "urllib.request.urlopen",
-        side_effect=urllib.error.HTTPError(
-            url=None, code=500, msg="test-msg", hdrs=None, fp=None
+    with (
+        patch(
+            "urllib.request.urlopen",
+            side_effect=urllib.error.HTTPError(
+                url=None, code=500, msg="test-msg", hdrs=None, fp=None
+            ),
         ),
-    ), pytest.raises(ApitStoreConnectionError, match="HTTP Error 500: test-msg"):
+        pytest.raises(ApitStoreConnectionError, match="HTTP Error 500: test-msg"),
+    ):
         download_artwork("any-url")

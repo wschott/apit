@@ -65,13 +65,18 @@ target-version = "py311"
 select = [
     "E",   # pycodestyle
     "F",   # pyflakes
+    "I",   # isort
     "B",   # flake8-bugbear
     "SIM", # flake8-simplify
     "UP",  # pyupgrade
     "TRY", # tryceratops
+    "S",   # bandit
+    "RUF", # Ruff
 ]
-ignore = ["E501", "B904", "TRY003"]
+ignore = ["E501", "B904", "TRY003", "I001"]
 
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
 
 [tool.mypy] # TODO
 python_version = "3.11"

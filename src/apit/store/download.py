@@ -33,7 +33,7 @@ def generate_lookup_url(source: str) -> str:
 
 def download_metadata(url: str) -> str:
     try:
-        with urllib.request.urlopen(url) as response:  # nosec
+        with urllib.request.urlopen(url) as response:  # noqa: S310
             data_read = response.read()
             return data_read.decode("utf-8")
     except urllib.error.URLError as e:
@@ -42,7 +42,7 @@ def download_metadata(url: str) -> str:
 
 def download_artwork(url: str) -> tuple[bytes, MimeType]:
     try:
-        with urllib.request.urlopen(url) as response:  # nosec
+        with urllib.request.urlopen(url) as response:  # noqa: S310
             content_type = response.getheader("Content-Type")
             logging.debug("Headers: %s", response.info())
             return response.read(), to_mime_type(content_type)

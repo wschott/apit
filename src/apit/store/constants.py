@@ -1,4 +1,4 @@
-# flake8: noqa
+# ruff: noqa
 # Documentation:
 # https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/
 # https://godoc.org/trimmer.io/go-xmp/models/itunes

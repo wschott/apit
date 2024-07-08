@@ -1,4 +1,4 @@
-# flake8: noqa
+# ruff: noqa
 from apit.tag_id import TagIdEnum
 
 

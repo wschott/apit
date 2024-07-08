@@ -20,16 +20,17 @@ class Mp3Tag(TaggedValue):
         if isinstance(self._unprocessed_value, mutagen.id3.USLT):  # MP3_MAPPING.LYRICS
             lyrics = self._unprocessed_value
             if verbose:
-                return lyrics.text.replace("\r", os.linesep)  # type: ignore
+                return lyrics.text.replace("\r", os.linesep)  # type: ignore[attr-defined]
             return "<present>"
         elif isinstance(
             self._unprocessed_value, mutagen.id3.APIC
         ):  # MP3_MAPPING.ARTWORK
             return "<present>"
         elif self.tag_id == Mp3Mapping.GAPLESS or isinstance(
-            self._unprocessed_value, mutagen.id3.TCMP  # MP3_MAPPING.COMPILATION
+            self._unprocessed_value,
+            mutagen.id3.TCMP,  # MP3_MAPPING.COMPILATION
         ):
-            return "<yes>" if self._unprocessed_value.text[0] == "1" else "<no>"  # type: ignore
+            return "<yes>" if self._unprocessed_value.text[0] == "1" else "<no>"
         else:
             return str(self._unprocessed_value)
 

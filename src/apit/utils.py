@@ -9,7 +9,7 @@ def generate_padded_track_number(
     disc_total: int,
 ) -> str:
     if disc_total > 1:
-        return f"{padded_number(disc_number, disc_total)}-{padded_number(track_number, track_total)}"  # noqa: B950
+        return f"{padded_number(disc_number, disc_total)}-{padded_number(track_number, track_total)}"
     return padded_number(track_number, track_total)
 
 

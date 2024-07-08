@@ -49,7 +49,7 @@ class TagCommand(Command):
         tag_command.add_argument(
             "source",
             metavar="SOURCE",
-            help="URL to Apple Music album for metadata download OR file with already downloaded metadata",  # noqa: B950
+            help="URL to Apple Music album for metadata download OR file with already downloaded metadata",
         )
 
     @staticmethod

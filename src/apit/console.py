@@ -15,7 +15,7 @@ class Color(StrEnum):
     BRIGHT_YELLOW = "bright_yellow"
 
     def as_bright(self) -> Color:
-        return Color[f"BRIGHT_{str(self.name)}"]
+        return Color[f"BRIGHT_{str(self.name)}"]  # noqa: RUF010
 
     def bb(self) -> str:
         return f"[{self.value}]"

@@ -15,7 +15,7 @@ class AudioFileFactory:
     def load(cls, file: Path) -> AudioFile:
         extension = file.suffix[1:]
         try:
-            return file_types[extension](file)  # type: ignore
+            return file_types[extension](file)  # type: ignore[operator]
         except KeyError as e:
             raise ApitUnsupportedTypeError(extension) from e
 
