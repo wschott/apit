@@ -94,7 +94,7 @@ def get_metadata_json(source: str) -> str:
         try:
             return Path(source).read_text()
         except Exception:
-            raise ApitError("Error while reading metadata file: %s" % Path(source))
+            raise ApitError(f"Error while reading metadata file: {Path(source)}")
     elif is_url(source):
         logging.info("Use URL to download metadata: %s", source)
         query_url = generate_lookup_url(source)

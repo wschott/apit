@@ -12,9 +12,7 @@ class FileTags:
 
     def filter(self, names_to_select: list[ReadableTagName]) -> list[TaggedValue]:
         name_to_tag_map = {tag.readable_name: tag for tag in self._tags if tag.is_known}
-        return [
-            tag for name in names_to_select if (tag := name_to_tag_map.get(name, None))
-        ]
+        return [tag for name in names_to_select if (tag := name_to_tag_map.get(name))]
 
     def filter_unknown(self) -> list[TaggedValue]:
         return [tag for tag in self._tags if not tag.is_known]

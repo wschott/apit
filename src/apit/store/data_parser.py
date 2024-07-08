@@ -84,5 +84,5 @@ def extract_by_key(key: StoreKey, item: dict[str, Any]) -> Any:
     if not isinstance(key, StoreKey):
         raise ApitError(f"Unknown metadata key: {key}")
     if key not in item:
-        raise ApitError("Metadata key not found in metadata: %s" % key)
+        raise ApitError(f"Metadata key not found in metadata: {key}")
     return item[key]

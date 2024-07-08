@@ -12,7 +12,7 @@ class Mp3Tag(TaggedValue):
     def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
         try:
             mapped_tag_id = Mp3Mapping(tag_id)
-            return MP3_MAPPING_TO_READABLE_TAG_NAME.get(mapped_tag_id, None)
+            return MP3_MAPPING_TO_READABLE_TAG_NAME.get(mapped_tag_id)
         except ValueError:
             return None
 

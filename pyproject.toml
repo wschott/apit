@@ -59,7 +59,9 @@ show_missing = true
 
 
 [tool.ruff]
-line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
 select = [
     "E",   # pycodestyle
     "F",   # pyflakes
@@ -68,7 +70,7 @@ select = [
     "UP",  # pyupgrade
     "TRY", # tryceratops
 ]
-ignore = ["E501", "B904", "TRY003", "TRY200"]
+ignore = ["E501", "B904", "TRY003"]
 
 
 [tool.mypy] # TODO
