@@ -15,29 +15,39 @@ At least [Python](https://www.python.org) 3.11
 
 ## apit Installation
 
-    $ cd apit-source-code/  # i.e. this folder
-    $ pip install .
+```shell
+$ cd apit-source-code/  # i.e. this folder
+$ pip install .
+```
 
 
 # Usage
 
 ## Command line help
 
-    $ apit -h
+```shell
+$ apit -h
+```
 
 ## Print the current metadata
 
-    $ apit list ~/Music/Music/Media/Artist/Album/
+```shell
+$ apit list ~/Music/Music/Media/Artist/Album/
+```
 
 ## Tag the music files' metadata using data from Apple Music/iTunes Store
 
 Example using an url:
 
-    $ apit tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+```shell
+$ apit tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+```
 
 Example using an already downloaded metadata file:
 
-    $ apit tag ~/Music/Music/Media/Artist/Album/ ~/Desktop/Artist-Album-123456789.json
+```shell
+$ apit tag ~/Music/Music/Media/Artist/Album/ ~/Desktop/Artist-Album-123456789.json
+```
 
 ### Filename format requirements
 
@@ -84,20 +94,26 @@ By default, artwork from Apple Music/iTunes Store is saved to your files. Additi
 
 Examples:
 
-    $ apit tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
-    $ apit tag --artwork-size 1000 ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+```shell
+$ apit tag ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+$ apit tag --artwork-size 1000 ~/Music/Music/Media/Artist/Album/ https://music.apple.com/us/album/album-name/123456789
+```
 
 ## Create backup files
 
 You can create backup files before updating metadata if you put `--backup` (short: `-b`) in your command.
 
-    $ apit tag --backup ~/Music/Music/Media/Artist/Album/
+```shell
+$ apit tag --backup ~/Music/Music/Media/Artist/Album/
+```
 
 ## Verbose mode
 
 To see more information what happens you can put `-v` into your command. Using `-vv` enables debug output.
 
-    $ apit tag -v ~/Music/Music/Media/Artist/Album/
+```shell
+$ apit tag -v ~/Music/Music/Media/Artist/Album/
+```
 
 
 # apit Development
@@ -106,20 +122,28 @@ To see more information what happens you can put `-v` into your command. Using `
 
 Install apit in an editable mode:
 
-    $ pip install --editable ".[dev]"
+```shell
+$ pip install --editable ".[dev]"
+```
 
 This will install [tox](https://tox.readthedocs.io/) and other development tools.
 Tox is used to run for example tests in an isolated environment. Show all possible actions using:
 
-    $ tox -a
+```shell
+$ tox -a
+```
 
 Running a specific tox command will install its necessary dependencies in separate virtualenvs.
 
 Code style is ensured using a pre-commit hook:
 
-    $ pre-commit install
+```shell
+$ pre-commit install
+```
 
 
 ## Building
 
-    $ tox -e build
+```shell
+$ tox -e build
+```
