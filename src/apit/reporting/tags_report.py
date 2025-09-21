@@ -1,5 +1,6 @@
 from typing import Final
 
+from rich.markup import escape
 from rich.table import Table
 
 from apit.file_tags import FileTags
@@ -19,7 +20,7 @@ def to_tags_report(file_tags: FileTags, verbose: bool) -> Table:
 
 
 def _to_table_rows(tags: list[TaggedValue], verbose: bool) -> list[tuple[str, str]]:
-    return [(tag.description(verbose), tag.value(verbose)) for tag in tags]
+    return [(tag.description(verbose), escape(tag.value(verbose))) for tag in tags]
 
 
 ORDERED_TAGS: Final = [
