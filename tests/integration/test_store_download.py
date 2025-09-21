@@ -32,7 +32,7 @@ def test_download_metadata_using_real_itunes_data():
 
 @pytest.mark.integration
 def test_downloaded_artwork():
-    artwork_content, image_type = download_artwork(
+    artwork_content, _ = download_artwork(
         "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/88/92/4c/88924c01-6fb3-8616-f0b3-881b1ed09e03/source/100x100bb.jpg"
     )
 
