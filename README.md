@@ -15,8 +15,16 @@ At least [Python](https://www.python.org) 3.11
 
 ## apit Installation
 
+With [uv](https://docs.astral.sh/uv/), this installs apit into its own isolated environment and puts `apit` on your `PATH`:
+
 ```shell
 $ cd apit-source-code/  # i.e. this folder
+$ uv tool install .
+```
+
+Alternatively, with pip:
+
+```shell
 $ pip install .
 ```
 
@@ -120,17 +128,19 @@ $ apit tag -v ~/Music/Music/Media/Artist/Album/
 
 ## Develop mode
 
-Install apit in an editable mode:
+Install the locked dependencies into a `.venv` in this folder. apit is installed in editable mode:
 
 ```shell
-$ pip install --editable ".[dev]"
+$ uv sync
 ```
 
-This will install [tox](https://tox.readthedocs.io/) and other development tools.
+Run commands in that environment with `uv run`, for example `uv run apit -h` or `uv run pytest`.
+
+This also installs the `dev` dependency group, which includes [tox](https://tox.readthedocs.io/) and other development tools.
 Tox is used to run for example tests in an isolated environment. Show all possible actions using:
 
 ```shell
-$ tox -a
+$ uv run tox -a
 ```
 
 Running a specific tox command will install its necessary dependencies in separate virtualenvs.
@@ -138,8 +148,10 @@ Running a specific tox command will install its necessary dependencies in separa
 Code style is ensured using a pre-commit hook:
 
 ```shell
-$ pre-commit install
+$ uv run pre-commit install
 ```
+
+If you use pip instead of uv, install the development tools with `pip install --editable . --group dev` (pip 25.1 or later).
 
 
 ## Building
