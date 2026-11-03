@@ -1,0 +1,44 @@
+[tools]
+uv = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["python"]
+python.uv_venv_auto = "create|source"
+
+
+[tasks.install]
+description = "Install dependencies"
+run = "uv sync"
+
+[tasks."test:unit"]
+description = "Execute unit tests (cleans coverage data before)"
+depends = ["clean"]
+usage = '''
+arg "[module]" help="Python module"
+'''
+run = "uv run coverage run -m pytest ${usage_module}"
+
+[tasks."test:integration"]
+description = "Execute integration tests (cleans coverage data before)"
+depends = ["clean"]
+run = "uv run coverage run -m pytest --runintegration"
+
+[tasks.clean]
+description = "Clean collected coverage data"
+run = "uv run coverage erase"
+
+[tasks.report]
+description = "Execute unit and integration tests and report coverage data"
+depends = [
+    "test:unit",
+    "test:integration",
+]
+run = [
+    "uv run coverage combine",
+    "uv run coverage report",
+    "uv run coverage html",
+]
+
+[tasks.build]
+description = "Build distribution"
+run = "uv build"

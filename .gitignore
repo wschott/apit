@@ -6,7 +6,6 @@ dist/
 
 .coverage*
 htmlcov/
-.tox/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/

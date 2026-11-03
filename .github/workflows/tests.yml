@@ -2,11 +2,13 @@
 
 name: Tests
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches: [main]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -15,6 +17,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7
+    - uses: jdx/mise-action@v5
     - name: Set up uv and Python ${{ matrix.python-version }}
       uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
       with:
@@ -22,8 +25,8 @@ jobs:
     - name: Install dependencies
       run: uv sync --locked
     - name: Run tests
-      run: uv run tox -e py
+      run: mise run test:unit
     - name: Run integration tests
-      run: uv run tox -e integration
+      run: mise run test:integration
     - name: Report results
-      run: uv run tox -e report
+      run: mise run report
