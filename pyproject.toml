@@ -17,11 +17,12 @@ dependencies = [
     "rich>=12.6.0",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
+    "coverage",
     "pre-commit",
-    "tox",
     "pytest",
+    "tox",
 ]
 
 [project.urls]
@@ -39,8 +40,8 @@ list = 'apit.commands.list:ListCommand'
 tag = 'apit.commands.tag:TagCommand'
 
 [build-system]
-requires = ["setuptools>=61.0.0"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.13.6,<0.14"]
+build-backend = "uv_build"
 
 
 [tool.coverage.run]
