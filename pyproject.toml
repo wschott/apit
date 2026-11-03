@@ -22,7 +22,6 @@ dev = [
     "coverage",
     "pre-commit",
     "pytest",
-    "tox",
 ]
 
 [project.urls]
@@ -52,7 +51,6 @@ source = ["apit"]
 [tool.coverage.paths]
 source = [
     "src/apit",
-    ".tox/*/lib/python*/site-packages/apit",
 ]
 
 [tool.coverage.report]

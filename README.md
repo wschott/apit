@@ -135,15 +135,8 @@ $ uv sync
 ```
 
 Run commands in that environment with `uv run`, for example `uv run apit -h` or `uv run pytest`.
+This also installs the `dev` dependency group, which includes development tools.
 
-This also installs the `dev` dependency group, which includes [tox](https://tox.readthedocs.io/) and other development tools.
-Tox is used to run for example tests in an isolated environment. Show all possible actions using:
-
-```shell
-$ uv run tox -a
-```
-
-Running a specific tox command will install its necessary dependencies in separate virtualenvs.
 
 Code style is ensured using a pre-commit hook:
 
@@ -157,5 +150,5 @@ If you use pip instead of uv, install the development tools with `pip install --
 ## Building
 
 ```shell
-$ tox -e build
+$ uv build
 ```
