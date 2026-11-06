@@ -42,9 +42,10 @@ def test_generate_lookup_url_using_invalid_url(url: str):
 
 
 def test_download_metadata():
-    response_attrs = {"read.return_value": b'{"resultCount":12, "results": [{}]}'}
+    response = MagicMock()
+    response.read.return_value = b'{"resultCount":12, "results": [{}]}'
     mock = MagicMock()
-    mock.__enter__.return_value = MagicMock(**response_attrs)
+    mock.__enter__.return_value = response
 
     with patch("urllib.request.urlopen", return_value=mock):
         json = download_metadata("any-url")
@@ -76,13 +77,12 @@ def test_download_metadata_with_url_error():
 
 
 def test_download_artwork():
-    response_attrs = {
-        "read.return_value": b"artwork-content",
-        "info.return_value": "",
-        "getheader.return_value": "image/jpeg",
-    }
+    response = MagicMock()
+    response.read.return_value = b"artwork-content"
+    response.info.return_value = ""
+    response.getheader.return_value = "image/jpeg"
     mock = MagicMock()
-    mock.__enter__.return_value = MagicMock(**response_attrs)
+    mock.__enter__.return_value = response
 
     with patch("urllib.request.urlopen", return_value=mock):
         artwork = download_artwork("any-url")

@@ -1,4 +1,5 @@
 import os
+from typing import override
 
 import mutagen.id3
 
@@ -9,6 +10,7 @@ from apit.tagged_value import TaggedValue
 
 
 class Mp3Tag(TaggedValue):
+    @override
     def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
         try:
             mapped_tag_id = Mp3Mapping(tag_id)
@@ -16,6 +18,7 @@ class Mp3Tag(TaggedValue):
         except ValueError:
             return None
 
+    @override
     def value(self, verbose: bool) -> str:
         if isinstance(self._unprocessed_value, mutagen.id3.USLT):  # MP3_MAPPING.LYRICS
             lyrics = self._unprocessed_value

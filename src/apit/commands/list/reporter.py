@@ -1,3 +1,5 @@
+from typing import override
+
 from rich.table import Table
 
 from .action import ReadAction
@@ -12,10 +14,12 @@ class ReadActionReporter(ActionReporter):
         self.verbose = verbose
 
     @property
+    @override
     def preview_msg(self) -> str:
         return ""
 
     @property
+    @override
     def status_msg(self) -> str:
         if not self.action.successful:
             return "<error>"
@@ -24,6 +28,7 @@ class ReadActionReporter(ActionReporter):
         raise ApitError("Invalid state")  # TODO refactor
 
     @property
+    @override
     def result(self) -> str | Table:
         if self.action.executed and self.action.successful and self.action.result:
             if self.action.result.has_tags:

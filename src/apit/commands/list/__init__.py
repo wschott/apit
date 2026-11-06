@@ -1,5 +1,6 @@
 from collections.abc import Iterable
 from pathlib import Path
+from typing import override
 
 from .command import execute
 from apit.cli_options import CliOptions
@@ -13,6 +14,7 @@ __all__ = ["ListCommand"]
 
 class ListCommand(Command):
     @staticmethod
+    @override
     def setup_cli_parser(subparsers):
         list_command = subparsers.add_parser(
             "list",
@@ -26,5 +28,6 @@ class ListCommand(Command):
         add_path_argument(list_command)
 
     @staticmethod
+    @override
     def execute(files: Iterable[Path], options: CliOptions) -> CommandResult:
         return execute(files=files, verbose_level=options.verbose_level)

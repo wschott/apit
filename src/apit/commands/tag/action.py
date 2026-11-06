@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import override
 
 from apit.action import Action
 from apit.errors import ApitError
@@ -37,10 +38,12 @@ class TagAction(Action):
         return bool(self.disc) and bool(self.track)
 
     @property
+    @override
     def needs_confirmation(self) -> bool:
         return self.actionable
 
     @property
+    @override
     def actionable(self) -> bool:
         return self.file_matched and self.metadata_matched
 
@@ -66,6 +69,7 @@ class TagAction(Action):
             )
         )
 
+    @override
     def apply(self) -> None:
         if not self.actionable:
             return

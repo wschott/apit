@@ -1,3 +1,5 @@
+from typing import override
+
 from rich.table import Table
 
 from .action import TagAction
@@ -21,12 +23,14 @@ class TagActionReporter(ActionReporter):
         # TODO return '?'
 
     @property
+    @override
     def preview_msg(self) -> str:
         if not self.action.actionable:
             return f"<{self._not_actionable_msg}>"
         return f"{self.action.song.track_number_padded} {self.action.song.title}"  # type: ignore[ty:unresolved-attribute]
 
     @property
+    @override
     def status_msg(self) -> str:
         # TODO review conditions
         if not self.action.actionable:
@@ -38,6 +42,7 @@ class TagActionReporter(ActionReporter):
         raise ApitError("Invalid state")
 
     @property
+    @override
     def result(self) -> str | Table:
         if self.action.executed and self.action.successful and self.action.result:
             return to_tags_report(self.action.result, self.verbose)

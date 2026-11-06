@@ -1,6 +1,7 @@
 from argparse import BooleanOptionalAction
 from collections.abc import Iterable
 from pathlib import Path
+from typing import override
 
 from .command import execute
 from apit.cli_options import CliOptions
@@ -14,6 +15,7 @@ __all__ = ["TagCommand"]
 
 class TagCommand(Command):
     @staticmethod
+    @override
     def setup_cli_parser(subparsers):
         tag_command = subparsers.add_parser(
             "tag",
@@ -54,6 +56,7 @@ class TagCommand(Command):
         )
 
     @staticmethod
+    @override
     def execute(files: Iterable[Path], options: CliOptions) -> CommandResult:
         return execute(
             files=files,

@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import NamedTuple
+from typing import override
 
 import pytest
 
@@ -31,11 +32,13 @@ class MockTagAction(NamedTuple):
 
 
 class FakeTag(TaggedValue):
+    @override
     def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
         if tag_id == TagId("known-tag"):
             return ReadableTagName.TITLE
         return None
 
+    @override
     def value(self, verbose: bool) -> str:
         return self._unprocessed_value
 
@@ -44,9 +47,11 @@ class FakeFile(AudioFile):
     def __init__(self, file: Path) -> None:
         pass
 
+    @override
     def read(self) -> FileTags:
         return test_file_tags_data
 
+    @override
     def update(self, song: Song, artwork: Artwork | None = None) -> FileTags:
         return test_file_tags_data
 

@@ -1,5 +1,6 @@
 import os
 from typing import Final
+from typing import override
 
 from .constants import Mp4Mapping
 from apit.readable_names import ReadableTagName
@@ -12,6 +13,7 @@ from apit.tagged_value import TaggedValue
 
 
 class Mp4Tag(TaggedValue):
+    @override
     def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
         try:
             mapped_tag_id = Mp4Mapping(tag_id)
@@ -19,6 +21,7 @@ class Mp4Tag(TaggedValue):
         except ValueError:
             return None
 
+    @override
     def value(self, verbose: bool) -> str:
         if self.tag_id in [
             Mp4Mapping.COMPILATION,

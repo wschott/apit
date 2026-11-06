@@ -1,6 +1,7 @@
 from abc import ABC
 from abc import abstractmethod
 from typing import Any
+from typing import override
 
 from apit.readable_names import ReadableTagName
 from apit.tag_id import TagId
@@ -14,6 +15,7 @@ class TaggedValue(ABC):
         )
         self._unprocessed_value: Any = value
 
+    @override
     def __eq__(self, other) -> bool:
         if isinstance(other, TaggedValue):
             return (

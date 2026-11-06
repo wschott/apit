@@ -1,5 +1,6 @@
 import logging
 from typing import Final
+from typing import override
 
 from apit.color import Color
 from apit.color import to_colored_text
@@ -14,6 +15,7 @@ LEVEL_TO_COLOR_MAP: Final = {
 
 
 class ColoredFormatter(logging.Formatter):
+    @override
     def format(self, record: logging.LogRecord) -> str:
         return to_colored_text(
             super().format(record), LEVEL_TO_COLOR_MAP.get(record.levelno, Color.NONE)

@@ -3,6 +3,7 @@ from abc import abstractmethod
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
+from typing import override
 
 from apit.errors import ApitError
 
@@ -15,6 +16,7 @@ class Action(ABC):
         self._success: bool | None = None
         self._result: Any | None = None
 
+    @override
     def __str__(self) -> str:
         return f"<{self.__class__.__name__} {self.file.name!r}>"
 
