@@ -138,10 +138,10 @@ Run commands in that environment with `uv run`, for example `uv run apit -h` or 
 This also installs the `dev` dependency group, which includes development tools.
 
 
-Code style is ensured using a pre-commit hook:
+Code style is ensured using a [prek](https://prek.j178.dev) hook (reads `.pre-commit-config.yaml`):
 
 ```shell
-$ uv run pre-commit install
+$ uv run prek install
 ```
 
 If you use pip instead of uv, install the development tools with `pip install --editable . --group dev` (pip 25.1 or later).
