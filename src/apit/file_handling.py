@@ -1,5 +1,6 @@
 import re
 import shutil
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Final
 
@@ -12,7 +13,9 @@ REGEX_DISC_TRACK_NUMBER_IN_SONG_NAME: Final = re.compile(
 )
 
 
-def collect_files(path: Path, filter_ext: list[str] | str | None = None) -> list[Path]:
+def collect_files(
+    path: Path, filter_ext: Iterable[str] | str | None = None
+) -> list[Path]:
     if path.is_file():
         unfiltered_files = [path]
     elif path.is_dir():

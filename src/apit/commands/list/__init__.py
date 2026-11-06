@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from pathlib import Path
 
 from .command import execute
@@ -25,5 +26,5 @@ class ListCommand(Command):
         add_path_argument(list_command)
 
     @staticmethod
-    def execute(files: list[Path], options: CliOptions) -> CommandResult:
+    def execute(files: Iterable[Path], options: CliOptions) -> CommandResult:
         return execute(files=files, verbose_level=options.verbose_level)

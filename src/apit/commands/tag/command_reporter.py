@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from typing import Final
 
 from rich.table import Column
@@ -12,7 +13,7 @@ STR_SELECTED: Final = "[✕]"
 STR_NOT_SELECTED: Final = "[ ]"
 
 
-def print_actions_preview(actions: list[TagAction]) -> None:
+def print_actions_preview(actions: Iterable[TagAction]) -> None:
     console.print("Tagging Preview")
     console.print(
         f"- {Color.RED.bb()}red[/]    → file not actionable (metadata not found)"

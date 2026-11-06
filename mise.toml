@@ -6,6 +6,10 @@ idiomatic_version_file_enable_tools = ["python"]
 python.uv_venv_auto = "create|source"
 
 
+[tasks.type-check]
+description = "Check typings"
+run = "uv run ty check"
+
 [tasks.install]
 description = "Install dependencies"
 run = "uv sync"

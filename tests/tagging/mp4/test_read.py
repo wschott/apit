@@ -21,6 +21,7 @@ def test_metadata_reading(monkeypatch):
 
     result = read_metadata_raw(Path("dummy.m4a"))
 
+    assert result.tags is not None
     assert result.tags["trkn"] == "1/2"
     assert result.tags["aART"] == "Album Artist"
 

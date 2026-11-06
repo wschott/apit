@@ -3,6 +3,7 @@ from unittest.mock import call
 from unittest.mock import MagicMock
 
 import mutagen
+import mutagen.mp4
 import pytest
 
 from apit.errors import ApitError
@@ -125,7 +126,7 @@ def test_to_artwork_with_png():
 
 
 def test_to_artwork_with_unsupported_filetype():
-    artwork = Artwork(content=b"artwork-value", mimetype="unknown")
+    artwork = Artwork(content=b"artwork-value", mimetype="unknown")  # type: ignore[ty:invalid-argument-type]
 
     with pytest.raises(ApitError, match="Unknown artwork mime type"):
         _to_artwork(artwork)

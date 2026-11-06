@@ -24,7 +24,7 @@ class TagActionReporter(ActionReporter):
     def preview_msg(self) -> str:
         if not self.action.actionable:
             return f"<{self._not_actionable_msg}>"
-        return f"{self.action.song.track_number_padded} {self.action.song.title}"  # type: ignore[union-attr]
+        return f"{self.action.song.track_number_padded} {self.action.song.title}"  # type: ignore[ty:unresolved-attribute]
 
     @property
     def status_msg(self) -> str:
