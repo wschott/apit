@@ -16,18 +16,18 @@ from apit.tagged_value import TaggedValue
 
 
 class MockAction(NamedTuple):
-    needs_confirmation: bool
-    executed: bool
-    successful: bool
-    actionable: bool
+    needs_confirmation: bool | None
+    executed: bool | None
+    successful: bool | None
+    actionable: bool | None
 
 
 class MockTagAction(NamedTuple):
-    needs_confirmation: bool
-    executed: bool
-    successful: bool
-    actionable: bool
-    is_filename_identical_to_song: bool
+    needs_confirmation: bool | None
+    executed: bool | None
+    successful: bool | None
+    actionable: bool | None
+    is_filename_identical_to_song: bool | None
 
 
 class FakeTag(TaggedValue):

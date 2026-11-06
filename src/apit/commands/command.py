@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Protocol
 
@@ -10,4 +11,4 @@ class Command(Protocol):
     def setup_cli_parser(subparsers): ...
 
     @staticmethod
-    def execute(files: list[Path], options: CliOptions) -> CommandResult: ...
+    def execute(files: Iterable[Path], options: CliOptions) -> CommandResult: ...

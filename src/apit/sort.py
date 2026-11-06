@@ -1,8 +1,9 @@
 import re
+from collections.abc import Iterable
 from pathlib import Path
 
 
-def sort_naturally(paths: list[Path]) -> list[Path]:
+def sort_naturally(paths: Iterable[Path]) -> list[Path]:
     return sorted(paths, key=sort_naturally_key)
 
 

@@ -63,7 +63,11 @@ def test_download_metadata_with_url_error():
         patch(
             "urllib.request.urlopen",
             side_effect=urllib.error.HTTPError(
-                url=None, code=500, msg="test-msg", hdrs=None, fp=None
+                url="any-url",
+                code=500,
+                msg="test-msg",
+                hdrs=None,  # ty: ignore[invalid-argument-type]
+                fp=None,
             ),
         ),
         pytest.raises(ApitStoreConnectionError, match="HTTP Error 500: test-msg"),
@@ -83,7 +87,7 @@ def test_download_artwork():
     with patch("urllib.request.urlopen", return_value=mock):
         artwork = download_artwork("any-url")
 
-    assert b"artwork-content", artwork == MimeType.JPEG
+    assert artwork == (b"artwork-content", MimeType.JPEG)
 
 
 def test_download_artwork_with_url_error():
@@ -97,7 +101,11 @@ def test_download_artwork_with_url_error():
         patch(
             "urllib.request.urlopen",
             side_effect=urllib.error.HTTPError(
-                url=None, code=500, msg="test-msg", hdrs=None, fp=None
+                url="any-url",
+                code=500,
+                msg="test-msg",
+                hdrs=None,  # ty: ignore[invalid-argument-type]
+                fp=None,
             ),
         ),
         pytest.raises(ApitStoreConnectionError, match="HTTP Error 500: test-msg"),

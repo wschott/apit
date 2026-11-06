@@ -2,6 +2,7 @@ import logging
 import sys
 from argparse import ArgumentParser
 from collections.abc import Callable
+from collections.abc import Iterable
 
 from apit.cli_options import CliOptions
 from apit.command_result import CommandResult
@@ -13,7 +14,7 @@ from apit.file_types import AudioFileFactory
 from apit.logging import configure_logging
 
 
-def create_parser(command_cli_parser_setup_fns: list[Callable]):
+def create_parser(command_cli_parser_setup_fns: Iterable[Callable]):
     parser = ArgumentParser(
         description="%(prog)s - music files tagging using Apple Music/iTunes Store metadata.",
         epilog="`%(prog)s <command> -h` shows help for a specific command.",
@@ -26,7 +27,7 @@ def create_parser(command_cli_parser_setup_fns: list[Callable]):
     return parser
 
 
-def parse_args(args: list[str]) -> CliOptions:
+def parse_args(args: Iterable[str]) -> CliOptions:
     parser = create_parser(CommandFactory.get_cli_parser_setup_fns())
     return parser.parse_args(args, namespace=CliOptions())
 

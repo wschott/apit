@@ -101,7 +101,7 @@ def test_filter_not_actionable(mock_action_actionable, mock_action_not_actionabl
 
 @patch.multiple(Action, __abstractmethods__=set())
 def test_action_init():
-    action = Action(Path("file-path"))
+    action = Action(Path("file-path"))  # type: ignore[ty:call-non-callable]
 
     assert action.file == Path("file-path")
 

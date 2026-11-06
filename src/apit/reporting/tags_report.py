@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from typing import Final
 
 from rich.markup import escape
@@ -19,7 +20,7 @@ def to_tags_report(file_tags: FileTags, verbose: bool) -> Table:
     return metadata_table(known_tags_rows, unknown_tags_rows)
 
 
-def _to_table_rows(tags: list[TaggedValue], verbose: bool) -> list[tuple[str, str]]:
+def _to_table_rows(tags: Iterable[TaggedValue], verbose: bool) -> list[tuple[str, str]]:
     return [(tag.description(verbose), escape(tag.value(verbose))) for tag in tags]
 
 

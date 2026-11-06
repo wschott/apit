@@ -20,7 +20,7 @@ class Mp3Tag(TaggedValue):
         if isinstance(self._unprocessed_value, mutagen.id3.USLT):  # MP3_MAPPING.LYRICS
             lyrics = self._unprocessed_value
             if verbose:
-                return lyrics.text.replace("\r", os.linesep)  # type: ignore[attr-defined]
+                return lyrics.text.replace("\r", os.linesep)
             return "<present>"
         elif isinstance(
             self._unprocessed_value, mutagen.id3.APIC

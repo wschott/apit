@@ -1,4 +1,6 @@
 import json
+from collections.abc import Iterable
+from collections.abc import Mapping
 from typing import Any
 
 from .constants import COLLECTION_TYPE_KEY
@@ -25,7 +27,7 @@ def extract_songs(metadata_json: str) -> list[Song]:
     return _find_songs(itunes_data["results"], _find_album(itunes_data["results"]))
 
 
-def _find_album(music_data: list[dict[str, Any]]) -> Album:
+def _find_album(music_data: Iterable[Mapping[str, Any]]) -> Album:
     for item in music_data:
         if (
             COLLECTION_TYPE_KEY in item
@@ -35,7 +37,7 @@ def _find_album(music_data: list[dict[str, Any]]) -> Album:
     raise ApitError("No album found in metadata")
 
 
-def _find_songs(music_data: list[dict[str, Any]], album: Album) -> list[Song]:
+def _find_songs(music_data: Iterable[Mapping[str, Any]], album: Album) -> list[Song]:
     return [
         to_song(album, item)
         for item in music_data
@@ -43,7 +45,7 @@ def _find_songs(music_data: list[dict[str, Any]], album: Album) -> list[Song]:
     ]
 
 
-def to_album(item: dict[str, Any]) -> Album:
+def to_album(item: Mapping[str, Any]) -> Album:
     return Album(
         album_artist=extract_by_key(StoreKey.ALBUM_ARTIST, item),
         copyright=extract_by_key(StoreKey.COPYRIGHT, item),
@@ -51,7 +53,7 @@ def to_album(item: dict[str, Any]) -> Album:
     )
 
 
-def to_song(album: Album, item: dict[str, Any]) -> Song:
+def to_song(album: Album, item: Mapping[str, Any]) -> Song:
     try:
         _ = extract_by_key(StoreKey.COLLECTION_ARTIST, item)
     except ApitError:
@@ -80,7 +82,7 @@ def to_song(album: Album, item: dict[str, Any]) -> Song:
     )
 
 
-def extract_by_key(key: StoreKey, item: dict[str, Any]) -> Any:
+def extract_by_key(key: StoreKey, item: Mapping[str, Any]) -> Any:
     if not isinstance(key, StoreKey):
         raise ApitError(f"Unknown metadata key: {key}")
     if key not in item:

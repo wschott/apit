@@ -23,6 +23,7 @@ def test_extract_songs(test_metadata):
 
     song = find_song(songs, disc=DiscNumber(1), track=TrackNumber(3))
 
+    assert song is not None
     assert song.album_artist == "Kanye West"
     assert song.copyright == "℗ 2010 Roc-A-Fella Records, LLC"
 
@@ -110,6 +111,6 @@ def test_extract_by_key():
 
 def test_extract_by_key_using_invalid_metadata():
     with pytest.raises(ApitError, match="Unknown metadata key"):
-        extract_by_key("invalid-key", {"kind": "song"})
+        extract_by_key("invalid-key", {"kind": "song"})  # type: ignore[ty:invalid-argument-type]
     with pytest.raises(ApitError, match="Metadata key not found"):
         extract_by_key(StoreKey.MEDIA_KIND, {"invalid-key": "song"})
