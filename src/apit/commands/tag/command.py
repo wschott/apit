@@ -4,58 +4,49 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from .action import TagAction
-from .command_reporter import print_actions_preview
-from .reporter import TagActionReporter
-from apit.action import all_actions_successful
-from apit.action import any_action_needs_confirmation
-from apit.command_result import CommandResult
-from apit.errors import ApitError
-from apit.file_handling import extract_disc_and_track_number
-from apit.metadata import Artwork
-from apit.metadata import find_song
-from apit.metadata import Song
-from apit.mime_type import MimeType
-from apit.report import print_report
-from apit.store.data_parser import extract_songs
-from apit.store.download import download_artwork
-from apit.store.download import download_metadata
-from apit.store.download import generate_lookup_url
-from apit.url_utils import is_url
-from apit.user_input import ask_user_for_confirmation
+from apit.core.action import all_actions_successful
+from apit.core.action import any_action_needs_confirmation
+from apit.core.result import Result
+from apit.core.errors import ApitError
+from apit.core.metadata.artwork import Artwork
+from apit.core.metadata.song import Song
+from apit.core.metadata_parser import MetadataParser
+from apit.core.track_matching import match
+from apit.infra.cli.report import print_report
+from apit.infra.cli.tag_preview import print_actions_preview
+from apit.infra.cli.tag_reporter import TagActionReporter
+from apit.infra.cli.user_input import confirm
+from apit.infra.metadata_source.itunes_store_loader import ItunesStoreLoader
+from apit.utils.mime_type import MimeType
 
 
 def execute(
     files: Iterable[Path],
     verbose_level: int,
-    source: str,
-    has_backup_flag: bool,
-    has_embed_artwork_flag: bool,
+    should_backup: bool,
+    should_embed_artwork: bool,
     artwork_size: int,
-) -> CommandResult:
-    songs = to_songs(source)
-    artwork = to_artwork(songs, artwork_size) if has_embed_artwork_flag else None
+    metadata_json: str,
+    metadata_parser: MetadataParser,
+) -> Result:
+    songs = metadata_parser.extract_songs(metadata_json)
+    artwork = to_artwork(songs, artwork_size) if should_embed_artwork else None
 
     actions: list[TagAction] = [
-        create_action(file, songs, has_backup_flag, artwork) for file in files
+        TagAction(m, should_backup, artwork) for m in match(files, songs)
     ]
 
     if any_action_needs_confirmation(actions):
         print_actions_preview(actions)
-        ask_user_for_confirmation()
+        if not confirm(prompt="Apply?", abort_text="Aborted."):
+            raise ApitError("Aborted.")
 
     for action in actions:
         logging.info("Executing: %s", action)
         action.apply()
 
     print_report(actions, TagActionReporter, verbose=verbose_level > 0)
-    return (
-        CommandResult.SUCCESS if all_actions_successful(actions) else CommandResult.FAIL
-    )
-
-
-def to_songs(source: str) -> list[Song]:
-    metadata_json = get_metadata_json(source)
-    return extract_songs(metadata_json)
+    return Result.SUCCESS if all_actions_successful(actions) else Result.FAIL
 
 
 def to_artwork(songs: Sequence[Song], artwork_size: int) -> Artwork | None:
@@ -63,43 +54,15 @@ def to_artwork(songs: Sequence[Song], artwork_size: int) -> Artwork | None:
         return None
     first_song = songs[0]  # TODO refactor # TODO fix possible IndexError
 
-    size = artwork_size
-    upscaled_url = upscale_artwork_url(first_song, size)
-    logging.info("Use cover link (with size %d): %s", size, upscaled_url)
-    logging.info("Download cover (with size %d) from: %s", size, upscaled_url)
+    url = first_song.album.artwork_url
+    logging.info("Download cover (with size %d) from: %s", artwork_size, url)
 
-    artwork_content, image_type = download_artwork(upscaled_url)
-    return Artwork(content=artwork_content, mimetype=MimeType(image_type))
-
-
-def create_action(
-    file: Path, songs: Iterable[Song], should_backup: bool, artwork: Artwork | None
-) -> TagAction:
-    disc, track = extract_disc_and_track_number(file)
-
-    return TagAction(
-        file,
-        song=find_song(songs, disc=disc, track=track),
-        should_backup=should_backup,
-        artwork=artwork,
+    # TODO ItunesStore is used directly instead of a possible local file
+    artwork_content, artwork_content_type = ItunesStoreLoader().download_artwork(
+        url, artwork_size
     )
-
-
-def upscale_artwork_url(song: Song, size: int) -> str:
-    return song.artwork_url.replace("100x100", f"{size}x{size}")
-
-
-def get_metadata_json(source: str) -> str:
-    logging.info("Input source: %s", source)
-    if Path(source).exists():
-        logging.info("Use downloaded metadata file: %s", source)
-        try:
-            return Path(source).read_text()
-        except Exception:
-            raise ApitError(f"Error while reading metadata file: {Path(source)}")
-    elif is_url(source):
-        logging.info("Use URL to download metadata: %s", source)
-        query_url = generate_lookup_url(source)
-        logging.info("Query URL: %s", query_url)
-        return download_metadata(query_url)
-    raise ApitError(f"Invalid input source: {source}")
+    try:
+        mime_type = MimeType.from_content_type(artwork_content_type)
+    except ValueError:
+        raise ApitError(f"Unknown content type: {artwork_content_type}")
+    return Artwork(content=artwork_content, mime_type=mime_type)

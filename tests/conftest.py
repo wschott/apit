@@ -4,16 +4,23 @@ from typing import override
 
 import pytest
 
-from apit.file_tags import FileTags
-from apit.file_types.audio_file import AudioFile
-from apit.metadata import Album
-from apit.metadata import Artwork
-from apit.metadata import Song
-from apit.readable_names import ReadableTagName
-from apit.store.data_parser import to_album
-from apit.store.data_parser import to_song
-from apit.tag_id import TagId
-from apit.tagged_value import TaggedValue
+from apit.commands.tag.action import TagAction
+from apit.core.audio.audio_file import AudioFile
+from apit.core.audio.file_tags import FileTags
+from apit.core.audio.tag_id import TagId
+from apit.core.audio.tag_name import TagName
+from apit.core.audio.tag_value import TextValue
+from apit.core.audio.tagged_value import TaggedValue
+from apit.core.metadata.album import Album
+from apit.core.metadata.artwork import Artwork
+from apit.core.metadata.media_kind import MediaKind
+from apit.core.metadata.rating import Rating
+from apit.core.metadata.song import Song
+from apit.core.track_matching import Match
+from apit.core.track_matching import MatchQuality
+from apit.core.track_matching import match
+from apit.infra.metadata_source.itunes_metadata_parser import to_album
+from apit.infra.metadata_source.itunes_metadata_parser import to_song
 
 
 class MockAction(NamedTuple):
@@ -28,19 +35,12 @@ class MockTagAction(NamedTuple):
     executed: bool | None
     successful: bool | None
     actionable: bool | None
-    is_filename_identical_to_song: bool | None
+    match: Match
 
 
-class FakeTag(TaggedValue):
-    @override
-    def _get_readable_name(self, tag_id: TagId) -> ReadableTagName | None:
-        if tag_id == TagId("known-tag"):
-            return ReadableTagName.TITLE
-        return None
-
-    @override
-    def value(self, verbose: bool) -> str:
-        return self._unprocessed_value
+def fake_tag(tag_id: str, value: str) -> TaggedValue:
+    name = TagName.TITLE if tag_id == "known-tag" else None
+    return TaggedValue(TagId(tag_id), name, TextValue(value))
 
 
 class FakeFile(AudioFile):
@@ -56,7 +56,7 @@ class FakeFile(AudioFile):
         return test_file_tags_data
 
 
-test_file_tags_data = FileTags([FakeTag(TagId("tag_id"), "tag_value")])
+test_file_tags_data = FileTags([fake_tag("tag_id", "tag_value")])
 
 
 @pytest.fixture
@@ -121,7 +121,7 @@ def album_metadata_as_json_obj2():
             "collectionType": "Album",
             "artistName": "Album Artist",
             "copyright": "℗ 2010 Album Copyright",
-            "artworkUrl100": "cover-url",
+            "artworkUrl100": "https://cover.url/img/100x100bb.jpg",
         }
     ]
 
@@ -172,13 +172,30 @@ def mock_action_not_actionable():
 
 
 @pytest.fixture
-def mock_action_is_filename_identical_to_song():
-    return MockTagAction(None, None, None, True, True)
+def mock_action_exact_match():
+    return MockTagAction(None, None, None, True, _dummy_match(MatchQuality.EXACT))
 
 
 @pytest.fixture
-def mock_action_actionable_not_is_filename_identical_to_song():
-    return MockTagAction(None, None, None, True, False)
+def mock_action_differing_match():
+    return MockTagAction(None, None, None, True, _dummy_match(MatchQuality.DIFFERS))
+
+
+def _dummy_match(quality: MatchQuality) -> Match:
+    return Match(Path("dummy.m4a"), dummy_song(), quality, None)
+
+
+def make_tag_action(
+    file: Path,
+    song: Song | None = None,
+    should_backup: bool = False,
+    artwork: Artwork | None = None,
+) -> TagAction:
+    return TagAction(
+        match([file], [song] if song else [])[0],
+        should_backup=should_backup,
+        artwork=artwork,
+    )
 
 
 @pytest.fixture
@@ -233,7 +250,7 @@ def pytest_collection_modifyitems(config, items):
 def assert_dummy_test_album(album):
     assert album.album_artist == "Album Artist"
     assert album.copyright == "℗ 2010 Album Copyright"
-    assert album.artwork_url == "cover-url"
+    assert album.artwork_url == "https://cover.url/img/100x100bb.jpg"
 
 
 def assert_dummy_test_song(song):
@@ -242,7 +259,7 @@ def assert_dummy_test_song(song):
     assert song.collection_id == 12345
     assert song.artist == "Track Artist"
     assert song.album_name == "Test Album Namè"
-    assert song.media_kind == "song"
+    assert song.media_kind == MediaKind.SONG
     assert song.disc_number == 2
     assert song.disc_total == 3
     assert song.track_number == 3
@@ -250,7 +267,6 @@ def assert_dummy_test_song(song):
     assert song.title == "Track (feat. Other & $Artist) [Bonus Track]"
     assert song.genre == "Test Genré"
     assert song.content_id == 98765
-    assert song.rating == "explicit"
+    assert song.rating == Rating.EXPLICIT
     assert song.release_date == "2010-01-01T07:00:00Z"
     assert not song.compilation
-    assert song.artwork_url == "cover-url"

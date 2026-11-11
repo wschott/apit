@@ -1,5 +1,5 @@
 # ruff: noqa
-from apit.tag_id import TagIdEnum
+from apit.core.audio.tag_id import TagIdEnum
 
 
 # Atom meanings: see https://github.com/quodlibet/mutagen/blob/master/mutagen/id3/_frames.py

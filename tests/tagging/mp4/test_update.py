@@ -6,14 +6,14 @@ import mutagen
 import mutagen.mp4
 import pytest
 
-from apit.errors import ApitError
+from apit.core.errors import ApitError
+from apit.core.metadata.artwork import Artwork
+from apit.core.metadata.song import Song
 from apit.file_types.mp4.constants import Mp4Mapping
+from apit.file_types.mp4.fields import _to_mp4_cover
 from apit.file_types.mp4.update import _modify_mp4_file
-from apit.file_types.mp4.update import _to_artwork
 from apit.file_types.mp4.update import update_metadata
-from apit.metadata import Artwork
-from apit.metadata import Song
-from apit.mime_type import MimeType
+from apit.utils.mime_type import MimeType
 
 
 def test_modify_mp4_file(test_song: Song):
@@ -108,7 +108,7 @@ def test_metadata_updating_file_save_error(monkeypatch, test_song):
 def test_to_artwork_with_jpg():
     artwork = Artwork(b"artwork-value", MimeType.JPEG)
 
-    mp4_artwork = _to_artwork(artwork)
+    mp4_artwork = _to_mp4_cover(artwork)
 
     assert mp4_artwork == mutagen.mp4.MP4Cover(
         b"artwork-value", imageformat=mutagen.mp4.MP4Cover.FORMAT_JPEG
@@ -118,7 +118,7 @@ def test_to_artwork_with_jpg():
 def test_to_artwork_with_png():
     artwork = Artwork(b"artwork-value", MimeType.PNG)
 
-    mp4_artwork = _to_artwork(artwork)
+    mp4_artwork = _to_mp4_cover(artwork)
 
     assert mp4_artwork == mutagen.mp4.MP4Cover(
         b"artwork-value", imageformat=mutagen.mp4.MP4Cover.FORMAT_PNG
@@ -126,10 +126,10 @@ def test_to_artwork_with_png():
 
 
 def test_to_artwork_with_unsupported_filetype():
-    artwork = Artwork(content=b"artwork-value", mimetype="unknown")  # type: ignore[ty:invalid-argument-type]
+    artwork = Artwork(content=b"artwork-value", mime_type="unknown")  # type: ignore[ty:invalid-argument-type]
 
     with pytest.raises(ApitError, match="Unknown artwork mime type"):
-        _to_artwork(artwork)
+        _to_mp4_cover(artwork)
 
 
 def test_update_fails_for_original_file(monkeypatch, test_song: Song):

@@ -2,7 +2,10 @@ from pathlib import Path
 
 import pytest
 
+from apit.cli import main
 from apit.cli import parse_args
+from apit.core.result import Result
+from apit.infra.cli.exit_code import ExitCode
 
 
 def test_list_command():
@@ -17,17 +20,19 @@ def test_list_alias():
 
 
 def test_tag_command():
-    args = parse_args(["tag", "./tests/fixtures", "http://invalid-url.com/"])
+    args = parse_args(["tag", "./tests/fixtures", "https://invalid-url.com/"])
     assert args.command == "tag"
     assert args.path == Path("./tests/fixtures").absolute()
     assert args.has_embed_artwork_flag
     assert args.artwork_size == 600
 
 
-def test_tag_command_source_types():
-    args = parse_args(["tag", "./tests/fixtures", "http://invalid-url.com/"])
-    assert args.source == "http://invalid-url.com/"
+def test_tag_command_url_source():
+    args = parse_args(["tag", "./tests/fixtures", "https://invalid-url.com/"])
+    assert args.source == "https://invalid-url.com/"
 
+
+def test_tag_command_local_file_source():
     args = parse_args(["tag", "./tests/fixtures", "test-metadata-file.json"])
     assert args.source == "test-metadata-file.json"
 
@@ -82,3 +87,21 @@ def test_parse_args_invalid_option():
 def test_parse_args_using_non_existing_folder():
     with pytest.raises(SystemExit):
         parse_args(["list", "./non-existing"])
+
+
+def test_main_returns_usage_error_when_no_files_found(tmp_path, capsys):
+    assert main(["list", str(tmp_path)]) == ExitCode.USAGE_ERROR
+    assert "No matching files found" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize(
+    ("result", "exit_code"),
+    [
+        (Result.SUCCESS, ExitCode.OK),
+        (Result.FAIL, ExitCode.ERROR),
+    ],
+)
+def test_main_maps_result_to_exit_code(monkeypatch, tmp_path, result, exit_code):
+    monkeypatch.setattr("apit.cli.run", lambda _options: result)
+
+    assert main(["list", str(tmp_path)]) == exit_code

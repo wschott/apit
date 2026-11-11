@@ -2,7 +2,7 @@ from pathlib import Path
 
 import mutagen.mp4
 
-from apit.errors import ApitError
+from apit.core.errors import ApitError
 
 
 def read_metadata_raw(file: Path) -> mutagen.mp4.MP4:

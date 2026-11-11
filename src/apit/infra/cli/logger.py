@@ -1,0 +1,22 @@
+import logging
+from typing import Final
+from typing import override
+
+from apit.infra.cli.color import Color
+from apit.infra.cli.color import to_colored_text
+
+LEVEL_TO_COLOR_MAP: Final = {
+    logging.DEBUG: Color.MAGENTA,
+    logging.INFO: Color.MAGENTA,
+    logging.WARNING: Color.MAGENTA,
+    logging.ERROR: Color.RED,
+    logging.CRITICAL: Color.RED,
+}
+
+
+class ColoredFormatter(logging.Formatter):
+    @override
+    def format(self, record: logging.LogRecord) -> str:
+        return to_colored_text(
+            super().format(record), LEVEL_TO_COLOR_MAP.get(record.levelno, Color.NONE)
+        )

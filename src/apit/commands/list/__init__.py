@@ -3,8 +3,8 @@ from pathlib import Path
 from typing import override
 
 from .command import execute
-from apit.cli_options import CliOptions
-from apit.command_result import CommandResult
+from apit.core.options import Options
+from apit.core.result import Result
 from apit.commands.command import Command
 from apit.commands.common_cli_parser_arguments import add_path_argument
 from apit.commands.common_cli_parser_arguments import add_verbose_argument
@@ -29,5 +29,5 @@ class ListCommand(Command):
 
     @staticmethod
     @override
-    def execute(files: Iterable[Path], options: CliOptions) -> CommandResult:
+    def execute(files: Iterable[Path], options: Options) -> Result:
         return execute(files=files, verbose_level=options.verbose_level)

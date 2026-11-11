@@ -2,8 +2,8 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Protocol
 
-from apit.cli_options import CliOptions
-from apit.command_result import CommandResult
+from apit.core.options import Options
+from apit.core.result import Result
 
 
 class Command(Protocol):
@@ -11,4 +11,4 @@ class Command(Protocol):
     def setup_cli_parser(subparsers): ...
 
     @staticmethod
-    def execute(files: Iterable[Path], options: CliOptions) -> CommandResult: ...
+    def execute(files: Iterable[Path], options: Options) -> Result: ...

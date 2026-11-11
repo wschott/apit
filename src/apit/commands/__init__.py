@@ -1,10 +1,14 @@
 from apit.commands.command import Command
-from apit.package_utils import load_entry_point_modules
+from apit.commands.list import ListCommand
+from apit.commands.tag import TagCommand
 
 __all__ = ["CommandFactory"]
 
 
-commands: dict[str, Command] = load_entry_point_modules(group="apit.commands")
+commands: dict[str, type[Command]] = {
+    "list": ListCommand,
+    "tag": TagCommand,
+}
 
 
 class CommandFactory:

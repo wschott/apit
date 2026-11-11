@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 import mutagen.mp4
 import pytest
 
-from apit.errors import ApitError
+from apit.core.errors import ApitError
 from apit.file_types.mp4.read import read_metadata_raw
 
 

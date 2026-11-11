@@ -1,5 +1,5 @@
 from apit.commands.list.action import ReadAction
-from apit.errors import ApitError
+from apit.core.errors import ApitError
 from tests.conftest import FakeFile
 
 

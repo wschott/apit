@@ -3,13 +3,13 @@ from collections.abc import Iterable
 from pathlib import Path
 
 from .action import ReadAction
-from .reporter import ReadActionReporter
-from apit.action import all_actions_successful
-from apit.command_result import CommandResult
-from apit.report import print_report
+from apit.core.action import all_actions_successful
+from apit.core.result import Result
+from apit.infra.cli.list_reporter import ReadActionReporter
+from apit.infra.cli.report import print_report
 
 
-def execute(files: Iterable[Path], verbose_level: int) -> CommandResult:
+def execute(files: Iterable[Path], verbose_level: int) -> Result:
     actions: list[ReadAction] = [ReadAction(file) for file in files]
 
     for action in actions:
@@ -17,6 +17,4 @@ def execute(files: Iterable[Path], verbose_level: int) -> CommandResult:
         action.apply()
 
     print_report(actions, ReadActionReporter, verbose=verbose_level > 0)
-    return (
-        CommandResult.SUCCESS if all_actions_successful(actions) else CommandResult.FAIL
-    )
+    return Result.SUCCESS if all_actions_successful(actions) else Result.FAIL

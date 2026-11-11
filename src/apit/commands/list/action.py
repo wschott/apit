@@ -1,8 +1,8 @@
 from typing import override
 
-from apit.action import Action
-from apit.errors import ApitError
-from apit.file_tags import FileTags
+from apit.core.action import Action
+from apit.core.audio.file_tags import FileTags
+from apit.core.errors import ApitError
 from apit.file_types import AudioFileFactory
 
 

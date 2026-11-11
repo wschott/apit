@@ -30,14 +30,6 @@ homepage = "https://github.com/wschott/apit"
 [project.scripts]
 apit = "apit.cli:cli"
 
-[project.entry-points.'apit.file_types']
-mp3 = 'apit.file_types.mp3:Mp3File'
-m4a = 'apit.file_types.mp4:Mp4File'
-
-[project.entry-points.'apit.commands']
-list = 'apit.commands.list:ListCommand'
-tag = 'apit.commands.tag:TagCommand'
-
 [build-system]
 requires = ["uv_build>=0.13.6,<0.14"]
 build-backend = "uv_build"

@@ -3,13 +3,13 @@ from unittest.mock import patch
 
 import pytest
 
-from apit.action import Action
-from apit.action import all_actions_successful
-from apit.action import any_action_needs_confirmation
-from apit.action import filter_errors
-from apit.action import filter_not_actionable
-from apit.action import filter_successes
-from apit.errors import ApitError
+from apit.core.action import Action
+from apit.core.action import all_actions_successful
+from apit.core.action import any_action_needs_confirmation
+from apit.core.action import filter_errors
+from apit.core.action import filter_not_actionable
+from apit.core.action import filter_successes
+from apit.core.errors import ApitError
 
 
 class FakeAction(Action):

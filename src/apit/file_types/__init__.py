@@ -1,13 +1,22 @@
 from pathlib import Path
 
-from apit.errors import ApitUnsupportedTypeError
-from apit.file_types.audio_file import AudioFile
-from apit.package_utils import load_entry_point_modules
+from apit.core.audio.audio_file import AudioFile
+from apit.core.errors import ApitError
+from apit.file_types.mp3 import Mp3File
+from apit.file_types.mp4 import Mp4File
 
 __all__ = ["AudioFileFactory"]
 
 
-file_types: dict[str, AudioFile] = load_entry_point_modules(group="apit.file_types")
+file_types: dict[str, type[AudioFile]] = {
+    "m4a": Mp4File,
+    "mp3": Mp3File,
+}
+
+
+class ApitUnsupportedFileTypeError(ApitError):
+    def __init__(self, unsupported_type: str) -> None:
+        super().__init__(f"Unsupported type: {unsupported_type}")
 
 
 class AudioFileFactory:
@@ -15,9 +24,9 @@ class AudioFileFactory:
     def load(cls, file: Path) -> AudioFile:
         extension = file.suffix[1:]
         try:
-            return file_types[extension](file)  # type: ignore[ty:call-non-callable]
+            return file_types[extension](file)
         except KeyError as e:
-            raise ApitUnsupportedTypeError(extension) from e
+            raise ApitUnsupportedFileTypeError(extension) from e
 
     @classmethod
     def get_supported_extensions(cls) -> list[str]:

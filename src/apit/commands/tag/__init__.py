@@ -1,14 +1,20 @@
+import logging
 from argparse import BooleanOptionalAction
 from collections.abc import Iterable
 from pathlib import Path
 from typing import override
 
 from .command import execute
-from apit.cli_options import CliOptions
-from apit.command_result import CommandResult
+from apit.core.options import Options
+from apit.core.result import Result
 from apit.commands.command import Command
 from apit.commands.common_cli_parser_arguments import add_path_argument
 from apit.commands.common_cli_parser_arguments import add_verbose_argument
+from apit.core.metadata_loader import MetadataLoader
+from apit.infra.metadata_source.itunes_metadata_parser import ItunesMetadataParser
+from apit.infra.metadata_source.itunes_store_loader import ItunesStoreLoader
+from apit.infra.metadata_source.local_file_loader import LocalFileLoader
+from apit.utils.http import is_url
 
 __all__ = ["TagCommand"]
 
@@ -57,12 +63,23 @@ class TagCommand(Command):
 
     @staticmethod
     @override
-    def execute(files: Iterable[Path], options: CliOptions) -> CommandResult:
+    def execute(files: Iterable[Path], options: Options) -> Result:
+        metadata_json = TagCommand._get_metadata(options.source)
+
         return execute(
             files=files,
             verbose_level=options.verbose_level,
-            source=options.source,
-            has_backup_flag=options.has_backup_flag,
-            has_embed_artwork_flag=options.has_embed_artwork_flag,
+            should_backup=options.has_backup_flag,
+            should_embed_artwork=options.has_embed_artwork_flag,
             artwork_size=options.artwork_size,
+            metadata_json=metadata_json,
+            metadata_parser=ItunesMetadataParser(),
         )
+
+    @staticmethod
+    def _get_metadata(source: str) -> str:
+        logging.info("Input source: %s", source)
+        metadata_loader: MetadataLoader = (
+            ItunesStoreLoader() if is_url(source) else LocalFileLoader()
+        )
+        return metadata_loader.load(source)

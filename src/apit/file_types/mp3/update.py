@@ -1,15 +1,14 @@
-from datetime import datetime
 from pathlib import Path
+from typing import cast
 
 import mutagen.id3
 import mutagen.mp3
 
-from .constants import Mp3Mapping
+from .fields import MP3_FIELDS
 from .read import read_metadata_raw
-from apit.errors import ApitError
-from apit.metadata import Artwork
-from apit.metadata import Song
-from apit.tag_id import TagId
+from apit.core.errors import ApitError
+from apit.core.metadata.artwork import Artwork
+from apit.core.metadata.song import Song
 
 
 def update_metadata(
@@ -30,66 +29,14 @@ def update_metadata(
         return mp3_file
 
 
-def _to_artwork(artwork: Artwork) -> mutagen.id3.APIC:
-    return mutagen.id3.APIC(
-        mime=artwork.mimetype.value,
-        type=mutagen.id3.PictureType.COVER_FRONT,
-        data=artwork.content,
-    )
-
-
 def _modify_mp3_file(
     mp3_file: mutagen.mp3.MP3, song: Song, artwork: Artwork | None = None
 ) -> mutagen.mp3.MP3:
-    _update_specific_tag(mp3_file.tags, Mp3Mapping.ARTIST, song.artist)
-    _update_specific_tag(mp3_file.tags, Mp3Mapping.TITLE, song.title)
-    _update_specific_tag(mp3_file.tags, Mp3Mapping.ALBUM_NAME, song.album_name)
-    _update_specific_tag(mp3_file.tags, Mp3Mapping.GENRE, song.genre)
-    _update_specific_tag(
-        mp3_file.tags, Mp3Mapping.RELEASE_DATE, extract_year(song.release_date)
-    )
-    _update_specific_tag(
-        mp3_file.tags, Mp3Mapping.DISC_NUMBER, f"{song.disc_number}/{song.disc_total}"
-    )
-    _update_specific_tag(
-        mp3_file.tags,
-        Mp3Mapping.TRACK_NUMBER,
-        f"{song.track_number}/{song.track_total}",
-    )
-    _update_specific_tag(mp3_file.tags, Mp3Mapping.ALBUM_ARTIST, song.album_artist)
-    _update_specific_tag(mp3_file.tags, Mp3Mapping.COPYRIGHT, song.copyright)
-    if song.compilation:
-        _update_specific_tag(
-            mp3_file.tags, Mp3Mapping.COMPILATION, str(int(song.compilation))
-        )
-    else:
-        _unset_tag(mp3_file.tags, Mp3Mapping.COMPILATION)
-
-    if artwork:
-        _update_artwork_tag(mp3_file.tags, Mp3Mapping.ARTWORK, artwork)
+    tags = cast(mutagen.id3.ID3, mp3_file.tags)
+    for field in MP3_FIELDS:
+        if field.encode is None:
+            continue
+        if (frames := field.encode(field.tag_id, song, artwork)) is not None:
+            tags.setall(field.tag_id.value, frames)
 
     return mp3_file
-
-
-def extract_year(date: str) -> str:
-    return str(datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ").year)
-
-
-def _update_specific_tag(tags, tag_id: TagId, value):
-    try:
-        tag = tags[tag_id]
-    except KeyError:
-        tags.add(mutagen.id3.Frames[tag_id](encoding=3, text=value))
-    else:
-        tag.encoding = 3
-        tag.text = value
-
-
-def _update_artwork_tag(tags, tag_id: TagId, artwork: Artwork):
-    _unset_tag(tags, tag_id)
-    apic = _to_artwork(artwork)
-    tags.add(apic)
-
-
-def _unset_tag(tags, tag_id: TagId):
-    tags.delall(tag_id)
